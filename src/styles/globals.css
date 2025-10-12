@@ -1,0 +1,177 @@
+@import 'tailwindcss';
+
+@config "../../tailwind.config.js";
+
+/* ============================================
+   🪟 GLASSMORPHISM UTILITIES
+   ============================================ */
+
+/* Base glass effect - Light mode */
+.glass {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.glass-sm {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
+}
+
+.glass-md {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.glass-lg {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.2);
+}
+
+.glass-xl {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 64px 0 rgba(31, 38, 135, 0.25);
+}
+
+/* Dark mode glass variants */
+.dark .glass {
+  background-color: rgba(20, 18, 16, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-sm {
+  background-color: rgba(20, 18, 16, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-md {
+  background-color: rgba(20, 18, 16, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-lg {
+  background-color: rgba(20, 18, 16, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-xl {
+  background-color: rgba(20, 18, 16, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass card - ready to use */
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.glass-card:hover {
+  box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.dark .glass-card {
+  background-color: rgba(20, 18, 16, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass navbar */
+.glass-navbar {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.dark .glass-navbar {
+  background-color: rgba(20, 18, 16, 0.8);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass sidebar */
+.glass-sidebar {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  height: 100%;
+}
+
+.dark .glass-sidebar {
+  background-color: rgba(20, 18, 16, 0.6);
+  border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass modal */
+.glass-modal {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 64px 0 rgba(31, 38, 135, 0.25);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark .glass-modal {
+  background-color: rgba(20, 18, 16, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom scrollbar with glass effect */
+.scrollbar-glass::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-glass::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollbar-glass::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 9999px;
+}
+
+.dark .scrollbar-glass::-webkit-scrollbar-thumb {
+  background-color: rgba(20, 18, 16, 0.6);
+}
+
+.scrollbar-glass::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .scrollbar-glass::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(20, 18, 16, 0.8);
+}
