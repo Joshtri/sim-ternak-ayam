@@ -1,0 +1,19 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Force specific files to have LF line endings
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.txt text eol=lf
+*.prettierrc text eol=lf
+*.eslint* text eol=lf
