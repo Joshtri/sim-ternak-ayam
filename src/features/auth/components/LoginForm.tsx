@@ -1,28 +1,39 @@
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { Link } from "@tanstack/react-router";
+// Link from router removed because this form uses a plain anchor for the register link
 import { Mail, Lock, LogIn } from "lucide-react";
 import { useForm, FormProvider } from "react-hook-form";
+
+import { useLogin } from "../hooks/useAuth";
 
 import { Card } from "@/components/ui/Card";
 
 interface LoginFormData {
-  email: string;
+  username: string;
   password: string;
 }
 
 export default function LoginForm() {
   const methods = useForm<LoginFormData>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login attempt:", data);
-    // TODO: Handle login logic here
-    // Example: await loginUser(data.email, data.password);
+  const login = useLogin();
+
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await login.mutateAsync({
+        username: data.username,
+        password: data.password,
+      });
+    } catch (error) {
+      // Errors are handled inside the hook (toasts), but log to avoid unhandled promise
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
   };
 
   return (
@@ -42,21 +53,17 @@ export default function LoginForm() {
 
           {/* Form Fields */}
           <div className="flex flex-col gap-4">
-            {/* Email Input */}
+            {/* Username Input */}
             <Input
-              {...methods.register("email", {
-                required: "Email wajib diisi",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Format email tidak valid",
-                },
+              {...methods.register("username", {
+                required: "Username wajib diisi",
               })}
-              errorMessage={methods.formState.errors.email?.message}
-              isInvalid={!!methods.formState.errors.email}
-              label="Email"
-              placeholder="Masukkan email Anda"
+              errorMessage={methods.formState.errors.username?.message}
+              isInvalid={!!methods.formState.errors.username}
+              label="Username"
+              placeholder="Masukkan username Anda"
               startContent={<Mail className="text-default-400" size={18} />}
-              type="email"
+              type="text"
               variant="bordered"
             />
 
@@ -82,7 +89,9 @@ export default function LoginForm() {
             <Button
               className="w-full mt-4"
               color="primary"
-              isLoading={methods.formState.isSubmitting}
+              isLoading={
+                login.status === "pending" || methods.formState.isSubmitting
+              }
               size="lg"
               startContent={<LogIn size={18} />}
               type="submit"
@@ -93,9 +102,9 @@ export default function LoginForm() {
             {/* Register Link */}
             <div className="text-center text-sm text-default-500 mt-4">
               Belum punya akun?{" "}
-              <Link className="text-primary hover:underline" href="/register">
+              <a className="text-primary hover:underline" href="/register">
                 Daftar di sini
-              </Link>
+              </a>
             </div>
           </div>
         </Card>

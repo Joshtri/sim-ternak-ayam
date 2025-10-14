@@ -22,6 +22,8 @@ import { useAyams } from "@/features/ayams/hooks/useAyams";
 import { FormBuilder } from "@/components/ui/Form/FormBuilder";
 import { Card } from "@/components/ui/Card";
 import FormActions from "@/components/ui/Form/FormActions";
+import { ICurrentUser } from "@/interfaces/common";
+import { useCurrentUser } from "@/features/auth/hooks/useAuth";
 
 /**
  * Handle form submission
@@ -62,6 +64,8 @@ export function PanenCreateForm() {
 
   // Fetch ayams for dropdown
   const { data: ayams, isLoading: isLoadingAyams } = useAyams();
+  const { data: meData, isLoading: isLoadingMe } =
+    useCurrentUser<ICurrentUser>();
 
   // Initialize react-hook-form
   const methods = useForm<PanenFormData>({
@@ -69,12 +73,29 @@ export function PanenCreateForm() {
     mode: "onBlur",
   });
 
+  const filteredAyams = useMemo(() => {
+    if (!ayams || !meData) return [];
+
+    const roleNormalized = String(meData?.role ?? "").toLowerCase();
+
+    if (roleNormalized === "petugas" && meData?.kandangsManaged?.length) {
+      // For Petugas, filter ayams by kandangId they manage
+      const managedKandangIds = meData.kandangsManaged.map((k: any) =>
+        String(k.id)
+      );
+
+      return ayams.filter(a => managedKandangIds.includes(String(a.kandangId)));
+    }
+
+    return ayams;
+  }, [ayams, meData]);
+
   // Transform ayams to select options
   const ayamOptions = useMemo(() => {
-    if (!ayams) return [];
+    if (!filteredAyams) return [];
 
-    return transformAyamsToOptions(ayams);
-  }, [ayams]);
+    return transformAyamsToOptions(filteredAyams);
+  }, [filteredAyams]);
 
   // Update schema with dynamic ayam options
   const dynamicSchema = useMemo(() => {

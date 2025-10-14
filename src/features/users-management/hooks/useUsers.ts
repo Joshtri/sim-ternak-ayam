@@ -9,6 +9,7 @@ import {
 } from "../services/userService";
 
 import { getErrorMessage } from "@/lib/axios";
+import { showToast } from "@/utils/showToast";
 
 // Query keys
 export const userKeys = {
@@ -52,10 +53,20 @@ export function useCreateUser() {
     onSuccess: () => {
       // Invalidate all user lists
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      console.log("User created successfully");
+      showToast({
+        title: "Berhasil!",
+        description: "User berhasil dibuat",
+        color: "success",
+      });
     },
     onError: error => {
-      console.error("Failed to create user:", getErrorMessage(error));
+      const errorMessage = getErrorMessage(error);
+
+      showToast({
+        title: "Gagal Membuat User",
+        description: errorMessage || "Terjadi kesalahan saat membuat user",
+        color: "error",
+      });
     },
   });
 }
@@ -75,10 +86,20 @@ export function useUpdateUser() {
         queryKey: userKeys.detail(variables.id),
       });
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      console.log("User updated successfully");
+      showToast({
+        title: "Berhasil!",
+        description: "User berhasil diupdate",
+        color: "success",
+      });
     },
     onError: error => {
-      console.error("Failed to update user:", getErrorMessage(error));
+      const errorMessage = getErrorMessage(error);
+
+      showToast({
+        title: "Gagal Mengupdate User",
+        description: errorMessage || "Terjadi kesalahan saat mengupdate user",
+        color: "error",
+      });
     },
   });
 }
@@ -94,10 +115,20 @@ export function useDeleteUser() {
     onSuccess: () => {
       // Invalidate all user lists
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      console.log("User deleted successfully");
+      showToast({
+        title: "Berhasil!",
+        description: "User berhasil dihapus",
+        color: "success",
+      });
     },
     onError: error => {
-      console.error("Failed to delete user:", getErrorMessage(error));
+      const errorMessage = getErrorMessage(error);
+
+      showToast({
+        title: "Gagal Menghapus User",
+        description: errorMessage || "Terjadi kesalahan saat menghapus user",
+        color: "error",
+      });
     },
   });
 }
@@ -114,10 +145,23 @@ export function useToggleUserStatus() {
       // Invalidate the specific user and all user lists
       queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      console.log("User status updated successfully");
+      showToast({
+        title: "Berhasil!",
+        description: "Status user berhasil diubah",
+        color: "success",
+      });
     },
     onError: error => {
-      console.error("Failed to toggle user status:", getErrorMessage(error));
+      const errorMessage = getErrorMessage(error);
+
+      const description =
+        errorMessage || "Terjadi kesalahan saat mengubah status user";
+
+      showToast({
+        title: "Gagal Mengubah Status",
+        description,
+        color: "error",
+      });
     },
   });
 }
@@ -137,10 +181,20 @@ export function useChangePassword() {
       newPassword: string;
     }) => userService.changePassword(id, oldPassword, newPassword),
     onSuccess: () => {
-      console.log("Password changed successfully");
+      showToast({
+        title: "Berhasil!",
+        description: "Password berhasil diubah",
+        color: "success",
+      });
     },
     onError: error => {
-      console.error("Failed to change password:", getErrorMessage(error));
+      const errorMessage = getErrorMessage(error);
+
+      showToast({
+        title: "Gagal Mengubah Password",
+        description: errorMessage || "Terjadi kesalahan saat mengubah password",
+        color: "error",
+      });
     },
   });
 }

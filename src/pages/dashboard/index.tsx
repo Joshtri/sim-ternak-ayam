@@ -1,5 +1,9 @@
-import React from "react";
+import { DashboardGrid } from "@/features/dashboard/components/DashboardGrid";
 
 export default function DashboardPage() {
-  return <div>DashboardPage</div>;
+  return (
+    <div className="p-6">
+      <DashboardGrid />
+    </div>
+  );
 }

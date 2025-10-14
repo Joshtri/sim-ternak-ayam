@@ -175,3 +175,81 @@
 .dark .scrollbar-glass::-webkit-scrollbar-thumb:hover {
   background-color: rgba(20, 18, 16, 0.8);
 }
+
+/* ============================================
+   🐔 Custom cursor utilities
+   - .cursor-chicken : uses an inline SVG with a chicken emoji as a cursor
+   - .cursor-default-os : example placeholder if you want an OS-like cursor
+   ============================================ */
+
+/* Chicken emoji cursor as a data URI SVG. Hotspot set to 12 12 (near center).
+   Note: emoji rendering depends on platform and font, results may vary across OSes. */
+:root {
+  /* Embedded SVG cursor (user-provided) - encoded for data URI */
+  --cursor-chicken: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 32 32'><path fill='%23706d67' fill-rule='evenodd' d='M8.003,25.003v-24h2v2h2%20v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h-6v2h2v4h2v4h-2v2h-4v-2h-2v-4h-2v-4h-2v2h-2v2H8.003z' clip-rule='evenodd'/><path fill='%23e6e5e5' fill-rule='evenodd' d='M10.003,21.003v-16h2v2%20h2v2h2v2h2v2h2v2h2v2h-4v4h2v4h2v4h-4v-4h-2v-4h-2v-2h-2v2H10.003z' clip-rule='evenodd'/></svg>") 12 12, auto;
+}
+
+.cursor-chicken {
+  cursor: var(--cursor-chicken) !important;
+}
+
+/* Optional: a subtle OS-like pointer (fallback to default) */
+.cursor-oslike {
+  cursor: default;
+}
+
+/* Utility to apply chicken cursor to the whole app */
+html.cursor-chicken,
+body.cursor-chicken,
+.cursor-chicken * {
+  cursor: var(--cursor-chicken) !important;
+}
+
+/* JS-driven custom cursor element (fallback when CSS cursor is unreliable) */
+.custom-cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  mix-blend-mode: normal;
+}
+
+/* Hide the native cursor when using the JS cursor */
+.hide-native-cursor,
+html.hide-native-cursor,
+body.hide-native-cursor {
+  cursor: none !important;
+}
+
+/* Interactive JS cursor states */
+.custom-cursor {
+  opacity: 0;
+  transition: opacity 120ms linear, transform 120ms linear;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+}
+
+.custom-cursor--click {
+  opacity: 1;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+}
+
+/* Slight scale when hovering interactive elements to hint clickability */
+.custom-cursor--click:hover,
+.custom-cursor--click:active {
+  transform: translate3d(-50%, -50%, 0) scale(0.98);
+}
+
+/* Make the cursor smaller on very small screens to avoid obscuring UI */
+@media (max-width: 480px) {
+  .custom-cursor {
+    width: 22px;
+    height: 22px;
+  }
+}

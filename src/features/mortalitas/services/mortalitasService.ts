@@ -3,9 +3,36 @@ import { CreateMortalitasDto, Mortalitas, UpdateMortalitasDto } from "../types";
 import api, { ApiResponse, PaginatedResponse } from "@/lib/axios";
 
 export const mortalitasService = {
-  getMortalitas: async (): Promise<Mortalitas[]> => {
-    const response =
-      await api.get<PaginatedResponse<Mortalitas>>("/mortalitas");
+  getMortalitas: async (filters?: {
+    kandangId?: string;
+    search?: string;
+    page?: number;
+    pageSize?: number;
+  }): Promise<Mortalitas[]> => {
+    const params: Record<string, any> = {};
+
+    if (filters) {
+      // Convert kandangId to string if provided
+      if (filters.kandangId && filters.kandangId.trim() !== "") {
+        params["kandangId"] = filters.kandangId;
+      }
+
+      // Add search if provided and not empty
+      if (filters.search && filters.search.trim() !== "") {
+        params["search"] = filters.search.trim();
+      }
+
+      // Add pagination if needed (optional for future use)
+      if (filters.page) params["page"] = filters.page;
+      if (filters.pageSize) params["pageSize"] = filters.pageSize;
+    }
+
+    const response = await api.get<PaginatedResponse<Mortalitas>>(
+      "/mortalitas",
+      {
+        params,
+      }
+    );
 
     return response.data.data;
   },

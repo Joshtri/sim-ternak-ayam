@@ -4,7 +4,13 @@ export interface Mortalitas extends BaseEntity {
   ayamId: string;
   tanggalKematian: string;
   jumlahKematian: number;
+  petugasId: string;
+  petugasNama: string;
+  kandangId: string;
+  kandangNama: string;
+  jumlahAyamSebelumMati: number;
   penyebabKematian: string;
+  jumlahAyamSesudahMati: number;
 }
 
 export interface CreateMortalitasDto {

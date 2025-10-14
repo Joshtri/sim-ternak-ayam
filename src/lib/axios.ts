@@ -39,9 +39,16 @@ api.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          // Unauthorized - clear token and redirect to login
-          localStorage.removeItem("authToken");
-          window.location.href = "/login";
+          // Unauthorized - clear token but do not force a navigation here.
+          // Forcing a global redirect here can be annoying (navigates the user
+          // away immediately). Instead, clear the token and let UI components
+          // decide how to respond (they can show a toast or trigger a redirect).
+          try {
+            localStorage.removeItem("authToken");
+            if (api.defaults.headers.common) {
+              delete (api.defaults.headers.common as any).Authorization;
+            }
+          } catch { }
           break;
         case 403:
           // Forbidden
@@ -110,9 +117,8 @@ export const getErrorMessage = (error: unknown): string => {
 
     // Check for validation errors first
     if (apiError?.errors) {
-      const errorMessages = Object.values(apiError.errors)
-        .flat()
-        .join(", ");
+      const errorMessages = Object.values(apiError.errors).flat().join(", ");
+
       return errorMessages || apiError.message;
     }
 

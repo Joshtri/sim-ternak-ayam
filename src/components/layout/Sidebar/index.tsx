@@ -1,6 +1,7 @@
-import { Link, useMatchRoute } from "@tanstack/react-router";
-import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { Link, useMatchRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@heroui/react";
 
 import {
@@ -9,6 +10,7 @@ import {
   UserRole,
 } from "@/types/navigation";
 import { getNavigationByRole } from "@/config/navigation";
+import { authService } from "@/features/auth/services/authService";
 
 // ============================================
 // 🎯 SIDEBAR COMPONENT
@@ -25,7 +27,34 @@ export function Sidebar({
   userRole = "operator",
   isCollapsed = false,
 }: SidebarProps) {
-  const navigation = getNavigationByRole(userRole);
+  // Try to fetch current user; fallback to provided userRole prop
+  const { data: me } = useQuery({
+    queryKey: ["me"],
+    queryFn: () =>
+      authService.me<{
+        role?: string;
+        fullName?: string;
+        username?: string;
+      }>(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const normalizeRole = (r?: string) => {
+    if (!r) return userRole;
+
+    const lower = r.toLowerCase();
+
+    if (lower.includes("pemilik")) return "pemilik" as UserRole;
+
+    if (lower.includes("operator")) return "operator" as UserRole;
+
+    if (lower.includes("petugas")) return "petugas" as UserRole;
+
+    return userRole;
+  };
+
+  const effectiveRole = normalizeRole(me?.role);
+  const navigation = getNavigationByRole(effectiveRole);
 
   return (
     <aside
@@ -63,12 +92,18 @@ export function Sidebar({
       <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-divider bg-content1/50">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-            <span className="text-primary font-semibold">A</span>
+            <span className="text-primary font-semibold">
+              {(me?.username || "A")[0]?.toUpperCase() ?? "A"}
+            </span>
           </div>
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">Admin User</p>
-              <p className="text-xs text-default-500 capitalize">{userRole}</p>
+              <p className="font-medium text-sm truncate">
+                {me?.fullName ?? me?.username ?? "Admin User"}
+              </p>
+              <p className="text-xs text-default-500 capitalize">
+                {effectiveRole}
+              </p>
             </div>
           )}
         </div>

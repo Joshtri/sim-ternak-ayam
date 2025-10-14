@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { mortalitasService } from "../services/mortalitasService";
-import { CreateMortalitasDto, UpdateMortalitasDto } from "../types";
+import { CreateMortalitasDto, Mortalitas, UpdateMortalitasDto } from "../types";
 
 import { getErrorMessage } from "@/lib/axios";
 import { showToast } from "@/utils/showToast";
@@ -11,7 +11,8 @@ import { showToast } from "@/utils/showToast";
 export const mortalitasKeys = {
   all: ["mortalitas"] as const,
   lists: () => [...mortalitasKeys.all, "list"] as const,
-  list: () => [...mortalitasKeys.lists()] as const,
+  list: (filters?: Mortalitas) =>
+    [...mortalitasKeys.lists(), JSON.stringify(filters ?? {})] as const,
   details: () => [...mortalitasKeys.all, "detail"] as const,
   detail: (id: string) => [...mortalitasKeys.details(), id] as const,
 };
@@ -19,10 +20,15 @@ export const mortalitasKeys = {
 /**
  * Hook to fetch all mortalitas
  */
-export function useMortalitas() {
+export function useMortalitas(filters?: {
+  kandangId?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}) {
   return useQuery({
-    queryKey: mortalitasKeys.list(),
-    queryFn: () => mortalitasService.getMortalitas(),
+    queryKey: mortalitasKeys.list(filters as any),
+    queryFn: () => mortalitasService.getMortalitas(filters),
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
   });
 }
@@ -60,6 +66,7 @@ export function useCreateMortalitas() {
     },
     onError: error => {
       const errorMessage = getErrorMessage(error);
+
       console.error("Failed to create mortalitas:", errorMessage);
 
       // Show error toast
@@ -80,8 +87,13 @@ export function useUpdateMortalitas() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<UpdateMortalitasDto> }) =>
-      mortalitasService.updateMortalitas(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<UpdateMortalitasDto>;
+    }) => mortalitasService.updateMortalitas(id, data),
     onSuccess: (_, variables) => {
       // Invalidate the specific mortalitas and all mortalitas lists
       queryClient.invalidateQueries({
@@ -98,6 +110,7 @@ export function useUpdateMortalitas() {
     },
     onError: error => {
       const errorMessage = getErrorMessage(error);
+
       console.error("Failed to update mortalitas:", errorMessage);
 
       // Show error toast
@@ -132,6 +145,7 @@ export function useDeleteMortalitas() {
     },
     onError: error => {
       const errorMessage = getErrorMessage(error);
+
       console.error("Failed to delete mortalitas:", errorMessage);
 
       // Show error toast

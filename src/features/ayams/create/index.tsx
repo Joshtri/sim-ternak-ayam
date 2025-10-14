@@ -8,7 +8,9 @@ import type { AyamFormData } from "./helpers";
 import { useForm, FormProvider } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { useCurrentUser } from "@/features/auth/hooks/useAuth";
 
+import { ICurrentUser } from "@/interfaces/common";
 import { useCreateAyam } from "../hooks/useAyams";
 
 import { ayamSchema } from "./fields";
@@ -60,6 +62,8 @@ export function AyamCreateForm() {
   const navigate = useNavigate();
   const createAyam = useCreateAyam();
 
+    const { data: meData, isLoading: isLoadingMe } = useCurrentUser<ICurrentUser>();
+
   // Fetch kandangs for dropdown
   const { data: kandangs, isLoading: isLoadingKandangs } = useKandangs();
 
@@ -69,12 +73,31 @@ export function AyamCreateForm() {
     mode: "onBlur",
   });
 
-  // Transform kandangs to select options
-  const kandangOptions = useMemo(() => {
-    if (!kandangs) return [];
+  // Filter kandangs based on user role and managed kandangs
+  const filteredKandangs = useMemo(() => {
+    if (!kandangs || !meData) return [];
 
-    return transformKandangsToOptions(kandangs);
-  }, [kandangs]);
+    const roleNormalized = String(meData.role ?? "").toLowerCase();
+
+    // If user is Petugas, filter kandangs by managed kandangs
+    if (roleNormalized === "petugas") {
+      const managedKandangIds = new Set(
+        (meData.kandangsManaged ?? []).map((k: any) => String(k.id))
+      );
+
+      return kandangs.filter(kandang => managedKandangIds.has(String(kandang.id)));
+    }
+
+    // For other roles (Pemilik, Admin, etc.), show all kandangs
+    return kandangs;
+  }, [kandangs, meData]);
+
+  // Transform filtered kandangs to select options
+  const kandangOptions = useMemo(() => {
+    if (!filteredKandangs) return [];
+
+    return transformKandangsToOptions(filteredKandangs);
+  }, [filteredKandangs]);
 
   // Update schema with dynamic kandang options
   const dynamicSchema = useMemo(() => {
@@ -100,14 +123,16 @@ export function AyamCreateForm() {
     handleFormSubmit(data, createAyam, navigate);
   };
 
+  const isLoading = isLoadingKandangs || isLoadingMe;
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Card className="p-6">
-          {/* Loading state for kandangs data */}
-          {isLoadingKandangs ? (
+          {/* Loading state */}
+          {isLoading ? (
             <div className="flex justify-center items-center p-8">
-              <div className="text-gray-500">Memuat data kandang...</div>
+              <div className="text-gray-500">Memuat data...</div>
             </div>
           ) : (
             <>

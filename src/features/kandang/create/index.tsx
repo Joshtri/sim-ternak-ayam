@@ -73,7 +73,12 @@ export function KandangCreateForm() {
   const petugasOptions = useMemo(() => {
     if (!users) return [];
 
-    return transformUsersToOptions(users);
+    // Filter users with role "Petugas"
+    const petugasUsers = users.filter(
+      (u: any) => String(u.role ?? "") === "Petugas"
+    );
+
+    return transformUsersToOptions(petugasUsers);
   }, [users]);
 
   // Update schema with dynamic petugas options

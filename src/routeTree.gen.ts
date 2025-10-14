@@ -13,6 +13,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedUsersManagementIndexRouteImport } from './routes/_authenticated/users-management/index'
 import { Route as AuthenticatedDaftarVaksinIndexRouteImport } from './routes/_authenticated/daftar-vaksin/index'
@@ -59,6 +60,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -227,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/daftar-ayam/$id': typeof AuthenticatedDaftarAyamIdRoute
   '/daftar-ayam/create': typeof AuthenticatedDaftarAyamCreateRoute
   '/daftar-biaya/$id': typeof AuthenticatedDaftarBiayaIdRoute
@@ -259,6 +266,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/daftar-ayam/$id': typeof AuthenticatedDaftarAyamIdRoute
   '/daftar-ayam/create': typeof AuthenticatedDaftarAyamCreateRoute
   '/daftar-biaya/$id': typeof AuthenticatedDaftarBiayaIdRoute
@@ -293,6 +301,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/daftar-ayam/$id': typeof AuthenticatedDaftarAyamIdRoute
   '/_authenticated/daftar-ayam/create': typeof AuthenticatedDaftarAyamCreateRoute
   '/_authenticated/daftar-biaya/$id': typeof AuthenticatedDaftarBiayaIdRoute
@@ -327,6 +336,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/forgot-password'
     | '/dashboard'
+    | '/profile'
     | '/daftar-ayam/$id'
     | '/daftar-ayam/create'
     | '/daftar-biaya/$id'
@@ -359,6 +369,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/forgot-password'
     | '/dashboard'
+    | '/profile'
     | '/daftar-ayam/$id'
     | '/daftar-ayam/create'
     | '/daftar-biaya/$id'
@@ -392,6 +403,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/forgot-password'
     | '/_authenticated/dashboard'
+    | '/_authenticated/profile'
     | '/_authenticated/daftar-ayam/$id'
     | '/_authenticated/daftar-ayam/create'
     | '/_authenticated/daftar-biaya/$id'
@@ -456,6 +468,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -651,6 +670,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedDaftarAyamIdRoute: typeof AuthenticatedDaftarAyamIdRoute
   AuthenticatedDaftarAyamCreateRoute: typeof AuthenticatedDaftarAyamCreateRoute
   AuthenticatedDaftarBiayaIdRoute: typeof AuthenticatedDaftarBiayaIdRoute
@@ -681,6 +701,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedDaftarAyamIdRoute: AuthenticatedDaftarAyamIdRoute,
   AuthenticatedDaftarAyamCreateRoute: AuthenticatedDaftarAyamCreateRoute,
   AuthenticatedDaftarBiayaIdRoute: AuthenticatedDaftarBiayaIdRoute,

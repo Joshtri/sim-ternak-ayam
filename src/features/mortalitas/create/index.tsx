@@ -22,6 +22,8 @@ import { useAyams } from "@/features/ayams/hooks/useAyams";
 import { FormBuilder } from "@/components/ui/Form/FormBuilder";
 import { Card } from "@/components/ui/Card";
 import FormActions from "@/components/ui/Form/FormActions";
+import { useCurrentUser } from "@/features/auth/hooks/useAuth";
+import { ICurrentUser } from "@/interfaces/common";
 
 /**
  * Handle form submission
@@ -60,6 +62,9 @@ export function MortalitasCreateForm() {
   const navigate = useNavigate();
   const createMortalitas = useCreateMortalitas();
 
+  // Fetch current user to get managed kandangs
+  const { data: meData, isLoading: isLoadingMe } = useCurrentUser<ICurrentUser>();
+
   // Fetch ayams for dropdown
   const { data: ayams, isLoading: isLoadingAyams } = useAyams();
 
@@ -69,12 +74,31 @@ export function MortalitasCreateForm() {
     mode: "onBlur",
   });
 
-  // Transform ayams to select options
-  const ayamOptions = useMemo(() => {
-    if (!ayams) return [];
+  // Filter ayams based on user role and managed kandangs
+  const filteredAyams = useMemo(() => {
+    if (!ayams || !meData) return [];
 
-    return transformAyamsToOptions(ayams);
-  }, [ayams]);
+    const roleNormalized = String(meData.role ?? "").toLowerCase();
+
+    // If user is Petugas, filter ayams by managed kandangs
+    if (roleNormalized === "petugas") {
+      const managedKandangIds = new Set(
+        (meData.kandangsManaged ?? []).map((k: any) => String(k.id))
+      );
+
+      return ayams.filter(ayam => managedKandangIds.has(String(ayam.kandangId)));
+    }
+
+    // For other roles (Pemilik, Admin, etc.), show all ayams
+    return ayams;
+  }, [ayams, meData]);
+
+  // Transform filtered ayams to select options
+  const ayamOptions = useMemo(() => {
+    if (!filteredAyams) return [];
+
+    return transformAyamsToOptions(filteredAyams);
+  }, [filteredAyams]);
 
   // Update schema with dynamic ayam options
   const dynamicSchema = useMemo(() => {
@@ -100,12 +124,14 @@ export function MortalitasCreateForm() {
     handleFormSubmit(data, createMortalitas, navigate);
   };
 
+  const isLoading = isLoadingAyams || isLoadingMe;
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Card className="p-6">
           {/* Loading state for ayams data */}
-          {isLoadingAyams ? (
+          {isLoading ? (
             <div className="flex justify-center items-center p-8">
               <div className="text-gray-500">Memuat data ayam...</div>
             </div>

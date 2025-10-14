@@ -16,6 +16,12 @@ import {
   Settings,
 } from "lucide-react";
 import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@heroui/react";
+
+import { authService } from "@/features/auth/services/authService";
+import { showToast } from "@/utils/showToast";
 
 // ============================================
 // 🎯 NAVBAR COMPONENT
@@ -38,6 +44,50 @@ export function Navbar({
     setIsDark(!isDark);
     document.documentElement.classList.toggle("dark");
   };
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  // silence unused prop warning if consumer doesn't use it yet
+  void isSidebarCollapsed;
+
+  interface CurrentUser {
+    id?: string;
+    username?: string;
+    email?: string;
+    fullName?: string;
+    noWA?: string;
+    role?: string;
+    createdAt?: string;
+    updateAt?: string;
+  }
+
+  const { data: me } = useQuery<CurrentUser>({
+    queryKey: ["me"],
+    queryFn: () => authService.me<CurrentUser>(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: () => authService.logout(),
+    onSuccess: () => {
+      try {
+        qc.invalidateQueries({ queryKey: ["me"] });
+      } catch {}
+
+      showToast({
+        title: "Logged out",
+        description: "Anda berhasil logout.",
+        color: "success",
+      });
+    },
+    onError: (err: any) => {
+      showToast({
+        title: "Logout gagal",
+        description: String(err?.message ?? "Gagal logout"),
+        color: "error",
+      });
+    },
+  });
 
   return (
     <header className="glass-navbar">
@@ -106,16 +156,37 @@ export function Navbar({
             <DropdownTrigger>
               <Button className="gap-2" variant="light">
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                  <span className="text-primary font-semibold text-sm">A</span>
+                  <span className="text-primary font-semibold text-sm">
+                    {me?.username?.[0]?.toUpperCase() ?? "A"}
+                  </span>
                 </div>
                 <div className="hidden lg:block text-left">
-                  <p className="text-sm font-medium">Admin User</p>
-                  <p className="text-xs text-default-500">Operator</p>
+                  <p className="text-sm font-medium">
+                    {me?.fullName ?? me?.username ?? "Admin User"}
+                  </p>
+                  <p className="text-xs text-default-500">
+                    {me?.role ?? "Operator"}
+                  </p>
                 </div>
               </Button>
             </DropdownTrigger>
-            <DropdownMenu aria-label="User menu">
-              <DropdownItem key="profile" startContent={<User size={16} />}>
+            <DropdownMenu
+              aria-label="User menu"
+              onAction={async key => {
+                if (key === "logout") {
+                  await logoutMutation.mutateAsync();
+                  try {
+                    navigate({ to: "/" });
+                  } catch {}
+                }
+              }}
+            >
+              <DropdownItem
+                key="profile"
+                as={Link}
+                href={"/profile"}
+                startContent={<User size={16} />}
+              >
                 Profile
               </DropdownItem>
               <DropdownItem
@@ -128,6 +199,7 @@ export function Navbar({
                 key="logout"
                 className="text-danger"
                 color="danger"
+                isDisabled={logoutMutation.status === "pending"}
                 startContent={<LogOut size={16} />}
               >
                 Logout

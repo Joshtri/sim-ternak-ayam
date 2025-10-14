@@ -1,16 +1,32 @@
 import { Ayam, AyamFilters, CreateAyamDto, UpdateAyamDto } from "../interface";
 
-import api, { ApiResponse, PaginatedResponse } from "@/lib/axios";
+import api, { ApiResponse } from "@/lib/axios";
 
 export const ayamService = {
   getAyams: async (filters?: AyamFilters): Promise<Ayam[]> => {
-    const response = await api.get<PaginatedResponse<Ayam>>("/ayams", {
-      params: filters,
-    });
+    // Build clean params object
+    const params: Record<string, any> = {};
+
+    if (filters) {
+      // Convert kandangId to string if provided
+      if (filters.kandangId && filters.kandangId.trim() !== "") {
+        params["kandangId"] = filters.kandangId;
+      }
+
+      // Add search if provided and not empty
+      if (filters.search && filters.search.trim() !== "") {
+        params["search"] = filters.search.trim();
+      }
+
+      // Add pagination if needed (optional for future use)
+      if (filters.page) params["page"] = filters.page;
+      if (filters.pageSize) params["pageSize"] = filters.pageSize;
+    }
+
+    const response = await api.get<ApiResponse<Ayam[]>>("/ayams", { params });
 
     return response.data.data;
   },
-
   getAyam: async (id: string): Promise<Ayam> => {
     const response = await api.get<ApiResponse<Ayam>>(`/ayams/${id}`);
 

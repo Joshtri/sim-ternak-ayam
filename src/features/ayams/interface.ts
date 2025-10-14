@@ -5,6 +5,10 @@ export interface Ayam extends BaseEntity {
   kandangNama: string;
   tanggalMasuk: string;
   jumlahMasuk: number;
+  petugasKandangNama: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface CreateAyamDto {
@@ -19,4 +23,24 @@ export interface UpdateAyamDto extends Pick<BaseEntity, "id"> {
   jumlahMasuk?: number;
 }
 
-export interface AyamFilters extends BaseResponseApi {}
+export interface AyamFilters extends BaseResponseApi {
+  kandangId?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+// export interface AyamFilters {
+//   kandangId?: string; // GUID as string
+//   search?: string;
+//   page?: number; // for future pagination
+//   pageSize?: number; // for future pagination
+// }
+
+// export interface ApiResponse<T> {
+//   success: boolean;
+//   message: string;
+//   data: T;
+//   statusCode: number;
+//   timestamp: string;
+// }

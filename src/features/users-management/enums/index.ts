@@ -3,9 +3,9 @@
  * Matches C# backend enum values
  */
 export enum UserRole {
-  PETUGAS = 0,
-  OPERATOR = 1,
-  PEMILIK = 2,
+  PETUGAS = "Petugas",
+  OPERATOR = "Operator",
+  PEMILIK = "Pemilik",
 }
 
 /**

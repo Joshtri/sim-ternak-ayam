@@ -30,7 +30,7 @@ export default function KandangList() {
     {
       key: "petugas-nama",
       label: "Nama Petugas",
-      value: (kandang: any) => kandang.namaPetugas,
+      value: (kandang: any) => kandang.petugasNama,
     },
     // { key: "status", label: "Status", value: (kandang: any) => kandang.status },
     { key: "actions", label: "Aksi", align: "center" as const },

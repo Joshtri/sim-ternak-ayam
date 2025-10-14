@@ -1,17 +1,41 @@
 import type { Ayam } from "../interface";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useDeleteAyam, useAyams } from "../hooks/useAyams";
 
 import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { useCurrentUser } from "@/features/auth/hooks/useAuth";
+import { ICurrentUser } from "@/interfaces/common";
 
 export default function AyamsList() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: ayams, isLoading } = useAyams({
+  const { data: meData, isLoading: isLoadingMe } =
+    useCurrentUser<ICurrentUser>();
+
+  console.log(meData);
+
+  const { data: ayams, isLoading: isLoadingAyams } = useAyams({
     search: searchQuery,
   });
+
+  // Filter client-side: if user is Petugas, show only ayams with kandangId
+  const filteredAyams = useMemo(() => {
+    const list = ayams ?? [];
+
+    const role = String(meData?.role ?? "").toLowerCase();
+
+    if (role === "petugas") {
+      const kandangIds = new Set(
+        (meData?.kandangsManaged ?? []).map((k: any) => String(k.id))
+      );
+
+      return list.filter(a => kandangIds.has(String(a.kandangId)));
+    }
+
+    return list;
+  }, [ayams, meData]);
 
   const deleteAyam = useDeleteAyam();
 
@@ -20,6 +44,12 @@ export default function AyamsList() {
       key: "kandangNama",
       label: "Nama Kandang",
       value: (ayam: Ayam) => ayam.kandangNama,
+    },
+
+    {
+      key: "penanggungJawabKandang",
+      label: "Penanggung Jawab Kandang",
+      value: (ayam: Ayam) => ayam.petugasKandangNama,
     },
     {
       key: "tanggalMasuk",
@@ -43,6 +73,8 @@ export default function AyamsList() {
     { key: "actions", label: "Aksi", align: "center" as const },
   ];
 
+  const isLoading = isLoadingAyams || isLoadingMe;
+
   return (
     <ListGrid
       actionButtons={{
@@ -64,7 +96,7 @@ export default function AyamsList() {
         label: "Tambah Data Ayam",
       }}
       columns={columns}
-      data={ayams}
+      data={filteredAyams}
       deleteConfirmMessage={(item: Ayam) =>
         `Apakah Anda yakin ingin menghapus data ayam dari ${item.kandangNama}?`
       }

@@ -21,6 +21,37 @@ declare module "@tanstack/react-router" {
 
 const rootElement = document.querySelector("#root") as Element;
 
+// Apply saved cursor preference on startup so the chicken cursor appears
+// immediately even if the toggle component hasn't mounted yet.
+try {
+  const pref = localStorage.getItem("cursorChicken");
+
+  if (pref === "1") {
+    document.documentElement.classList.add("cursor-chicken");
+  }
+} catch {
+  // ignore
+}
+
+// Apply saved auth token (if present) to axios defaults so requests include
+// the Authorization header on first load. This supports Bearer-token style
+// authentication when the backend returns a token at login.
+try {
+  const token = localStorage.getItem("authToken");
+
+  if (token) {
+    // Importing the api instance dynamically to avoid circular import at top
+    // level. Doing this sync here is fine since main.tsx runs once.
+
+    const api = require("./lib/axios").default;
+
+    api.defaults.headers.common = api.defaults.headers.common || {};
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+} catch {
+  // ignore
+}
+
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
 

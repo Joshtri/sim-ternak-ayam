@@ -12,7 +12,8 @@ import { showToast } from "@/utils/showToast";
 export const ayamKeys = {
   all: ["ayam"] as const,
   lists: () => [...ayamKeys.all, "list"] as const,
-  list: (filters?: AyamFilters) => [...ayamKeys.lists(), filters] as const,
+  list: (filters?: AyamFilters) =>
+    [...ayamKeys.lists(), JSON.stringify(filters ?? {})] as const,
   details: () => [...ayamKeys.all, "detail"] as const,
   detail: (id: string) => [...ayamKeys.details(), id] as const,
 };
@@ -60,7 +61,6 @@ export function useCreateAyam() {
     },
     onError: error => {
       const errorMessage = getErrorMessage(error);
-      console.error("Failed to create ayam:", errorMessage);
 
       // Show error toast
       showToast({
@@ -97,12 +97,12 @@ export function useUpdateAyam() {
     },
     onError: error => {
       const errorMessage = getErrorMessage(error);
-      console.error("Failed to update ayam:", errorMessage);
 
       // Show error toast
       showToast({
         title: "Gagal Mengupdate Data Ayam",
-        description: errorMessage || "Terjadi kesalahan saat mengupdate data ayam",
+        description:
+          errorMessage || "Terjadi kesalahan saat mengupdate data ayam",
         color: "error",
       });
     },
@@ -130,12 +130,12 @@ export function useDeleteAyam() {
     },
     onError: error => {
       const errorMessage = getErrorMessage(error);
-      console.error("Failed to delete ayam:", errorMessage);
 
       // Show error toast
       showToast({
         title: "Gagal Menghapus Data Ayam",
-        description: errorMessage || "Terjadi kesalahan saat menghapus data ayam",
+        description:
+          errorMessage || "Terjadi kesalahan saat menghapus data ayam",
         color: "error",
       });
     },

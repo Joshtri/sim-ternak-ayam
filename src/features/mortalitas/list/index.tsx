@@ -1,15 +1,35 @@
 import type { Mortalitas } from "../types";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useDeleteMortalitas, useMortalitas } from "../hooks/useMortalitas";
 
 import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { useCurrentUser } from "@/features/auth/hooks/useAuth";
+import { ICurrentUser } from "@/interfaces/common";
 
 export default function MortalitasList() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: mortalitas, isLoading } = useMortalitas();
+  const { data: meData, isLoading: isLoadingMe } =
+    useCurrentUser<ICurrentUser>();
+
+  // Determine kandangId filter based on user role
+  // For Petugas: filter by first managed kandang (or you can add UI to select)
+  // For other roles: no filter (show all)
+  const kandangIdFilter = useMemo(() => {
+    const roleNormalized = String(meData?.role ?? "").toLowerCase();
+    if (roleNormalized === "petugas" && meData?.kandangsManaged?.length) {
+      // For Petugas, filter by first kandang or you can add dropdown to select
+      return String(meData.kandangsManaged[0].id);
+    }
+    return undefined;
+  }, [meData]);
+
+  // Use server-side filtering with kandangId query param
+  const { data: mortalitas, isLoading: isLoadingMortalitas } = useMortalitas({
+    kandangId: kandangIdFilter,
+  });
 
   const deleteMortalitas = useDeleteMortalitas();
 
@@ -24,7 +44,27 @@ export default function MortalitasList() {
     });
   };
 
+  // Filter data based on search query only (kandangId filtering is done server-side)
+  const filteredData = useMemo(() => {
+    const list = mortalitas ?? [];
+
+    // Apply search filter (by penyebabKematian)
+    if (!searchQuery || searchQuery.trim() === "") return list;
+
+    const q = searchQuery.toLowerCase().trim();
+
+    return list.filter(item =>
+      String(item.penyebabKematian ?? "")
+        .toLowerCase()
+        .includes(q)
+    );
+  }, [mortalitas, searchQuery]);
   const columns = [
+    {
+      key: "penanggungJawabKandang",
+      label: "Penanggung Jawab Kandang",
+      value: (item: Mortalitas) => item.petugasNama,
+    },
     {
       key: "tanggalKematian",
       label: "Tanggal Kematian",
@@ -36,6 +76,18 @@ export default function MortalitasList() {
       value: (item: Mortalitas) => item.jumlahKematian.toLocaleString("id-ID"),
     },
     {
+      key: "jumlahAyamSebelumMati",
+      label: "Jumlah Ayam Sebelum Mati (ekor)",
+      value: (item: Mortalitas) =>
+        item.jumlahAyamSebelumMati.toLocaleString("id-ID"),
+    },
+    {
+      key: "jumlahAyamSesudahMati",
+      label: "Jumlah Ayam Sesudah Mati (ekor)",
+      value: (item: Mortalitas) =>
+        item.jumlahAyamSesudahMati.toLocaleString("id-ID"),
+    },
+    {
       key: "penyebabKematian",
       label: "Penyebab Kematian",
       value: (item: Mortalitas) => item.penyebabKematian,
@@ -44,9 +96,11 @@ export default function MortalitasList() {
   ];
 
   // Filter data based on search query
-  const filteredData = mortalitas?.filter(item =>
-    item.penyebabKematian.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredData = mortalitas?.filter(item =>
+  //   item.penyebabKematian.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
+
+  const isLoading = isLoadingMortalitas || isLoadingMe;
 
   return (
     <ListGrid

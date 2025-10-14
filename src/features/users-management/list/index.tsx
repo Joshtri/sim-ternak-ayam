@@ -67,10 +67,6 @@ export default function UserManagementList() {
           },
         },
       }}
-      breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Manajemen User" },
-      ]}
       deleteConfirmMessage={(item: User) =>
         `Apakah Anda yakin ingin menghapus user "${item.fullName}"?`
       }

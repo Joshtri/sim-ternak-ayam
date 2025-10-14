@@ -96,7 +96,10 @@ export const userFormSchema: FormSchema = {
           required: true,
           colSpan: 2,
           validation: validateRole,
-          options: getRoleOptions(),
+          options: getRoleOptions().map(option => ({
+            ...option,
+            value: option.value.toString(),
+          })),
         },
       ],
     },
