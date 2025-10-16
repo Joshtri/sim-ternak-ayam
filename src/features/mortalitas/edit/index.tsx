@@ -37,7 +37,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformMortalitasEditFormData(data);
+    const transformedData = transformMortalitasEditFormData(data, id);
 
     console.log("Updating mortalitas data:", transformedData);
 
