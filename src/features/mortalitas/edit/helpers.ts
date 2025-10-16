@@ -10,6 +10,7 @@ import type { Ayam } from "@/features/ayams/interface";
  * Mortalitas edit form data interface
  */
 export interface MortalitasEditFormData {
+  id: string;
   ayamId: string;
   tanggalKematian: string;
   jumlahKematian: number;
@@ -47,10 +48,11 @@ export const getDefaultMortalitasEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformMortalitasEditFormData = (
-  data: MortalitasEditFormData
+  data: MortalitasEditFormData,
+  id: string
 ): UpdateMortalitasDto => {
   return {
-    id: "", // Will be set in the component
+    id, // Will be set in the component
     ayamId: data.ayamId,
     tanggalKematian: data.tanggalKematian,
     jumlahKematian: Number(data.jumlahKematian),
