@@ -6,7 +6,7 @@ export interface User {
   username: string;
   email: string;
   fullName: string;
-  role: "admin" | "manager" | "operator";
+  role: "Petugas" | "Operator" | "Pemilik";
   noWA?: string;
   avatar?: string;
   isActive: boolean;
@@ -21,14 +21,15 @@ export interface CreateUserDto {
   fullName: string;
   email: string;
   noWA: string;
-  role: number; // 0 = Petugas, 1 = Operator, 2 = Pemilik
+  role: string; // "Petugas" | "Operator" | "Pemilik"
 }
 
 export interface UpdateUserDto {
-  name?: string;
+  username?: string;
+  fullName?: string;
   email?: string;
-  role?: "admin" | "manager" | "operator";
-  phone?: string;
+  role?: "Petugas" | "Operator" | "Pemilik";
+  noWA?: string;
   isActive?: boolean;
 }
 
