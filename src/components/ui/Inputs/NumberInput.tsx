@@ -33,6 +33,7 @@ export const NumberInput = ({
         name={name}
         render={({ field }) => (
           <HeroNumberInput
+            aria-label={label}
             errorMessage={error}
             isDisabled={disabled}
             isInvalid={!!error}
