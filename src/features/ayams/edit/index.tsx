@@ -37,7 +37,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformAyamEditFormData(data);
+    const transformedData = transformAyamEditFormData(data,id);
 
     console.log("Updating ayam data:", transformedData);
 
