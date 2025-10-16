@@ -80,7 +80,7 @@ export default function JenisKegiatanList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-jenis-kegiatan/edit/${id}`,
+          href: (id: string) => `/daftar-jenis-kegiatan/${id}/edit`,
           label: "Edit",
         },
         delete: {
