@@ -44,10 +44,11 @@ export const getDefaultAyamEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformAyamEditFormData = (
-  data: AyamEditFormData
+  data: AyamEditFormData,
+  id: string
 ): UpdateAyamDto => {
   return {
-    id: "", // Will be set in the component
+    id,
     kandangId: data.kandangId,
     tanggalMasuk: data.tanggalMasuk,
     jumlahMasuk: Number(data.jumlahMasuk),
