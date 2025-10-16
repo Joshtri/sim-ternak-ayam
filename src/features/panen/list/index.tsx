@@ -64,9 +64,7 @@ export default function PanenList() {
   ];
 
   // Filter data based on search query
-  const filteredData = panens?.filter(item =>
-    item.namaKandang.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredData = panens?.filter(item => item.namaKandang);
 
   return (
     <ListGrid
@@ -76,7 +74,7 @@ export default function PanenList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-panen/edit/${id}`,
+          href: (id: string) => `/daftar-panen/${id}/edit`,
           label: "Edit",
         },
         delete: {
@@ -89,7 +87,7 @@ export default function PanenList() {
         label: "Tambah Data Panen",
       }}
       columns={columns}
-      data={filteredData}
+      data={panens || []}
       deleteConfirmMessage={(item: Panen) =>
         `Apakah Anda yakin ingin menghapus data panen dari kandang "${item.namaKandang}"?`
       }
