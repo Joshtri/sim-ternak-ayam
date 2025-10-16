@@ -1,5 +1,5 @@
-import React from "react";
+import { MortalitasEditForm } from "@/features/mortalitas/edit";
 
 export default function EditMortalitasPage() {
-  return <div>EditMortalitasPage</div>;
+  return <MortalitasEditForm />;
 }
