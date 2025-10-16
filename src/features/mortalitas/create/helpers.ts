@@ -34,6 +34,7 @@ export const getDefaultMortalitasFormValues =
  */
 export const transformMortalitasFormData = (
   data: MortalitasFormData
+  
 ): CreateMortalitasDto => {
   return {
     ayamId: data.ayamId,
