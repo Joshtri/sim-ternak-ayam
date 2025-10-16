@@ -37,7 +37,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformPanenEditFormData(data);
+    const transformedData = transformPanenEditFormData(data, id);
 
     console.log("Updating panen data:", transformedData);
 
