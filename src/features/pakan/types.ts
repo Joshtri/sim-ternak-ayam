@@ -2,19 +2,25 @@ import { BaseEntity } from "@/interfaces/common";
 
 export interface Pakan extends BaseEntity {
   namaPakan: string;
-  stok: number;
+  stokKg: number;
+  bulan: number;
+  tahun: number;
 }
 
 export interface CreatePakanDto {
   namaPakan: string;
-  stok: number;
+  stokKg: number;
+  bulan: number;
+  tahun: number;
 }
 
 export interface UpdatePakanDto extends Pick<BaseEntity, "id"> {
   namaPakan?: string;
-  stok?: number;
+  stokKg?: number;
+  bulan?: number;
+  tahun?: number;
 }
 
 export interface UpdateStockDto {
-  stok: number;
+  stokKg: number;
 }
