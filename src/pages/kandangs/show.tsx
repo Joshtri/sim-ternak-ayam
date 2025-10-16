@@ -1,5 +1,5 @@
-import React from "react";
+import KandangDetail from "@/features/kandang/show";
 
 export default function KandangShowPage() {
-  return <div>show kandang</div>;
+  return <KandangDetail />;
 }
