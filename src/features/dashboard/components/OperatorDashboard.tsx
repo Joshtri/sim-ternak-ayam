@@ -97,7 +97,7 @@ export function OperatorDashboard() {
       </div>
 
       {/* Financial Summary */}
-      <Card className="p-6">
+      {/* <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <DollarSign size={24} className="text-primary" />
           <h2 className="text-xl font-semibold">Ringkasan Keuangan</h2>
@@ -138,7 +138,7 @@ export function OperatorDashboard() {
             </p>
           </div>
         </div>
-      </Card>
+      </Card> */}
 
       {/* Productivity Stats */}
       <Card className="p-6">
