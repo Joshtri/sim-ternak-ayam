@@ -52,7 +52,7 @@ export const formatUserForDisplay = (user: any) => {
 /**
  * Get role label from value
  */
-export const getRoleLabel = (role: number): string => {
+export const getRoleLabel = (role: string): string => {
   switch (role) {
     case UserRole.PETUGAS:
       return "Petugas";
