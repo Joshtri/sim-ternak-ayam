@@ -71,7 +71,7 @@ export default function MortalitasDetail() {
             </LinkButton>
             <LinkButton
               color="warning"
-              href={`/daftar-mortalitas/edit/${id}`}
+              href={`/daftar-mortalitas/${id}/edit`}
               size="md"
               startContent={<Pencil className="w-4 h-4" />}
               variant="solid"
