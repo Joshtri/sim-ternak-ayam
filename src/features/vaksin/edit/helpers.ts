@@ -22,6 +22,7 @@ export const getDefaultVaksinEditFormValues = (
 ): Partial<VaksinEditFormData> => {
   if (!vaksin) {
     const now = new Date();
+
     return {
       namaVaksin: "",
       stok: 0,
@@ -44,10 +45,11 @@ export const getDefaultVaksinEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformVaksinEditFormData = (
-  data: VaksinEditFormData
+  data: VaksinEditFormData,
+  id: string
 ): UpdateVaksinDto => {
   return {
-    id: "", // Will be set in the component
+    id, // Will be set in the component
     namaVaksin: data.namaVaksin,
     stok: Number(data.stok),
     bulan: Number(data.bulan),
