@@ -19,13 +19,6 @@ import { useProduktivitas } from "../hooks/useLaporan";
 import PetugasPerformanceCard from "./components/PetugasPerformanceCard";
 import DetailProduktivitasModal from "./components/DetailProduktivitasModal";
 
-// Simple DetailModal component
-interface DetailModalProps {
-  petugasId: string | null;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
 // Main Component
 export default function ProduktivitasList() {
   const [sortBy, setSortBy] = useState<string>("productivity");
