@@ -1,7 +1,5 @@
-import React from 'react'
+import { OperasionalEditForm } from "@/features/operasional/edit";
 
-export default function edit() {
-  return (
-    <div>edit</div>
-  )
+export default function OperasionalEditPage() {
+  return <OperasionalEditForm />;
 }
