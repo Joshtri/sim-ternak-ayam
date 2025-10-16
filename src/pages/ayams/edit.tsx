@@ -1,7 +1,5 @@
-import React from 'react'
+import { AyamEditForm } from "@/features/ayams/edit";
 
 export default function AyamEditPage() {
-  return (
-    <div>AyamEditPage</div>
-  )
+  return <AyamEditForm />;
 }
