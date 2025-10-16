@@ -45,7 +45,7 @@ const handleFormSubmit = async (
     console.log("Mortalitas data created successfully!");
 
     // Navigate back to list
-    navigate({ to: "/mortalitas" });
+    navigate({ to: "/daftar-mortalitas" });
   } catch (error) {
     console.error("Error creating mortalitas data:", error);
   }
