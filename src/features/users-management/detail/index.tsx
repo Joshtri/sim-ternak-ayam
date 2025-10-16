@@ -72,11 +72,6 @@ export default function UserManagementDetail() {
             </LinkButton>
           </div>
         }
-        breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Manajemen User", href: "/users-management" },
-          { label: "Detail" },
-        ]}
         description="Informasi lengkap pengguna sistem"
         title={`Detail User: ${user.fullName}`}
       />
@@ -106,15 +101,15 @@ export default function UserManagementDetail() {
                 value: (
                   <Badge
                     color={
-                      user.role === "admin"
+                      user.role === "Pemilik"
                         ? "danger"
-                        : user.role === "manager"
+                        : user.role === "Petugas"
                           ? "warning"
                           : "primary"
                     }
                     variant="flat"
                   >
-                    {user.role as any}
+                    {user.role}
                   </Badge>
                 ),
               },
