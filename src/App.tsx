@@ -17,7 +17,7 @@ type AppProps = { router: TanstackRouter };
 const App = ({ router }: AppProps): FunctionComponent => {
   return (
     <QueryClientProvider client={queryClient}>
-      <InteractiveCursor />
+      {/* <InteractiveCursor /> */}
       <RouterProvider router={router} />
       <ToastProvider maxVisibleToasts={3000} placement="top-right" />
 
