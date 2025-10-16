@@ -44,6 +44,7 @@ export const SelectInput = ({
 
   return (
     <FormFieldWrapper
+      key={name}
       helperText={description}
       label={label}
       name={name}
@@ -54,18 +55,18 @@ export const SelectInput = ({
         name={name}
         render={({ field }) => {
           // Convert field value to selection keys
-          let selectedKeys: Set<string> | undefined;
+          // Always provide a Set to avoid uncontrolled-to-controlled warning
+          let selectedKeys: Set<string>;
 
           if (selectionMode === "multiple") {
-            selectedKeys = field.value ? new Set(field.value) : undefined;
+            selectedKeys = new Set(field.value ?? []);
           } else {
-            selectedKeys = field.value
-              ? new Set([String(field.value)])
-              : undefined;
+            selectedKeys = new Set(field.value ? [String(field.value)] : []);
           }
 
           return (
             <Select
+              aria-label={label}
               disallowEmptySelection={disallowEmptySelection}
               errorMessage={error}
               isDisabled={disabled}
