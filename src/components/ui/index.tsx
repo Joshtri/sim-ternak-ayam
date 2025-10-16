@@ -4,7 +4,7 @@ export { Badge } from "./Badge";
 export { Separator } from "./Separator";
 export { Heading } from "./Heading";
 export { Text } from "./Text";
-export { ListGrid } from "./ListGrid";
+// export { ListGrid } from "./ListGrid";
 
 // Button Components
 export { Button, LinkButton, CreateOrEditButton } from "./Button";
