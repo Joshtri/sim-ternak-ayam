@@ -12,11 +12,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get path dari query parameter
-    const path = req.query.path ? req.query.path.join('/') : '';
+    // Extract path from URL - remove /api/ prefix
+    const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
+    const path = urlPath.replace('/api/', '');
 
     // Backend API URL
     const backendUrl = `http://sim-ternak-api.runasp.net/api/${path}`;
+
+    console.log('Proxying:', req.method, backendUrl);
 
     // Prepare request options
     const options = {
