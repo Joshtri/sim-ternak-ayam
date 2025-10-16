@@ -35,7 +35,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformKandangEditFormData(data);
+    const transformedData = transformKandangEditFormData(data, id);
 
     console.log("Updating kandang data:", transformedData);
 
