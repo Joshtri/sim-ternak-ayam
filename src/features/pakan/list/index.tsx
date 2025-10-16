@@ -43,9 +43,12 @@ export default function PakanList() {
   ];
 
   // Filter data based on search query
-  const filteredData = pakans?.filter(item =>
-    item.namaPakan.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = pakans?.filter(item => {
+    if (!searchQuery) return true;
+
+    const query = searchQuery.toLowerCase();
+    return item.namaPakan?.toLowerCase().includes(query) ?? false;
+  });
 
   return (
     <ListGrid
