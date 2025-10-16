@@ -43,34 +43,38 @@ export default function JenisKegiatanList() {
         </span>
       ),
     },
-    {
-      key: "satuan",
-      label: "Satuan",
-      value: (item: JenisKegiatan) => (
-        <Badge color="primary" variant="flat">
-          {item.satuan}
-        </Badge>
-      ),
-    },
-    {
-      key: "biayaDefault",
-      label: "Biaya Default",
-      value: (item: JenisKegiatan) => (
-        <span className="font-semibold text-success">
-          {formatCurrency(item.biayaDefault)}
-        </span>
-      ),
-    },
+    // {
+    //   key: "satuan",
+    //   label: "Satuan",
+    //   value: (item: JenisKegiatan) => (
+    //     <Badge color="primary" variant="flat">
+    //       {item.satuan}
+    //     </Badge>
+    //   ),
+    // },
+    // {
+    //   key: "biayaDefault",
+    //   label: "Biaya Default",
+    //   value: (item: JenisKegiatan) => (
+    //     <span className="font-semibold text-success">
+    //       {formatCurrency(item.biayaDefault)}
+    //     </span>
+    //   ),
+    // },
     { key: "actions", label: "Aksi", align: "center" as const },
   ];
 
   // Filter data based on search query
-  const filteredData = jenisKegiatans?.filter(
-    item =>
-      item.namaKegiatan.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.deskripsi.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.satuan.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = jenisKegiatans?.filter(item => {
+    if (!searchQuery) return true;
+
+    const query = searchQuery.toLowerCase();
+    return (
+      (item.namaKegiatan?.toLowerCase().includes(query) ?? false) ||
+      (item.deskripsi?.toLowerCase().includes(query) ?? false) ||
+      (item.satuan?.toLowerCase().includes(query) ?? false)
+    );
+  });
 
   return (
     <ListGrid
