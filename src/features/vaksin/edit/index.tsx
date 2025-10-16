@@ -33,7 +33,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformVaksinEditFormData(data);
+    const transformedData = transformVaksinEditFormData(data, id);
 
     console.log("Updating vaksin data:", transformedData);
 
