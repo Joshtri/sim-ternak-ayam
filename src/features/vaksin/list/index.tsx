@@ -43,9 +43,12 @@ export default function VaksinList() {
   ];
 
   // Filter data based on search query
-  const filteredData = vaksins?.filter(item =>
-    item.namaVaksin.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = vaksins?.filter(item => {
+    if (!searchQuery) return true;
+
+    const query = searchQuery.toLowerCase();
+    return item.namaVaksin?.toLowerCase().includes(query) ?? false;
+  });
 
   return (
     <ListGrid
