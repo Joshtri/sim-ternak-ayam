@@ -43,10 +43,11 @@ export const getDefaultJenisKegiatanEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformJenisKegiatanEditFormData = (
-  data: JenisKegiatanEditFormData
+  data: JenisKegiatanEditFormData,
+  id: string
 ): UpdateJenisKegiatanDto => {
   return {
-    id: "", // Will be set in the component
+    id,
     namaKegiatan: data.namaKegiatan,
     deskripsi: data.deskripsi,
     satuan: data.satuan,
