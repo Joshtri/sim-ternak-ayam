@@ -80,11 +80,15 @@ export default function BiayaList() {
   ];
 
   // Filter data based on search query
-  const filteredData = biayas?.filter(
-    item =>
-      item.jenisBiaya.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.petugasNama.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = biayas?.filter(item => {
+    if (!searchQuery) return true;
+
+    const query = searchQuery.toLowerCase();
+    return (
+      (item.jenisBiaya?.toLowerCase().includes(query) ?? false) ||
+      (item.petugasNama?.toLowerCase().includes(query) ?? false)
+    );
+  });
 
   return (
     <ListGrid
