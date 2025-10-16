@@ -1,7 +1,7 @@
 "use client";
 
 import { Textarea } from "@heroui/react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { FormFieldWrapper } from "../Form/FormFieldWrapper";
 
@@ -31,7 +31,7 @@ export const TextareaInput = ({
   description,
 }: TextareaInputProps) => {
   const {
-    register,
+    control,
     formState: { errors },
   } = useFormContext();
 
@@ -44,18 +44,25 @@ export const TextareaInput = ({
       name={name}
       required={required}
     >
-      <Textarea
-        {...register(name)}
-        errorMessage={error}
-        id={name}
-        isDisabled={disabled}
-        isInvalid={!!error}
-        isRequired={required}
-        labelPlacement="outside"
-        maxLength={maxLength}
-        maxRows={maxRows}
-        minRows={minRows || rows}
-        placeholder={placeholder}
+      <Controller
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <Textarea
+            {...field}
+            errorMessage={error}
+            id={name}
+            isDisabled={disabled}
+            isInvalid={!!error}
+            isRequired={required}
+            labelPlacement="outside"
+            maxLength={maxLength}
+            maxRows={maxRows}
+            minRows={minRows || rows}
+            placeholder={placeholder}
+            value={field.value || ""}
+          />
+        )}
       />
     </FormFieldWrapper>
   );
