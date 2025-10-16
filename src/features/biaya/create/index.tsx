@@ -64,7 +64,9 @@ export function BiayaCreateForm() {
   const createBiaya = useCreateBiaya();
 
   // Fetch data for dropdowns
-  const { data: users, isLoading: isLoadingUsers } = useUsers();
+  const { data: users, isLoading: isLoadingUsers } = useUsers({
+    role: "petugas",
+  });
   const { data: operasionals, isLoading: isLoadingOperasionals } =
     useOperasionals();
 
