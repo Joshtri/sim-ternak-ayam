@@ -42,12 +42,15 @@ export const getDefaultKandangEditFormValues = (
 /**
  * Transform form data to UpdateKandangDto before submission
  * @param data - Raw form data
+ * @param id - Kandang ID (required by backend)
  * @returns Transformed data ready for API
  */
 export const transformKandangEditFormData = (
-  data: KandangEditFormData
+  data: KandangEditFormData,
+  id: string
 ): UpdateKandangDto => {
   return {
+    id,
     namaKandang: data.namaKandang.trim(),
     kapasitas: Number(data.kapasitas),
     lokasi: data.lokasi.trim(),
