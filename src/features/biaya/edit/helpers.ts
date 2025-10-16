@@ -54,10 +54,11 @@ export const getDefaultBiayaEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformBiayaEditFormData = (
-  data: BiayaEditFormData
+  data: BiayaEditFormData,
+  id: string
 ): UpdateBiayaDto => {
   const dto: UpdateBiayaDto = {
-    id: "", // Will be set in the component
+    id,
     jenisBiaya: data.jenisBiaya,
     tanggal: data.tanggal,
     jumlah: Number(data.jumlah),
