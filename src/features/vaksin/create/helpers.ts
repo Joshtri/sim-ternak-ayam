@@ -10,15 +10,22 @@ import type { CreateVaksinDto } from "../types";
 export interface VaksinFormData {
   namaVaksin: string;
   stok: number;
+  bulan: number;
+  tahun: number;
 }
 
 /**
  * Get default form values
  */
-export const getDefaultVaksinFormValues = (): Partial<VaksinFormData> => ({
-  namaVaksin: "",
-  stok: 0,
-});
+export const getDefaultVaksinFormValues = (): Partial<VaksinFormData> => {
+  const currentDate = new Date();
+  return {
+    namaVaksin: "",
+    stok: 0,
+    bulan: currentDate.getMonth() + 1, // Current month (1-12)
+    tahun: currentDate.getFullYear(), // Current year
+  };
+};
 
 /**
  * Transform form data to CreateVaksinDto before submission
@@ -29,6 +36,8 @@ export const transformVaksinFormData = (data: VaksinFormData): CreateVaksinDto =
   return {
     namaVaksin: data.namaVaksin,
     stok: Number(data.stok),
+    bulan: Number(data.bulan),
+    tahun: Number(data.tahun),
   };
 };
 
@@ -49,4 +58,28 @@ export const formatStok = (stok: number): string => {
  */
 export const isLowStock = (stok: number, threshold: number = 50): boolean => {
   return stok < threshold;
+};
+
+/**
+ * Format month-year for display
+ * @param bulan - Month (1-12)
+ * @param tahun - Year
+ * @returns Formatted string (e.g., "Januari 2025")
+ */
+export const formatMonthYear = (bulan: number, tahun: number): string => {
+  const monthNames = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+  return `${monthNames[bulan - 1]} ${tahun}`;
+};
+
+/**
+ * Format month-year in short format
+ * @param bulan - Month (1-12)
+ * @param tahun - Year
+ * @returns Formatted string (e.g., "01/2025")
+ */
+export const formatMonthYearShort = (bulan: number, tahun: number): string => {
+  return `${bulan.toString().padStart(2, '0')}/${tahun}`;
 };
