@@ -8,6 +8,7 @@ import type { UpdatePakanDto, Pakan } from "../types";
  * Pakan edit form data interface
  */
 export interface PakanEditFormData {
+  
   namaPakan: string;
   stokKg: number;
   bulan: number;
@@ -44,10 +45,11 @@ export const getDefaultPakanEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformPakanEditFormData = (
-  data: PakanEditFormData
+  data: PakanEditFormData,
+  id: string
 ): UpdatePakanDto => {
   return {
-    id: "", // Will be set in the component
+    id,
     namaPakan: data.namaPakan,
     stokKg: Number(data.stokKg),
     bulan: Number(data.bulan),
