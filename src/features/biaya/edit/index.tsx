@@ -37,7 +37,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformBiayaEditFormData(data);
+    const transformedData = transformBiayaEditFormData(data, id);
 
     console.log("Updating biaya data:", transformedData);
 
