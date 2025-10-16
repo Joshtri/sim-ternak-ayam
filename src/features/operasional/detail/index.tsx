@@ -77,7 +77,7 @@ export default function OperasionalDetail() {
             </LinkButton>
             <LinkButton
               color="warning"
-              href={`/daftar-operasional/edit/${id}`}
+              href={`/daftar-operasional/${id}/edit`}
               size="md"
               startContent={<Pencil className="w-4 h-4" />}
               variant="solid"
