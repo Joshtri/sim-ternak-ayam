@@ -110,7 +110,7 @@ export default function MortalitasList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-mortalitas/edit/${id}`,
+          href: (id: string) => `/daftar-mortalitas/${id}/edit`,
           label: "Edit",
         },
         delete: {
