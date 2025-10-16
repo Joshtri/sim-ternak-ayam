@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 import { usePakanById } from "../hooks/usePakan";
-import { formatStok, isLowStock } from "../create/helpers";
+import { formatStok, isLowStock, formatMonthYear } from "../create/helpers";
 
 import { DetailCard, DetailCardSkeleton } from "@/components/ui/DetailCard";
 import { Badge } from "@/components/ui/Badge";
@@ -51,7 +51,7 @@ export default function PakanDetail() {
     );
   }
 
-  const lowStock = isLowStock(pakan.stok);
+  const lowStock = isLowStock(pakan.stokKg);
 
   return (
     <div className="p-4 md:p-6 space-y-6">
@@ -70,7 +70,7 @@ export default function PakanDetail() {
             </LinkButton>
             <LinkButton
               color="warning"
-              href={`/daftar-pakan/edit/${id}`}
+              href={`/daftar-pakan/${id}/edit`}
               size="md"
               startContent={<Pencil className="w-4 h-4" />}
               variant="solid"
@@ -108,12 +108,12 @@ export default function PakanDetail() {
                 fullWidth: true,
               },
               {
-                key: "stok",
+                key: "stokKg",
                 label: "Stok",
                 value: (
                   <div className="flex items-center gap-2">
                     <span className="text-2xl font-bold text-success">
-                      {formatStok(pakan.stok)}
+                      {formatStok(pakan.stokKg)}
                     </span>
                     {lowStock && (
                       <Badge color="danger" variant="flat">
@@ -121,6 +121,16 @@ export default function PakanDetail() {
                       </Badge>
                     )}
                   </div>
+                ),
+                fullWidth: true,
+              },
+              {
+                key: "periode",
+                label: "Periode",
+                value: (
+                  <span className="font-semibold text-lg">
+                    {formatMonthYear(pakan.bulan, pakan.tahun)}
+                  </span>
                 ),
                 fullWidth: true,
               },
@@ -168,8 +178,9 @@ export default function PakanDetail() {
               </h4>
               <p className="text-sm text-orange-700">
                 Stok pakan <span className="font-semibold">{pakan.namaPakan}</span>{" "}
+                untuk periode <span className="font-semibold">{formatMonthYear(pakan.bulan, pakan.tahun)}</span>{" "}
                 saat ini adalah{" "}
-                <span className="font-semibold">{formatStok(pakan.stok)}</span>.
+                <span className="font-semibold">{formatStok(pakan.stokKg)}</span>.
                 Segera lakukan pengisian ulang stok untuk menghindari kehabisan
                 pakan.
               </p>
