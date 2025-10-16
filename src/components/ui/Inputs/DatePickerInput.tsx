@@ -75,8 +75,6 @@ export const DatePickerInput = ({
                 isDisabled={disabled}
                 isInvalid={!!error}
                 isRequired={required}
-                // label={placeholder}
-                maxValue={maxValue}
                 minValue={minValue}
                 value={dateValue}
                 onChange={date => {
@@ -89,6 +87,9 @@ export const DatePickerInput = ({
                     field.onChange(null);
                   }
                 }}
+                aria-label={label}
+                // label={placeholder}
+                maxValue={maxValue}
               />
             );
           }}
