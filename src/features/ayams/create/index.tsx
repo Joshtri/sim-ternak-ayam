@@ -24,6 +24,7 @@ import { useKandangs } from "@/features/kandang/hooks/useKandang";
 import { FormBuilder } from "@/components/ui/Form/FormBuilder";
 import { Card } from "@/components/ui/Card";
 import FormActions from "@/components/ui/Form/FormActions";
+import { SkeletonCard, SkeletonForm } from "@/components/ui";
 
 /**
  * Handle form submission
@@ -128,12 +129,10 @@ export function AyamCreateForm() {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Card className="p-6">
+        <Card className={isLoading ? "p-0" : "p-6"}>
           {/* Loading state */}
           {isLoading ? (
-            <div className="flex justify-center items-center p-8">
-              <div className="text-gray-500">Memuat data...</div>
-            </div>
+            <SkeletonForm fields={4} />
           ) : (
             <>
               {/* Form builder with dynamic schema */}
