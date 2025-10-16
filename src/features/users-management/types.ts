@@ -13,7 +13,7 @@ export interface UserFormData {
   fullName: string;
   email: string;
   noWA: string;
-  role: number; // 0 = Petugas, 1 = Operator, 2 = Pemilik
+  role: string; // "Petugas" | "Operator" | "Pemilik"
 }
 
 /**
