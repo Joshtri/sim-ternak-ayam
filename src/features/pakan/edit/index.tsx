@@ -33,7 +33,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformPakanEditFormData(data);
+    const transformedData = transformPakanEditFormData(data, id );
 
     console.log("Updating pakan data:", transformedData);
 
