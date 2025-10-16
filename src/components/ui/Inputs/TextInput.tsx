@@ -1,5 +1,5 @@
 import { Input } from "@heroui/react";
-import { useFormContext, RegisterOptions } from "react-hook-form";
+import { useFormContext, RegisterOptions, Controller } from "react-hook-form";
 import { useState, MouseEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -26,6 +26,7 @@ export const TextInput = ({
 }: TextInputProps) => {
   const {
     register,
+    control,
     formState: { errors },
   } = useFormContext();
 
@@ -44,32 +45,41 @@ export const TextInput = ({
 
   return (
     <FormFieldWrapper label={label} name={name} required={required}>
-      <Input
-        {...register(name, validation)}
-        endContent={
-          isPassword ? (
-            <button
-              aria-label={show ? "Sembunyikan password" : "Tampilkan password"}
-              className="inline-flex items-center justify-center p-1"
-              type="button"
-              onClick={toggleShow}
-            >
-              {show ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
-            </button>
-          ) : undefined
-        }
-        errorMessage={error}
-        id={name}
-        isDisabled={disabled}
-        isInvalid={!!error}
-        isRequired={required}
-        labelPlacement="outside"
-        placeholder={placeholder}
-        type={isPassword && show ? "text" : type}
+      <Controller
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <Input
+            {...field}
+            endContent={
+              isPassword ? (
+                <button
+                  aria-label={
+                    show ? "Sembunyikan password" : "Tampilkan password"
+                  }
+                  className="inline-flex items-center justify-center p-1"
+                  type="button"
+                  onClick={toggleShow}
+                >
+                  {show ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              ) : undefined
+            }
+            errorMessage={error}
+            id={name}
+            isDisabled={disabled}
+            isInvalid={!!error}
+            isRequired={required}
+            labelPlacement="outside"
+            placeholder={placeholder}
+            type={isPassword && show ? "text" : type}
+          />
+        )}
+        rules={validation}
       />
     </FormFieldWrapper>
   );
