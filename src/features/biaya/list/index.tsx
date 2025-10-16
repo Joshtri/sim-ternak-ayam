@@ -94,7 +94,7 @@ export default function BiayaList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-biaya/edit/${id}`,
+          href: (id: string) => `/daftar-biaya/${id}/edit`,
           label: "Edit",
         },
         delete: {
