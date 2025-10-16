@@ -33,3 +33,35 @@ export const validateStok = {
   },
   valueAsNumber: true,
 };
+
+/**
+ * Validate bulan (month 1-12)
+ */
+export const validateBulan = {
+  required: "Bulan harus diisi",
+  min: {
+    value: 1,
+    message: "Bulan minimal 1 (Januari)",
+  },
+  max: {
+    value: 12,
+    message: "Bulan maksimal 12 (Desember)",
+  },
+  valueAsNumber: true,
+};
+
+/**
+ * Validate tahun (year 2000-2100)
+ */
+export const validateTahun = {
+  required: "Tahun harus diisi",
+  min: {
+    value: 2000,
+    message: "Tahun minimal 2000",
+  },
+  max: {
+    value: 2100,
+    message: "Tahun maksimal 2100",
+  },
+  valueAsNumber: true,
+};
