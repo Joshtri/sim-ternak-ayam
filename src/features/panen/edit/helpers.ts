@@ -47,10 +47,11 @@ export const getDefaultPanenEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformPanenEditFormData = (
-  data: PanenEditFormData
+  data: PanenEditFormData,
+  id: string
 ): UpdatePanenDto => {
   return {
-    id: "", // Will be set in the component
+    id,
     ayamId: data.ayamId,
     tanggalPanen: data.tanggalPanen,
     jumlahEkorPanen: Number(data.jumlahEkorPanen),
