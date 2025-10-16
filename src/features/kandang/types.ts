@@ -20,6 +20,7 @@ export interface CreateKandangDto {
 }
 
 export interface UpdateKandangDto {
+  id: string;
   namaKandang?: string;
   kapasitas?: number;
   lokasi?: string;
