@@ -72,7 +72,7 @@ export default function JenisKegiatanDetail() {
             </LinkButton>
             <LinkButton
               color="warning"
-              href={`/daftar-jenis-kegiatan/edit/${id}`}
+              href={`/daftar-jenis-kegiatan/${id}/edit`}
               size="md"
               startContent={<Pencil className="w-4 h-4" />}
               variant="solid"
