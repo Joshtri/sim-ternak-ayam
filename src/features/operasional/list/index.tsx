@@ -79,7 +79,7 @@ export default function OperasionalList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-operasional/edit/${id}`,
+          href: (id: string) => `/daftar-operasional/${id}/edit`,
           label: "Edit",
         },
         delete: {
