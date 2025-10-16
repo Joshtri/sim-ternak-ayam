@@ -1,22 +1,16 @@
 import { useParams } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  Pencil,
-  ListChecks,
-  Calendar,
-  Info,
-} from "lucide-react";
+import { ArrowLeft, Pencil, ListChecks, Calendar } from "lucide-react";
 
 import { useJenisKegiatanById } from "../hooks/useJenisKegiatan";
-import { formatCurrency } from "../create/helpers";
 
 import { DetailCard, DetailCardSkeleton } from "@/components/ui/DetailCard";
-import { Badge } from "@/components/ui/Badge";
 import { LinkButton } from "@/components/ui/Button";
 import { PageHeader } from "@/components/common/PageHeader";
 
 export default function JenisKegiatanDetail() {
-  const { id } = useParams("/_authenticated/daftar-jenis-kegiatan/$id" as any) as {
+  const { id } = useParams(
+    "/_authenticated/daftar-jenis-kegiatan/$id" as any
+  ) as {
     id?: string;
   };
 
@@ -121,24 +115,24 @@ export default function JenisKegiatanDetail() {
                 ),
                 fullWidth: true,
               },
-              {
-                key: "satuan",
-                label: "Satuan",
-                value: (
-                  <Badge color="primary" variant="flat" size="lg">
-                    {jenisKegiatan.satuan}
-                  </Badge>
-                ),
-              },
-              {
-                key: "biayaDefault",
-                label: "Biaya Default",
-                value: (
-                  <span className="text-2xl font-bold text-success">
-                    {formatCurrency(jenisKegiatan.biayaDefault)}
-                  </span>
-                ),
-              },
+              // {
+              //   key: "satuan",
+              //   label: "Satuan",
+              //   value: (
+              //     <Badge color="primary" variant="flat" size="lg">
+              //       {jenisKegiatan.satuan}
+              //     </Badge>
+              //   ),
+              // },
+              // {
+              //   key: "biayaDefault",
+              //   label: "Biaya Default",
+              //   value: (
+              //     <span className="text-2xl font-bold text-success">
+              //       {formatCurrency(jenisKegiatan.biayaDefault)}
+              //     </span>
+              //   ),
+              // },
             ],
           },
           {
@@ -173,28 +167,6 @@ export default function JenisKegiatanDetail() {
       />
 
       {/* Info Card */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-blue-600 mt-0.5" />
-          <div>
-            <h4 className="font-semibold text-blue-900 mb-1">
-              Informasi Data Master
-            </h4>
-            <p className="text-sm text-blue-700">
-              Jenis kegiatan{" "}
-              <span className="font-semibold">{jenisKegiatan.namaKegiatan}</span>{" "}
-              dengan satuan{" "}
-              <span className="font-semibold">{jenisKegiatan.satuan}</span> dan
-              biaya default{" "}
-              <span className="font-semibold">
-                {formatCurrency(jenisKegiatan.biayaDefault)}
-              </span>
-              . Data ini dapat digunakan sebagai referensi untuk pencatatan
-              kegiatan operasional peternakan.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
