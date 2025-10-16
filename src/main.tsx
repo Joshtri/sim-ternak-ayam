@@ -21,6 +21,22 @@ declare module "@tanstack/react-router" {
 
 const rootElement = document.querySelector("#root") as Element;
 
+// Apply saved theme preference on startup so dark mode applies immediately
+try {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    document.documentElement.classList.add("dark");
+  } else if (savedTheme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    // Default to light mode if no preference saved
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+} catch {
+  // ignore
+}
+
 // Apply saved cursor preference on startup so the chicken cursor appears
 // immediately even if the toggle component hasn't mounted yet.
 try {
