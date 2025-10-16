@@ -130,7 +130,7 @@ export const transformPakansToOptions = (pakans: Pakan[]): SelectOption[] => {
   return pakans.map(item => ({
     label: item.namaPakan,
     value: item.id,
-    description: `Stok: ${item.stok.toLocaleString("id-ID")} kg`,
+    description: `Stok: ${item.stokKg.toLocaleString("id-ID")} kg`,
   }));
 };
 
