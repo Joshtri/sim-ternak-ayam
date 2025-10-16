@@ -3,6 +3,7 @@ import type { Vaksin } from "../types";
 import { useState } from "react";
 
 import { useDeleteVaksin, useVaksins } from "../hooks/useVaksin";
+import { formatMonthYear } from "../create/helpers";
 
 import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
 import { Badge } from "@/components/ui/Badge";
@@ -33,6 +34,11 @@ export default function VaksinList() {
         );
       },
     },
+    {
+      key: "periode",
+      label: "Periode",
+      value: (item: Vaksin) => formatMonthYear(item.bulan, item.tahun),
+    },
     { key: "actions", label: "Aksi", align: "center" as const },
   ];
 
@@ -49,7 +55,7 @@ export default function VaksinList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-vaksin/edit/${id}`,
+          href: (id: string) => `/daftar-vaksin/${id}/edit`,
           label: "Edit",
         },
         delete: {
