@@ -9,6 +9,8 @@ import {
   TrendingUp,
   DollarSign,
   AlertCircle,
+  HeartPulse,
+  BarChart3,
 } from "lucide-react";
 
 import { NavigationSection } from "@/types/navigation";
@@ -126,43 +128,29 @@ export const navigationSections: NavigationSection[] = [
     ],
   },
 
-  // Laporan &= Analisis - Pemilik & Operator
+  // Laporan & Analisis - Pemilik & Operator
   {
     title: "Laporan & Analisis",
     items: [
       {
-        id: "laporan",
-        label: "Laporan",
-        icon: <FileText size={20} />,
-        href: "/laporan",
+        id: "laporan-kesehatan-ayam",
+        label: "Kesehatan Ayam",
+        icon: <HeartPulse size={20} />,
+        href: "/laporan-kesehatan-ayam",
         allowedRoles: ["pemilik", "operator"],
       },
       {
-        id: "kesehatan",
-        label: "Kesehatan Ayam",
-        icon: <AlertCircle size={20} />,
-        href: "/kesehatan",
-        allowedRoles: ["pemilik", "operator", "petugas"],
-      },
-      // {
-      //   id: "biaya",
-      //   label: "Data Biaya",
-      //   icon: <DollarSign size={20} />,
-      //   href: "/daftar-biaya",
-      //   allowedRoles: ["pemilik", "operator"],
-      // },
-      {
-        id: "keuangan",
-        label: "Keuangan",
-        icon: <DollarSign size={20} />,
-        href: "/keuangan",
-        allowedRoles: ["pemilik"],
+        id: "laporan-operasional",
+        label: "Laporan Operasional",
+        icon: <BarChart3 size={20} />,
+        href: "/laporan-operasional",
+        allowedRoles: ["pemilik", "operator"],
       },
       {
-        id: "analisis",
-        label: "Analisis Produktivitas",
+        id: "laporan-produktivitas",
+        label: "Produktivitas",
         icon: <TrendingUp size={20} />,
-        href: "/analisis",
+        href: "/laporan-produktivitas",
         allowedRoles: ["pemilik", "operator"],
       },
     ],
