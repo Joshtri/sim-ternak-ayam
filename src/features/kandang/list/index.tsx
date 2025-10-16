@@ -45,7 +45,7 @@ export default function KandangList() {
         },
 
         edit: {
-          href: (id: string) => `/daftar-kandang/edit/${id}`,
+          href: (id: string) => `/daftar-kandang/${id}/edit`,
           label: "Edit",
         },
         delete: {
