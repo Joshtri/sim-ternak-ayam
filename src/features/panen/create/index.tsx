@@ -24,6 +24,7 @@ import { Card } from "@/components/ui/Card";
 import FormActions from "@/components/ui/Form/FormActions";
 import { ICurrentUser } from "@/interfaces/common";
 import { useCurrentUser } from "@/features/auth/hooks/useAuth";
+import { SkeletonForm } from "@/components/ui";
 
 /**
  * Handle form submission
@@ -124,12 +125,13 @@ export function PanenCreateForm() {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Card className="p-6">
+        <Card className={isLoadingAyams ? "p-0" : "p-6"}>
           {/* Loading state for ayams data */}
           {isLoadingAyams ? (
-            <div className="flex justify-center items-center p-8">
-              <div className="text-gray-500">Memuat data ayam...</div>
-            </div>
+            // <div className="flex justify-center items-center p-8">
+            //   <div className="text-gray-500">Memuat data ayam...</div>
+            // </div>
+            <SkeletonForm fields={8} />
           ) : (
             <>
               {/* Form builder with dynamic schema */}
