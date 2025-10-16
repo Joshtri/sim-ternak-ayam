@@ -30,20 +30,22 @@ export default function OperasionalList() {
       key: "jenisKegiatanNama",
       label: "Jenis Kegiatan",
       value: (item: Operasional) => (
-        <span className="font-semibold">{item.jenisKegiatanNama}</span>
+        <span className="font-semibold">
+          {item.jenisKegiatanNama || "-"}
+        </span>
       ),
     },
     {
       key: "kandangNama",
       label: "Kandang",
       value: (item: Operasional) => (
-        <span className="text-primary">{item.kandangNama}</span>
+        <span className="text-primary">{item.kandangNama || "-"}</span>
       ),
     },
     {
       key: "petugasNama",
       label: "Petugas",
-      value: (item: Operasional) => item.petugasNama,
+      value: (item: Operasional) => item.petugasNama || "-",
     },
     {
       key: "tanggal",
@@ -63,13 +65,15 @@ export default function OperasionalList() {
   ];
 
   // Filter data based on search query
-  const filteredData = operasionals?.filter(
-    item =>
-      item.jenisKegiatanNama
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      item.kandangNama.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = operasionals?.filter(item => {
+    if (!searchQuery) return true;
+
+    const query = searchQuery.toLowerCase();
+    return (
+      (item.jenisKegiatanNama?.toLowerCase().includes(query) ?? false) ||
+      (item.kandangNama?.toLowerCase().includes(query) ?? false)
+    );
+  });
 
   return (
     <ListGrid
