@@ -24,6 +24,7 @@ import { useOperasionals } from "@/features/operasional/hooks/useOperasional";
 import { FormBuilder } from "@/components/ui/Form/FormBuilder";
 import { Card } from "@/components/ui/Card";
 import FormActions from "@/components/ui/Form/FormActions";
+import { SkeletonForm } from "@/components/ui";
 
 /**
  * Handle form submission
@@ -123,12 +124,13 @@ export function BiayaCreateForm() {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Card className="p-6">
+        <Card className={isLoadingAnyData ? "p-0" : "p-6"}>
           {/* Loading state for data */}
           {isLoadingAnyData ? (
-            <div className="flex justify-center items-center p-8">
-              <div className="text-gray-500">Memuat data...</div>
-            </div>
+            // <div className="flex justify-center items-center p-8">
+            //   <div className="text-gray-500">Memuat data...</div>
+            // </div>
+            <SkeletonForm fields={8} />
           ) : (
             <>
               {/* Form builder with dynamic schema */}
