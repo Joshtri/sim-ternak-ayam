@@ -83,7 +83,7 @@ export default function AyamsList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-ayam/edit/${id}`,
+          href: (id: string) => `/daftar-ayam/${id}/edit`,
           label: "Edit",
         },
         delete: {
