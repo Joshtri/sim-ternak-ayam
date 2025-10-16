@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 import { useVaksinById } from "../hooks/useVaksin";
-import { formatStok, isLowStock } from "../create/helpers";
+import { formatStok, isLowStock, formatMonthYear } from "../create/helpers";
 
 import { DetailCard, DetailCardSkeleton } from "@/components/ui/DetailCard";
 import { Badge } from "@/components/ui/Badge";
@@ -124,6 +124,16 @@ export default function VaksinDetail() {
                 ),
                 fullWidth: true,
               },
+              {
+                key: "periode",
+                label: "Periode",
+                value: (
+                  <span className="font-semibold text-lg">
+                    {formatMonthYear(vaksin.bulan, vaksin.tahun)}
+                  </span>
+                ),
+                fullWidth: true,
+              },
             ],
           },
           {
@@ -168,6 +178,7 @@ export default function VaksinDetail() {
               </h4>
               <p className="text-sm text-orange-700">
                 Stok vaksin <span className="font-semibold">{vaksin.namaVaksin}</span>{" "}
+                untuk periode <span className="font-semibold">{formatMonthYear(vaksin.bulan, vaksin.tahun)}</span>{" "}
                 saat ini adalah{" "}
                 <span className="font-semibold">{formatStok(vaksin.stok)}</span>.
                 Segera lakukan pengisian ulang stok untuk menghindari kehabisan
