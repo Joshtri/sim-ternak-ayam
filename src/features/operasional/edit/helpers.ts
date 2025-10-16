@@ -60,10 +60,11 @@ export const getDefaultOperasionalEditFormValues = (
  * @returns Transformed data ready for API
  */
 export const transformOperasionalEditFormData = (
-  data: OperasionalEditFormData
+  data: OperasionalEditFormData,
+  id: string
 ): UpdateOperasionalDto => {
   const dto: UpdateOperasionalDto = {
-    id: "", // Will be set in the component
+    id,
     jenisKegiatanId: data.jenisKegiatanId,
     tanggal: data.tanggal,
     jumlah: Number(data.jumlah),
