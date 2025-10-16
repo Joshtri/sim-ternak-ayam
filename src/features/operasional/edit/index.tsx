@@ -46,7 +46,7 @@ const handleFormSubmit = async (
 ) => {
   try {
     // Transform data before sending to API
-    const transformedData = transformOperasionalEditFormData(data);
+    const transformedData = transformOperasionalEditFormData(data, id);
 
     console.log("Updating operasional data:", transformedData);
 
