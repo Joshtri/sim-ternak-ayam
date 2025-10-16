@@ -3,6 +3,7 @@ import type { Pakan } from "../types";
 import { useState } from "react";
 
 import { useDeletePakan, usePakans } from "../hooks/usePakan";
+import { formatMonthYear } from "../create/helpers";
 
 import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
 import { Badge } from "@/components/ui/Badge";
@@ -21,17 +22,22 @@ export default function PakanList() {
       value: (item: Pakan) => item.namaPakan,
     },
     {
-      key: "stok",
+      key: "stokKg",
       label: "Stok",
       value: (item: Pakan) => {
-        const isLowStock = item.stok < 100; // Adjust threshold as needed
+        const isLowStock = item.stokKg < 100; // Adjust threshold as needed
 
         return (
           <Badge color={isLowStock ? "danger" : "success"} variant="flat">
-            {item.stok.toLocaleString("id-ID")} kg
+            {item.stokKg.toLocaleString("id-ID")} kg
           </Badge>
         );
       },
+    },
+    {
+      key: "periode",
+      label: "Periode",
+      value: (item: Pakan) => formatMonthYear(item.bulan, item.tahun),
     },
     { key: "actions", label: "Aksi", align: "center" as const },
   ];
@@ -49,7 +55,7 @@ export default function PakanList() {
           label: "Detail",
         },
         edit: {
-          href: (id: string) => `/daftar-pakan/edit/${id}`,
+          href: (id: string) => `/daftar-pakan/${id}/edit`,
           label: "Edit",
         },
         delete: {
