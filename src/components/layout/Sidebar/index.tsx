@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@heroui/react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { cn, Tooltip } from "@heroui/react";
 
 import {
   NavigationItem,
@@ -21,11 +21,20 @@ interface SidebarProps {
   userRole?: UserRole;
   /** Collapsed state */
   isCollapsed?: boolean;
+  /** Is mobile sidebar open */
+  isMobileOpen?: boolean;
+  /** Toggle collapse (desktop) */
+  onToggleCollapse?: () => void;
+  /** Close mobile sidebar */
+  onCloseMobile?: () => void;
 }
 
 export function Sidebar({
   userRole = "operator",
   isCollapsed = false,
+  isMobileOpen = false,
+  onToggleCollapse,
+  onCloseMobile,
 }: SidebarProps) {
   // Try to fetch current user; fallback to provided userRole prop
   const { data: me } = useQuery({
@@ -59,13 +68,17 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "glass-sidebar fixed left-0 top-0 h-screen overflow-y-auto scrollbar-glass",
+        "glass-sidebar fixed left-0 top-0 h-screen flex flex-col",
         "transition-all duration-300 z-40",
-        isCollapsed ? "w-20" : "w-64"
+        // Desktop: show/hide based on isCollapsed
+        isCollapsed ? "w-20" : "w-64",
+        // Mobile: slide in/out based on isMobileOpen
+        "lg:translate-x-0",
+        isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}
     >
       {/* Logo/Brand */}
-      <div className="p-3.5 border-b border-divider">
+      <div className="p-3.5 border-b border-divider flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="text-3xl">🐔</div>
           {!isCollapsed && (
@@ -75,28 +88,54 @@ export function Sidebar({
             </div>
           )}
         </div>
+
+        {/* Collapse Toggle Button - Desktop only */}
+        {onToggleCollapse && (
+          <button
+            className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-default-100 transition-colors"
+            onClick={onToggleCollapse}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? (
+              <ChevronRight size={18} className="text-default-500" />
+            ) : (
+              <ChevronLeft size={18} className="text-default-500" />
+            )}
+          </button>
+        )}
       </div>
 
-      {/* Navigation Sections */}
-      <nav className="p-4 space-y-6 pb-24">
+      {/* Navigation Sections - Scrollable area */}
+      <nav className="flex-1 overflow-y-auto scrollbar-glass p-4 space-y-6">
         {navigation.map((section, sectionIndex) => (
           <NavigationSectionComponent
             key={sectionIndex}
             isCollapsed={isCollapsed}
             section={section}
+            onItemClick={onCloseMobile}
           />
         ))}
       </nav>
 
-      {/* User Info di bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-divider bg-content1/50">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-            <span className="text-primary font-semibold">
-              {(me?.username || "A")[0]?.toUpperCase() ?? "A"}
-            </span>
-          </div>
-          {!isCollapsed && (
+      {/* User Info at bottom - Fixed, no scroll */}
+      <div className="flex-shrink-0 p-4 border-t border-divider bg-content1/50">
+        {isCollapsed ? (
+          <Tooltip content={me?.fullName ?? me?.username ?? "Admin User"} placement="right">
+            <div className="flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                <span className="text-primary font-semibold">
+                  {(me?.username || "A")[0]?.toUpperCase() ?? "A"}
+                </span>
+              </div>
+            </div>
+          </Tooltip>
+        ) : (
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+              <span className="text-primary font-semibold">
+                {(me?.username || "A")[0]?.toUpperCase() ?? "A"}
+              </span>
+            </div>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm truncate">
                 {me?.fullName ?? me?.username ?? "Admin User"}
@@ -105,8 +144,8 @@ export function Sidebar({
                 {effectiveRole}
               </p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </aside>
   );
@@ -118,9 +157,11 @@ export function Sidebar({
 function NavigationSectionComponent({
   section,
   isCollapsed,
+  onItemClick,
 }: {
   section: NavigationSection;
   isCollapsed: boolean;
+  onItemClick?: () => void;
 }) {
   return (
     <div>
@@ -135,6 +176,7 @@ function NavigationSectionComponent({
             key={item.id}
             isCollapsed={isCollapsed}
             item={item}
+            onItemClick={onItemClick}
           />
         ))}
       </ul>
@@ -148,15 +190,24 @@ function NavigationSectionComponent({
 function NavigationItemComponent({
   item,
   isCollapsed,
+  onItemClick,
 }: {
   item: NavigationItem;
   isCollapsed: boolean;
+  onItemClick?: () => void;
 }) {
   const matchRoute = useMatchRoute();
   const isActive = matchRoute({ to: item.href });
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasChildren = item.children && item.children.length > 0;
+
+  // Handle click - close mobile sidebar
+  const handleClick = () => {
+    if (onItemClick) {
+      onItemClick();
+    }
+  };
 
   // Item dengan children (collapsible)
   if (hasChildren && !isCollapsed) {
@@ -197,6 +248,7 @@ function NavigationItemComponent({
                 key={child.id}
                 isCollapsed={false}
                 item={child}
+                onItemClick={onItemClick}
               />
             ))}
           </ul>
@@ -205,32 +257,44 @@ function NavigationItemComponent({
     );
   }
 
-  // Regular item
+  // Regular item with tooltip when collapsed
+  const linkContent = (
+    <Link
+      className={cn(
+        "flex items-center gap-3 px-3 py-2.5 rounded-lg",
+        "transition-all duration-200",
+        "hover:bg-default-100",
+        isActive
+          ? "bg-primary/10 text-primary font-semibold"
+          : "text-default-700 hover:text-default-900",
+        isCollapsed && "justify-center"
+      )}
+      to={item.href}
+      onClick={handleClick}
+    >
+      <span className="flex-shrink-0">{item.icon}</span>
+      {!isCollapsed && (
+        <>
+          <span className="flex-1 text-sm font-medium">{item.label}</span>
+          {item.badge && (
+            <span className="px-2 py-0.5 text-xs bg-danger text-danger-foreground rounded-full">
+              {item.badge}
+            </span>
+          )}
+        </>
+      )}
+    </Link>
+  );
+
   return (
     <li>
-      <Link
-        className={cn(
-          "flex items-center gap-3 px-3 py-2.5 rounded-lg",
-          "transition-all duration-200",
-          "hover:bg-default-100",
-          isActive
-            ? "bg-primary/10 text-primary font-semibold"
-            : "text-default-700 hover:text-default-900"
-        )}
-        to={item.href}
-      >
-        <span className="flex-shrink-0">{item.icon}</span>
-        {!isCollapsed && (
-          <>
-            <span className="flex-1 text-sm font-medium">{item.label}</span>
-            {item.badge && (
-              <span className="px-2 py-0.5 text-xs bg-danger text-danger-foreground rounded-full">
-                {item.badge}
-              </span>
-            )}
-          </>
-        )}
-      </Link>
+      {isCollapsed ? (
+        <Tooltip content={item.label} placement="right">
+          {linkContent}
+        </Tooltip>
+      ) : (
+        linkContent
+      )}
     </li>
   );
 }
