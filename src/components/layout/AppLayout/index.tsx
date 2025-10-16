@@ -43,26 +43,23 @@ export function AppLayout({
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Sidebar - Desktop */}
-      <div className="hidden lg:block">
-        <Sidebar isCollapsed={isSidebarCollapsed} userRole={userRole} />
-      </div>
-
-      {/* Sidebar - Mobile (Overlay) */}
+      {/* Backdrop for mobile sidebar */}
       {isMobileSidebarOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/50 z-30 lg:hidden"
-            onClick={toggleMobileSidebar}
-          />
-
-          {/* Sidebar */}
-          <div className="lg:hidden">
-            <Sidebar userRole={userRole} />
-          </div>
-        </>
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={toggleMobileSidebar}
+          aria-hidden="true"
+        />
       )}
+
+      {/* Sidebar - Unified for desktop and mobile */}
+      <Sidebar
+        isCollapsed={isSidebarCollapsed}
+        isMobileOpen={isMobileSidebarOpen}
+        userRole={userRole}
+        onToggleCollapse={toggleSidebar}
+        onCloseMobile={toggleMobileSidebar}
+      />
 
       {/* Main Content Area */}
       <div
