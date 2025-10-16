@@ -19,10 +19,12 @@ export default function MortalitasList() {
   // For other roles: no filter (show all)
   const kandangIdFilter = useMemo(() => {
     const roleNormalized = String(meData?.role ?? "").toLowerCase();
+
     if (roleNormalized === "petugas" && meData?.kandangsManaged?.length) {
       // For Petugas, filter by first kandang or you can add dropdown to select
       return String(meData.kandangsManaged[0].id);
     }
+
     return undefined;
   }, [meData]);
 
