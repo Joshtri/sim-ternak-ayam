@@ -78,7 +78,7 @@ export default function PanenDetail() {
             </LinkButton>
             <LinkButton
               color="warning"
-              href={`/daftar-panen/edit/${id}`}
+              href={`/daftar-panen/${id}/edit`}
               size="md"
               startContent={<Pencil className="w-4 h-4" />}
               variant="solid"
