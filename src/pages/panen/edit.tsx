@@ -1,7 +1,5 @@
-import React from 'react'
+import { PanenEditForm } from "@/features/panen/edit";
 
-export default function edit() {
-  return (
-    <div>edit</div>
-  )
+export default function PanenEditPage() {
+  return <PanenEditForm />;
 }
