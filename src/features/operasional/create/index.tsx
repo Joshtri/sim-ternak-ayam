@@ -30,6 +30,7 @@ import { useVaksins } from "@/features/vaksin/hooks/useVaksin";
 import { FormBuilder } from "@/components/ui/Form/FormBuilder";
 import { Card } from "@/components/ui/Card";
 import FormActions from "@/components/ui/Form/FormActions";
+import { SkeletonForm } from "@/components/ui";
 
 /**
  * Handle form submission
@@ -182,12 +183,13 @@ export function OperasionalCreateForm() {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Card className="p-6">
+        <Card className={isLoadingAnyData ? "p-0" : "p-6"}>
           {/* Loading state for data */}
           {isLoadingAnyData ? (
-            <div className="flex justify-center items-center p-8">
-              <div className="text-gray-500">Memuat data...</div>
-            </div>
+            // <div className="flex justify-center items-center p-8">
+            //   <div className="text-gray-500">Memuat data...</div>
+            // </div>
+            <SkeletonForm fields={8} />
           ) : (
             <>
               {/* Form builder with dynamic schema */}
@@ -199,7 +201,8 @@ export function OperasionalCreateForm() {
                   backHref="/daftar-operasional"
                   backLabel="Kembali"
                   isSubmitting={
-                    methods.formState.isSubmitting || createOperasional.isPending
+                    methods.formState.isSubmitting ||
+                    createOperasional.isPending
                   }
                   submitLabel="Simpan Data Operasional"
                   onReset={() => handleFormReset(methods.reset)}
