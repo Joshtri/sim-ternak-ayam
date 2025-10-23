@@ -1,19 +1,21 @@
-import { Card } from "@/components/ui/Card";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Clock,
+  Home,
+  TrendingUp,
+} from "lucide-react";
+
 import { usePetugasDashboard } from "../hooks/useDashboard";
-import { AlertCircle, CheckCircle2, Clock, Home, TrendingUp } from "lucide-react";
+
+import { Card } from "@/components/ui/Card";
+import { DashboardSkeleton } from "./DashboardSkeleton";
 
 export function PetugasDashboard() {
   const { data, isLoading, isError } = usePetugasDashboard();
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-default-600">Memuat dashboard...</p>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton variant="petugas" />;
   }
 
   if (isError || !data) {
@@ -100,11 +102,11 @@ export function PetugasDashboard() {
       {/* My Kandangs */}
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Home size={24} className="text-primary" />
+          <Home className="text-primary" size={24} />
           <h2 className="text-xl font-semibold">Kandang Saya</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data.myKandangs.map((kandang) => (
+          {data.myKandangs.map(kandang => (
             <Card key={kandang.id} className="p-4 border">
               <h3 className="font-semibold text-lg">{kandang.name}</h3>
               <div className="mt-3 space-y-2 text-sm">
@@ -143,7 +145,7 @@ export function PetugasDashboard() {
         data.stockAlerts.warningStockCount > 0) && (
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <AlertCircle size={24} className="text-warning" />
+            <AlertCircle className="text-warning" size={24} />
             <h2 className="text-xl font-semibold">Peringatan Stok</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -153,7 +155,7 @@ export function PetugasDashboard() {
                   Stok Pakan Menipis
                 </h3>
                 <div className="space-y-2">
-                  {data.stockAlerts.lowStockPakan.map((item) => (
+                  {data.stockAlerts.lowStockPakan.map(item => (
                     <div
                       key={item.id}
                       className="flex justify-between items-center p-2 bg-warning-50 rounded"
@@ -173,7 +175,7 @@ export function PetugasDashboard() {
                   Stok Vaksin Menipis
                 </h3>
                 <div className="space-y-2">
-                  {data.stockAlerts.lowStockVaksin.map((item) => (
+                  {data.stockAlerts.lowStockVaksin.map(item => (
                     <div
                       key={item.id}
                       className="flex justify-between items-center p-2 bg-danger-50 rounded"
@@ -194,7 +196,7 @@ export function PetugasDashboard() {
       {/* My Performance */}
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp size={24} className="text-primary" />
+          <TrendingUp className="text-primary" size={24} />
           <h2 className="text-xl font-semibold">Performa Saya</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -220,7 +222,9 @@ export function PetugasDashboard() {
             <p className="text-2xl font-bold">
               {data.myPerformance.averageMortalityRate.toFixed(2)}%
             </p>
-            <p className="text-xs text-default-600 mt-1">Rata-rata Mortalitas</p>
+            <p className="text-xs text-default-600 mt-1">
+              Rata-rata Mortalitas
+            </p>
           </div>
           <div className="text-center p-4 bg-default-50 rounded-lg">
             <p className="text-2xl font-bold text-primary">
@@ -241,33 +245,37 @@ export function PetugasDashboard() {
                 Hari Ini
               </h3>
               <div className="space-y-2">
-                {data.upcomingActivities.todayActivities.map((activity, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex items-center justify-between p-3 rounded-lg ${
-                      activity.isOverdue ? "bg-danger-50" : "bg-default-50"
-                    }`}
-                  >
-                    <div>
-                      <p className="font-medium">{activity.activityType}</p>
-                      <p className="text-sm text-default-600">
-                        {activity.kandangName}
-                      </p>
+                {data.upcomingActivities.todayActivities.map(
+                  (activity, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex items-center justify-between p-3 rounded-lg ${
+                        activity.isOverdue ? "bg-danger-50" : "bg-default-50"
+                      }`}
+                    >
+                      <div>
+                        <p className="font-medium">{activity.activityType}</p>
+                        <p className="text-sm text-default-600">
+                          {activity.kandangName}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium">
+                          {activity.priority}
+                        </p>
+                        <p className="text-xs text-default-600">
+                          {new Date(activity.scheduledTime).toLocaleTimeString(
+                            "id-ID",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium">{activity.priority}</p>
-                      <p className="text-xs text-default-600">
-                        {new Date(activity.scheduledTime).toLocaleTimeString(
-                          "id-ID",
-                          {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             </div>
           )}
