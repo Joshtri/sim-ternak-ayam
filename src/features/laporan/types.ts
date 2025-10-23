@@ -43,6 +43,7 @@ export interface DetailPerJenis {
 }
 
 export interface DetailPerKandang {
+  kandangId: string; // Added kandangId for PDF export
   namaKandang: string;
   lokasi: string;
   jumlahOperasional: number;
