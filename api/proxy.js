@@ -12,12 +12,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Extract path from URL - remove /api/ prefix
-    const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
-    const path = urlPath.replace('/api/', '');
+    // Extract path and query from URL - remove /api/ prefix
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const path = url.pathname.replace('/api/', '');
+    const queryString = url.search; // includes the '?' if present
 
-    // Backend API URL
-    const backendUrl = `http://sim-ternak-api.runasp.net/api/${path}`;
+    // Backend API URL with query parameters
+    const backendUrl = `http://sim-ternak-api.runasp.net/api/${path}${queryString}`;
 
     console.log('Proxying:', req.method, backendUrl);
 
@@ -39,6 +40,26 @@ export default async function handler(req, res) {
 
     // Forward request ke backend
     const response = await fetch(backendUrl, options);
+
+    // Check content type to handle different response types
+    const contentType = response.headers.get('content-type');
+
+    // Handle PDF/binary responses
+    if (contentType && contentType.includes('application/pdf')) {
+      const buffer = await response.arrayBuffer();
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', response.headers.get('content-disposition') || 'attachment');
+      return res.status(response.status).send(Buffer.from(buffer));
+    }
+
+    // Handle other binary/octet-stream responses
+    if (contentType && (contentType.includes('application/octet-stream') || contentType.includes('image/'))) {
+      const buffer = await response.arrayBuffer();
+      res.setHeader('Content-Type', contentType);
+      return res.status(response.status).send(Buffer.from(buffer));
+    }
+
+    // Default: handle as JSON
     const data = await response.json();
 
     // Return response dari backend

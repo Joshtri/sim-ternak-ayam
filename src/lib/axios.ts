@@ -39,6 +39,12 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     // Handle different error status codes
     if (error.response) {
+      // Skip error handling for blob responses (like PDFs)
+      // If the response type was blob, don't try to parse as JSON
+      if (error.config?.responseType === 'blob') {
+        return Promise.reject(error);
+      }
+
       switch (error.response.status) {
         case 401:
           // Unauthorized - clear token but do not force a navigation here.
