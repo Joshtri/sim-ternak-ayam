@@ -63,11 +63,41 @@ export const validateOperasionalId = {
 };
 
 /**
+ * Validate kandangId (optional)
+ */
+export const validateKandangId = {
+  pattern: {
+    value: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    message: "Format ID kandang tidak valid",
+  },
+};
+
+/**
  * Validate buktiUrl (optional)
  */
 export const validateBuktiUrl = {
   pattern: {
     value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
     message: "Format URL tidak valid",
+  },
+};
+
+/**
+ * Validate keterangan (optional)
+ */
+export const validateKeterangan = {
+  maxLength: {
+    value: 500,
+    message: "Keterangan maksimal 500 karakter",
+  },
+};
+
+/**
+ * Validate catatan (optional)
+ */
+export const validateCatatan = {
+  maxLength: {
+    value: 500,
+    message: "Catatan maksimal 500 karakter",
   },
 };
