@@ -10,6 +10,7 @@ import {
 
 import { KesehatanAyam } from "../../types";
 import { getHealthStatusColor, getHealthStatusLabel } from "../helpers";
+import ExportPDFButton from "../../components/ExportPDFButton";
 
 function KandangHealthCard({
   kandang,
@@ -85,16 +86,26 @@ function KandangHealthCard({
           </div>
         </div>
 
-        {/* View Detail Button */}
-        <Button
-          fullWidth
-          color="primary"
-          size="sm"
-          variant="flat"
-          onClick={() => onViewDetail(kandang.kandangId)}
-        >
-          Lihat Detail
-        </Button>
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          <Button
+            className="flex-1"
+            color="primary"
+            size="sm"
+            variant="flat"
+            onClick={() => onViewDetail(kandang.kandangId)}
+          >
+            Lihat Detail
+          </Button>
+
+          <ExportPDFButton
+            kandangId={kandang.kandangId}
+            kandangNama={kandang.namaKandang}
+            reportType="kesehatan"
+            size="sm"
+            variant="bordered"
+          />
+        </div>
       </CardBody>
     </Card>
   );
