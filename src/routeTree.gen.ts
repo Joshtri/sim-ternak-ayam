@@ -16,9 +16,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedUsersManagementIndexRouteImport } from './routes/_authenticated/users-management/index'
+import { Route as AuthenticatedNotificationsIndexRouteImport } from './routes/_authenticated/notifications/index'
 import { Route as AuthenticatedLaporanProduktivitasIndexRouteImport } from './routes/_authenticated/laporan-produktivitas/index'
 import { Route as AuthenticatedLaporanOperasionalIndexRouteImport } from './routes/_authenticated/laporan-operasional/index'
 import { Route as AuthenticatedLaporanKesehatanAyamIndexRouteImport } from './routes/_authenticated/laporan-kesehatan-ayam/index'
+import { Route as AuthenticatedKandangAsistensIndexRouteImport } from './routes/_authenticated/kandang-asistens/index'
+import { Route as AuthenticatedJurnalHarianIndexRouteImport } from './routes/_authenticated/jurnal-harian/index'
 import { Route as AuthenticatedDaftarVaksinIndexRouteImport } from './routes/_authenticated/daftar-vaksin/index'
 import { Route as AuthenticatedDaftarPanenIndexRouteImport } from './routes/_authenticated/daftar-panen/index'
 import { Route as AuthenticatedDaftarPakanIndexRouteImport } from './routes/_authenticated/daftar-pakan/index'
@@ -28,9 +31,12 @@ import { Route as AuthenticatedDaftarKandangIndexRouteImport } from './routes/_a
 import { Route as AuthenticatedDaftarJenisKegiatanIndexRouteImport } from './routes/_authenticated/daftar-jenis-kegiatan/index'
 import { Route as AuthenticatedDaftarBiayaIndexRouteImport } from './routes/_authenticated/daftar-biaya/index'
 import { Route as AuthenticatedDaftarAyamIndexRouteImport } from './routes/_authenticated/daftar-ayam/index'
+import { Route as AuthenticatedChartsBoardIndexRouteImport } from './routes/_authenticated/charts-board/index'
 import { Route as AuthenticatedUsersManagementCreateRouteImport } from './routes/_authenticated/users-management/create'
 import { Route as AuthenticatedUsersManagementIdRouteImport } from './routes/_authenticated/users-management/$id'
+import { Route as AuthenticatedKandangAsistensCreateRouteImport } from './routes/_authenticated/kandang-asistens/create'
 import { Route as AuthenticatedDaftarVaksinCreateRouteImport } from './routes/_authenticated/daftar-vaksin/create'
+import { Route as AuthenticatedDaftarVaksinIdRouteImport } from './routes/_authenticated/daftar-vaksin/$id'
 import { Route as AuthenticatedDaftarPanenCreateRouteImport } from './routes/_authenticated/daftar-panen/create'
 import { Route as AuthenticatedDaftarPanenIdRouteImport } from './routes/_authenticated/daftar-panen/$id'
 import { Route as AuthenticatedDaftarPakanCreateRouteImport } from './routes/_authenticated/daftar-pakan/create'
@@ -45,7 +51,9 @@ import { Route as AuthenticatedDaftarBiayaCreateRouteImport } from './routes/_au
 import { Route as AuthenticatedDaftarBiayaIdRouteImport } from './routes/_authenticated/daftar-biaya/$id'
 import { Route as AuthenticatedDaftarAyamCreateRouteImport } from './routes/_authenticated/daftar-ayam/create'
 import { Route as AuthenticatedDaftarAyamIdRouteImport } from './routes/_authenticated/daftar-ayam/$id'
+import { Route as AuthenticatedDaftarBiayaBulananIndexRouteImport } from './routes/_authenticated/daftar-biaya/bulanan/index'
 import { Route as AuthenticatedUsersManagementIdEditEditRouteImport } from './routes/_authenticated/users-management/$idEdit/edit'
+import { Route as AuthenticatedKandangAsistensIdEditEditRouteImport } from './routes/_authenticated/kandang-asistens/$idEdit/edit'
 import { Route as AuthenticatedDaftarVaksinIdEditEditRouteImport } from './routes/_authenticated/daftar-vaksin/$idEdit/edit'
 import { Route as AuthenticatedDaftarPanenIdEditEditRouteImport } from './routes/_authenticated/daftar-panen/$idEdit/edit'
 import { Route as AuthenticatedDaftarPakanIdEditEditRouteImport } from './routes/_authenticated/daftar-pakan/$idEdit/edit'
@@ -91,6 +99,12 @@ const AuthenticatedUsersManagementIndexRoute =
     path: '/users-management/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedNotificationsIndexRoute =
+  AuthenticatedNotificationsIndexRouteImport.update({
+    id: '/notifications/',
+    path: '/notifications/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedLaporanProduktivitasIndexRoute =
   AuthenticatedLaporanProduktivitasIndexRouteImport.update({
     id: '/laporan-produktivitas/',
@@ -107,6 +121,18 @@ const AuthenticatedLaporanKesehatanAyamIndexRoute =
   AuthenticatedLaporanKesehatanAyamIndexRouteImport.update({
     id: '/laporan-kesehatan-ayam/',
     path: '/laporan-kesehatan-ayam/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedKandangAsistensIndexRoute =
+  AuthenticatedKandangAsistensIndexRouteImport.update({
+    id: '/kandang-asistens/',
+    path: '/kandang-asistens/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedJurnalHarianIndexRoute =
+  AuthenticatedJurnalHarianIndexRouteImport.update({
+    id: '/jurnal-harian/',
+    path: '/jurnal-harian/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedDaftarVaksinIndexRoute =
@@ -163,6 +189,12 @@ const AuthenticatedDaftarAyamIndexRoute =
     path: '/daftar-ayam/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedChartsBoardIndexRoute =
+  AuthenticatedChartsBoardIndexRouteImport.update({
+    id: '/charts-board/',
+    path: '/charts-board/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedUsersManagementCreateRoute =
   AuthenticatedUsersManagementCreateRouteImport.update({
     id: '/users-management/create',
@@ -175,10 +207,22 @@ const AuthenticatedUsersManagementIdRoute =
     path: '/users-management/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedKandangAsistensCreateRoute =
+  AuthenticatedKandangAsistensCreateRouteImport.update({
+    id: '/kandang-asistens/create',
+    path: '/kandang-asistens/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedDaftarVaksinCreateRoute =
   AuthenticatedDaftarVaksinCreateRouteImport.update({
     id: '/daftar-vaksin/create',
     path: '/daftar-vaksin/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDaftarVaksinIdRoute =
+  AuthenticatedDaftarVaksinIdRouteImport.update({
+    id: '/daftar-vaksin/$id',
+    path: '/daftar-vaksin/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedDaftarPanenCreateRoute =
@@ -265,10 +309,22 @@ const AuthenticatedDaftarAyamIdRoute =
     path: '/daftar-ayam/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedDaftarBiayaBulananIndexRoute =
+  AuthenticatedDaftarBiayaBulananIndexRouteImport.update({
+    id: '/daftar-biaya/bulanan/',
+    path: '/daftar-biaya/bulanan/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedUsersManagementIdEditEditRoute =
   AuthenticatedUsersManagementIdEditEditRouteImport.update({
     id: '/users-management/$idEdit/edit',
     path: '/users-management/$idEdit/edit',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedKandangAsistensIdEditEditRoute =
+  AuthenticatedKandangAsistensIdEditEditRouteImport.update({
+    id: '/kandang-asistens/$idEdit/edit',
+    path: '/kandang-asistens/$idEdit/edit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedDaftarVaksinIdEditEditRoute =
@@ -346,9 +402,12 @@ export interface FileRoutesByFullPath {
   '/daftar-pakan/create': typeof AuthenticatedDaftarPakanCreateRoute
   '/daftar-panen/$id': typeof AuthenticatedDaftarPanenIdRoute
   '/daftar-panen/create': typeof AuthenticatedDaftarPanenCreateRoute
+  '/daftar-vaksin/$id': typeof AuthenticatedDaftarVaksinIdRoute
   '/daftar-vaksin/create': typeof AuthenticatedDaftarVaksinCreateRoute
+  '/kandang-asistens/create': typeof AuthenticatedKandangAsistensCreateRoute
   '/users-management/$id': typeof AuthenticatedUsersManagementIdRoute
   '/users-management/create': typeof AuthenticatedUsersManagementCreateRoute
+  '/charts-board': typeof AuthenticatedChartsBoardIndexRoute
   '/daftar-ayam': typeof AuthenticatedDaftarAyamIndexRoute
   '/daftar-biaya': typeof AuthenticatedDaftarBiayaIndexRoute
   '/daftar-jenis-kegiatan': typeof AuthenticatedDaftarJenisKegiatanIndexRoute
@@ -358,9 +417,12 @@ export interface FileRoutesByFullPath {
   '/daftar-pakan': typeof AuthenticatedDaftarPakanIndexRoute
   '/daftar-panen': typeof AuthenticatedDaftarPanenIndexRoute
   '/daftar-vaksin': typeof AuthenticatedDaftarVaksinIndexRoute
+  '/jurnal-harian': typeof AuthenticatedJurnalHarianIndexRoute
+  '/kandang-asistens': typeof AuthenticatedKandangAsistensIndexRoute
   '/laporan-kesehatan-ayam': typeof AuthenticatedLaporanKesehatanAyamIndexRoute
   '/laporan-operasional': typeof AuthenticatedLaporanOperasionalIndexRoute
   '/laporan-produktivitas': typeof AuthenticatedLaporanProduktivitasIndexRoute
+  '/notifications': typeof AuthenticatedNotificationsIndexRoute
   '/users-management': typeof AuthenticatedUsersManagementIndexRoute
   '/daftar-ayam/$idEdit/edit': typeof AuthenticatedDaftarAyamIdEditEditRoute
   '/daftar-biaya/$idEdit/edit': typeof AuthenticatedDaftarBiayaIdEditEditRoute
@@ -371,7 +433,9 @@ export interface FileRoutesByFullPath {
   '/daftar-pakan/$idEdit/edit': typeof AuthenticatedDaftarPakanIdEditEditRoute
   '/daftar-panen/$idEdit/edit': typeof AuthenticatedDaftarPanenIdEditEditRoute
   '/daftar-vaksin/$idEdit/edit': typeof AuthenticatedDaftarVaksinIdEditEditRoute
+  '/kandang-asistens/$idEdit/edit': typeof AuthenticatedKandangAsistensIdEditEditRoute
   '/users-management/$idEdit/edit': typeof AuthenticatedUsersManagementIdEditEditRoute
+  '/daftar-biaya/bulanan': typeof AuthenticatedDaftarBiayaBulananIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -393,9 +457,12 @@ export interface FileRoutesByTo {
   '/daftar-pakan/create': typeof AuthenticatedDaftarPakanCreateRoute
   '/daftar-panen/$id': typeof AuthenticatedDaftarPanenIdRoute
   '/daftar-panen/create': typeof AuthenticatedDaftarPanenCreateRoute
+  '/daftar-vaksin/$id': typeof AuthenticatedDaftarVaksinIdRoute
   '/daftar-vaksin/create': typeof AuthenticatedDaftarVaksinCreateRoute
+  '/kandang-asistens/create': typeof AuthenticatedKandangAsistensCreateRoute
   '/users-management/$id': typeof AuthenticatedUsersManagementIdRoute
   '/users-management/create': typeof AuthenticatedUsersManagementCreateRoute
+  '/charts-board': typeof AuthenticatedChartsBoardIndexRoute
   '/daftar-ayam': typeof AuthenticatedDaftarAyamIndexRoute
   '/daftar-biaya': typeof AuthenticatedDaftarBiayaIndexRoute
   '/daftar-jenis-kegiatan': typeof AuthenticatedDaftarJenisKegiatanIndexRoute
@@ -405,9 +472,12 @@ export interface FileRoutesByTo {
   '/daftar-pakan': typeof AuthenticatedDaftarPakanIndexRoute
   '/daftar-panen': typeof AuthenticatedDaftarPanenIndexRoute
   '/daftar-vaksin': typeof AuthenticatedDaftarVaksinIndexRoute
+  '/jurnal-harian': typeof AuthenticatedJurnalHarianIndexRoute
+  '/kandang-asistens': typeof AuthenticatedKandangAsistensIndexRoute
   '/laporan-kesehatan-ayam': typeof AuthenticatedLaporanKesehatanAyamIndexRoute
   '/laporan-operasional': typeof AuthenticatedLaporanOperasionalIndexRoute
   '/laporan-produktivitas': typeof AuthenticatedLaporanProduktivitasIndexRoute
+  '/notifications': typeof AuthenticatedNotificationsIndexRoute
   '/users-management': typeof AuthenticatedUsersManagementIndexRoute
   '/daftar-ayam/$idEdit/edit': typeof AuthenticatedDaftarAyamIdEditEditRoute
   '/daftar-biaya/$idEdit/edit': typeof AuthenticatedDaftarBiayaIdEditEditRoute
@@ -418,7 +488,9 @@ export interface FileRoutesByTo {
   '/daftar-pakan/$idEdit/edit': typeof AuthenticatedDaftarPakanIdEditEditRoute
   '/daftar-panen/$idEdit/edit': typeof AuthenticatedDaftarPanenIdEditEditRoute
   '/daftar-vaksin/$idEdit/edit': typeof AuthenticatedDaftarVaksinIdEditEditRoute
+  '/kandang-asistens/$idEdit/edit': typeof AuthenticatedKandangAsistensIdEditEditRoute
   '/users-management/$idEdit/edit': typeof AuthenticatedUsersManagementIdEditEditRoute
+  '/daftar-biaya/bulanan': typeof AuthenticatedDaftarBiayaBulananIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -442,9 +514,12 @@ export interface FileRoutesById {
   '/_authenticated/daftar-pakan/create': typeof AuthenticatedDaftarPakanCreateRoute
   '/_authenticated/daftar-panen/$id': typeof AuthenticatedDaftarPanenIdRoute
   '/_authenticated/daftar-panen/create': typeof AuthenticatedDaftarPanenCreateRoute
+  '/_authenticated/daftar-vaksin/$id': typeof AuthenticatedDaftarVaksinIdRoute
   '/_authenticated/daftar-vaksin/create': typeof AuthenticatedDaftarVaksinCreateRoute
+  '/_authenticated/kandang-asistens/create': typeof AuthenticatedKandangAsistensCreateRoute
   '/_authenticated/users-management/$id': typeof AuthenticatedUsersManagementIdRoute
   '/_authenticated/users-management/create': typeof AuthenticatedUsersManagementCreateRoute
+  '/_authenticated/charts-board/': typeof AuthenticatedChartsBoardIndexRoute
   '/_authenticated/daftar-ayam/': typeof AuthenticatedDaftarAyamIndexRoute
   '/_authenticated/daftar-biaya/': typeof AuthenticatedDaftarBiayaIndexRoute
   '/_authenticated/daftar-jenis-kegiatan/': typeof AuthenticatedDaftarJenisKegiatanIndexRoute
@@ -454,9 +529,12 @@ export interface FileRoutesById {
   '/_authenticated/daftar-pakan/': typeof AuthenticatedDaftarPakanIndexRoute
   '/_authenticated/daftar-panen/': typeof AuthenticatedDaftarPanenIndexRoute
   '/_authenticated/daftar-vaksin/': typeof AuthenticatedDaftarVaksinIndexRoute
+  '/_authenticated/jurnal-harian/': typeof AuthenticatedJurnalHarianIndexRoute
+  '/_authenticated/kandang-asistens/': typeof AuthenticatedKandangAsistensIndexRoute
   '/_authenticated/laporan-kesehatan-ayam/': typeof AuthenticatedLaporanKesehatanAyamIndexRoute
   '/_authenticated/laporan-operasional/': typeof AuthenticatedLaporanOperasionalIndexRoute
   '/_authenticated/laporan-produktivitas/': typeof AuthenticatedLaporanProduktivitasIndexRoute
+  '/_authenticated/notifications/': typeof AuthenticatedNotificationsIndexRoute
   '/_authenticated/users-management/': typeof AuthenticatedUsersManagementIndexRoute
   '/_authenticated/daftar-ayam/$idEdit/edit': typeof AuthenticatedDaftarAyamIdEditEditRoute
   '/_authenticated/daftar-biaya/$idEdit/edit': typeof AuthenticatedDaftarBiayaIdEditEditRoute
@@ -467,7 +545,9 @@ export interface FileRoutesById {
   '/_authenticated/daftar-pakan/$idEdit/edit': typeof AuthenticatedDaftarPakanIdEditEditRoute
   '/_authenticated/daftar-panen/$idEdit/edit': typeof AuthenticatedDaftarPanenIdEditEditRoute
   '/_authenticated/daftar-vaksin/$idEdit/edit': typeof AuthenticatedDaftarVaksinIdEditEditRoute
+  '/_authenticated/kandang-asistens/$idEdit/edit': typeof AuthenticatedKandangAsistensIdEditEditRoute
   '/_authenticated/users-management/$idEdit/edit': typeof AuthenticatedUsersManagementIdEditEditRoute
+  '/_authenticated/daftar-biaya/bulanan/': typeof AuthenticatedDaftarBiayaBulananIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -491,9 +571,12 @@ export interface FileRouteTypes {
     | '/daftar-pakan/create'
     | '/daftar-panen/$id'
     | '/daftar-panen/create'
+    | '/daftar-vaksin/$id'
     | '/daftar-vaksin/create'
+    | '/kandang-asistens/create'
     | '/users-management/$id'
     | '/users-management/create'
+    | '/charts-board'
     | '/daftar-ayam'
     | '/daftar-biaya'
     | '/daftar-jenis-kegiatan'
@@ -503,9 +586,12 @@ export interface FileRouteTypes {
     | '/daftar-pakan'
     | '/daftar-panen'
     | '/daftar-vaksin'
+    | '/jurnal-harian'
+    | '/kandang-asistens'
     | '/laporan-kesehatan-ayam'
     | '/laporan-operasional'
     | '/laporan-produktivitas'
+    | '/notifications'
     | '/users-management'
     | '/daftar-ayam/$idEdit/edit'
     | '/daftar-biaya/$idEdit/edit'
@@ -516,7 +602,9 @@ export interface FileRouteTypes {
     | '/daftar-pakan/$idEdit/edit'
     | '/daftar-panen/$idEdit/edit'
     | '/daftar-vaksin/$idEdit/edit'
+    | '/kandang-asistens/$idEdit/edit'
     | '/users-management/$idEdit/edit'
+    | '/daftar-biaya/bulanan'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -538,9 +626,12 @@ export interface FileRouteTypes {
     | '/daftar-pakan/create'
     | '/daftar-panen/$id'
     | '/daftar-panen/create'
+    | '/daftar-vaksin/$id'
     | '/daftar-vaksin/create'
+    | '/kandang-asistens/create'
     | '/users-management/$id'
     | '/users-management/create'
+    | '/charts-board'
     | '/daftar-ayam'
     | '/daftar-biaya'
     | '/daftar-jenis-kegiatan'
@@ -550,9 +641,12 @@ export interface FileRouteTypes {
     | '/daftar-pakan'
     | '/daftar-panen'
     | '/daftar-vaksin'
+    | '/jurnal-harian'
+    | '/kandang-asistens'
     | '/laporan-kesehatan-ayam'
     | '/laporan-operasional'
     | '/laporan-produktivitas'
+    | '/notifications'
     | '/users-management'
     | '/daftar-ayam/$idEdit/edit'
     | '/daftar-biaya/$idEdit/edit'
@@ -563,7 +657,9 @@ export interface FileRouteTypes {
     | '/daftar-pakan/$idEdit/edit'
     | '/daftar-panen/$idEdit/edit'
     | '/daftar-vaksin/$idEdit/edit'
+    | '/kandang-asistens/$idEdit/edit'
     | '/users-management/$idEdit/edit'
+    | '/daftar-biaya/bulanan'
   id:
     | '__root__'
     | '/'
@@ -586,9 +682,12 @@ export interface FileRouteTypes {
     | '/_authenticated/daftar-pakan/create'
     | '/_authenticated/daftar-panen/$id'
     | '/_authenticated/daftar-panen/create'
+    | '/_authenticated/daftar-vaksin/$id'
     | '/_authenticated/daftar-vaksin/create'
+    | '/_authenticated/kandang-asistens/create'
     | '/_authenticated/users-management/$id'
     | '/_authenticated/users-management/create'
+    | '/_authenticated/charts-board/'
     | '/_authenticated/daftar-ayam/'
     | '/_authenticated/daftar-biaya/'
     | '/_authenticated/daftar-jenis-kegiatan/'
@@ -598,9 +697,12 @@ export interface FileRouteTypes {
     | '/_authenticated/daftar-pakan/'
     | '/_authenticated/daftar-panen/'
     | '/_authenticated/daftar-vaksin/'
+    | '/_authenticated/jurnal-harian/'
+    | '/_authenticated/kandang-asistens/'
     | '/_authenticated/laporan-kesehatan-ayam/'
     | '/_authenticated/laporan-operasional/'
     | '/_authenticated/laporan-produktivitas/'
+    | '/_authenticated/notifications/'
     | '/_authenticated/users-management/'
     | '/_authenticated/daftar-ayam/$idEdit/edit'
     | '/_authenticated/daftar-biaya/$idEdit/edit'
@@ -611,7 +713,9 @@ export interface FileRouteTypes {
     | '/_authenticated/daftar-pakan/$idEdit/edit'
     | '/_authenticated/daftar-panen/$idEdit/edit'
     | '/_authenticated/daftar-vaksin/$idEdit/edit'
+    | '/_authenticated/kandang-asistens/$idEdit/edit'
     | '/_authenticated/users-management/$idEdit/edit'
+    | '/_authenticated/daftar-biaya/bulanan/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -672,6 +776,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersManagementIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/notifications/': {
+      id: '/_authenticated/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/laporan-produktivitas/': {
       id: '/_authenticated/laporan-produktivitas/'
       path: '/laporan-produktivitas'
@@ -691,6 +802,20 @@ declare module '@tanstack/react-router' {
       path: '/laporan-kesehatan-ayam'
       fullPath: '/laporan-kesehatan-ayam'
       preLoaderRoute: typeof AuthenticatedLaporanKesehatanAyamIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/kandang-asistens/': {
+      id: '/_authenticated/kandang-asistens/'
+      path: '/kandang-asistens'
+      fullPath: '/kandang-asistens'
+      preLoaderRoute: typeof AuthenticatedKandangAsistensIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/jurnal-harian/': {
+      id: '/_authenticated/jurnal-harian/'
+      path: '/jurnal-harian'
+      fullPath: '/jurnal-harian'
+      preLoaderRoute: typeof AuthenticatedJurnalHarianIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/daftar-vaksin/': {
@@ -756,6 +881,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDaftarAyamIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/charts-board/': {
+      id: '/_authenticated/charts-board/'
+      path: '/charts-board'
+      fullPath: '/charts-board'
+      preLoaderRoute: typeof AuthenticatedChartsBoardIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/users-management/create': {
       id: '/_authenticated/users-management/create'
       path: '/users-management/create'
@@ -770,11 +902,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersManagementIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/kandang-asistens/create': {
+      id: '/_authenticated/kandang-asistens/create'
+      path: '/kandang-asistens/create'
+      fullPath: '/kandang-asistens/create'
+      preLoaderRoute: typeof AuthenticatedKandangAsistensCreateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/daftar-vaksin/create': {
       id: '/_authenticated/daftar-vaksin/create'
       path: '/daftar-vaksin/create'
       fullPath: '/daftar-vaksin/create'
       preLoaderRoute: typeof AuthenticatedDaftarVaksinCreateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/daftar-vaksin/$id': {
+      id: '/_authenticated/daftar-vaksin/$id'
+      path: '/daftar-vaksin/$id'
+      fullPath: '/daftar-vaksin/$id'
+      preLoaderRoute: typeof AuthenticatedDaftarVaksinIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/daftar-panen/create': {
@@ -875,11 +1021,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDaftarAyamIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/daftar-biaya/bulanan/': {
+      id: '/_authenticated/daftar-biaya/bulanan/'
+      path: '/daftar-biaya/bulanan'
+      fullPath: '/daftar-biaya/bulanan'
+      preLoaderRoute: typeof AuthenticatedDaftarBiayaBulananIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/users-management/$idEdit/edit': {
       id: '/_authenticated/users-management/$idEdit/edit'
       path: '/users-management/$idEdit/edit'
       fullPath: '/users-management/$idEdit/edit'
       preLoaderRoute: typeof AuthenticatedUsersManagementIdEditEditRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/kandang-asistens/$idEdit/edit': {
+      id: '/_authenticated/kandang-asistens/$idEdit/edit'
+      path: '/kandang-asistens/$idEdit/edit'
+      fullPath: '/kandang-asistens/$idEdit/edit'
+      preLoaderRoute: typeof AuthenticatedKandangAsistensIdEditEditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/daftar-vaksin/$idEdit/edit': {
@@ -965,9 +1125,12 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDaftarPakanCreateRoute: typeof AuthenticatedDaftarPakanCreateRoute
   AuthenticatedDaftarPanenIdRoute: typeof AuthenticatedDaftarPanenIdRoute
   AuthenticatedDaftarPanenCreateRoute: typeof AuthenticatedDaftarPanenCreateRoute
+  AuthenticatedDaftarVaksinIdRoute: typeof AuthenticatedDaftarVaksinIdRoute
   AuthenticatedDaftarVaksinCreateRoute: typeof AuthenticatedDaftarVaksinCreateRoute
+  AuthenticatedKandangAsistensCreateRoute: typeof AuthenticatedKandangAsistensCreateRoute
   AuthenticatedUsersManagementIdRoute: typeof AuthenticatedUsersManagementIdRoute
   AuthenticatedUsersManagementCreateRoute: typeof AuthenticatedUsersManagementCreateRoute
+  AuthenticatedChartsBoardIndexRoute: typeof AuthenticatedChartsBoardIndexRoute
   AuthenticatedDaftarAyamIndexRoute: typeof AuthenticatedDaftarAyamIndexRoute
   AuthenticatedDaftarBiayaIndexRoute: typeof AuthenticatedDaftarBiayaIndexRoute
   AuthenticatedDaftarJenisKegiatanIndexRoute: typeof AuthenticatedDaftarJenisKegiatanIndexRoute
@@ -977,9 +1140,12 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDaftarPakanIndexRoute: typeof AuthenticatedDaftarPakanIndexRoute
   AuthenticatedDaftarPanenIndexRoute: typeof AuthenticatedDaftarPanenIndexRoute
   AuthenticatedDaftarVaksinIndexRoute: typeof AuthenticatedDaftarVaksinIndexRoute
+  AuthenticatedJurnalHarianIndexRoute: typeof AuthenticatedJurnalHarianIndexRoute
+  AuthenticatedKandangAsistensIndexRoute: typeof AuthenticatedKandangAsistensIndexRoute
   AuthenticatedLaporanKesehatanAyamIndexRoute: typeof AuthenticatedLaporanKesehatanAyamIndexRoute
   AuthenticatedLaporanOperasionalIndexRoute: typeof AuthenticatedLaporanOperasionalIndexRoute
   AuthenticatedLaporanProduktivitasIndexRoute: typeof AuthenticatedLaporanProduktivitasIndexRoute
+  AuthenticatedNotificationsIndexRoute: typeof AuthenticatedNotificationsIndexRoute
   AuthenticatedUsersManagementIndexRoute: typeof AuthenticatedUsersManagementIndexRoute
   AuthenticatedDaftarAyamIdEditEditRoute: typeof AuthenticatedDaftarAyamIdEditEditRoute
   AuthenticatedDaftarBiayaIdEditEditRoute: typeof AuthenticatedDaftarBiayaIdEditEditRoute
@@ -990,7 +1156,9 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDaftarPakanIdEditEditRoute: typeof AuthenticatedDaftarPakanIdEditEditRoute
   AuthenticatedDaftarPanenIdEditEditRoute: typeof AuthenticatedDaftarPanenIdEditEditRoute
   AuthenticatedDaftarVaksinIdEditEditRoute: typeof AuthenticatedDaftarVaksinIdEditEditRoute
+  AuthenticatedKandangAsistensIdEditEditRoute: typeof AuthenticatedKandangAsistensIdEditEditRoute
   AuthenticatedUsersManagementIdEditEditRoute: typeof AuthenticatedUsersManagementIdEditEditRoute
+  AuthenticatedDaftarBiayaBulananIndexRoute: typeof AuthenticatedDaftarBiayaBulananIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -1014,10 +1182,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDaftarPakanCreateRoute: AuthenticatedDaftarPakanCreateRoute,
   AuthenticatedDaftarPanenIdRoute: AuthenticatedDaftarPanenIdRoute,
   AuthenticatedDaftarPanenCreateRoute: AuthenticatedDaftarPanenCreateRoute,
+  AuthenticatedDaftarVaksinIdRoute: AuthenticatedDaftarVaksinIdRoute,
   AuthenticatedDaftarVaksinCreateRoute: AuthenticatedDaftarVaksinCreateRoute,
+  AuthenticatedKandangAsistensCreateRoute:
+    AuthenticatedKandangAsistensCreateRoute,
   AuthenticatedUsersManagementIdRoute: AuthenticatedUsersManagementIdRoute,
   AuthenticatedUsersManagementCreateRoute:
     AuthenticatedUsersManagementCreateRoute,
+  AuthenticatedChartsBoardIndexRoute: AuthenticatedChartsBoardIndexRoute,
   AuthenticatedDaftarAyamIndexRoute: AuthenticatedDaftarAyamIndexRoute,
   AuthenticatedDaftarBiayaIndexRoute: AuthenticatedDaftarBiayaIndexRoute,
   AuthenticatedDaftarJenisKegiatanIndexRoute:
@@ -1030,12 +1202,16 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDaftarPakanIndexRoute: AuthenticatedDaftarPakanIndexRoute,
   AuthenticatedDaftarPanenIndexRoute: AuthenticatedDaftarPanenIndexRoute,
   AuthenticatedDaftarVaksinIndexRoute: AuthenticatedDaftarVaksinIndexRoute,
+  AuthenticatedJurnalHarianIndexRoute: AuthenticatedJurnalHarianIndexRoute,
+  AuthenticatedKandangAsistensIndexRoute:
+    AuthenticatedKandangAsistensIndexRoute,
   AuthenticatedLaporanKesehatanAyamIndexRoute:
     AuthenticatedLaporanKesehatanAyamIndexRoute,
   AuthenticatedLaporanOperasionalIndexRoute:
     AuthenticatedLaporanOperasionalIndexRoute,
   AuthenticatedLaporanProduktivitasIndexRoute:
     AuthenticatedLaporanProduktivitasIndexRoute,
+  AuthenticatedNotificationsIndexRoute: AuthenticatedNotificationsIndexRoute,
   AuthenticatedUsersManagementIndexRoute:
     AuthenticatedUsersManagementIndexRoute,
   AuthenticatedDaftarAyamIdEditEditRoute:
@@ -1056,8 +1232,12 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedDaftarPanenIdEditEditRoute,
   AuthenticatedDaftarVaksinIdEditEditRoute:
     AuthenticatedDaftarVaksinIdEditEditRoute,
+  AuthenticatedKandangAsistensIdEditEditRoute:
+    AuthenticatedKandangAsistensIdEditEditRoute,
   AuthenticatedUsersManagementIdEditEditRoute:
     AuthenticatedUsersManagementIdEditEditRoute,
+  AuthenticatedDaftarBiayaBulananIndexRoute:
+    AuthenticatedDaftarBiayaBulananIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
