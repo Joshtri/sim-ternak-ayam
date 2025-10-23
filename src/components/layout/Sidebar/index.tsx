@@ -92,14 +92,14 @@ export function Sidebar({
         {/* Collapse Toggle Button - Desktop only */}
         {onToggleCollapse && (
           <button
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-default-100 transition-colors"
             onClick={onToggleCollapse}
-            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? (
-              <ChevronRight size={18} className="text-default-500" />
+              <ChevronRight className="text-default-500" size={18} />
             ) : (
-              <ChevronLeft size={18} className="text-default-500" />
+              <ChevronLeft className="text-default-500" size={18} />
             )}
           </button>
         )}
@@ -120,7 +120,10 @@ export function Sidebar({
       {/* User Info at bottom - Fixed, no scroll */}
       <div className="flex-shrink-0 p-4 border-t border-divider bg-content1/50">
         {isCollapsed ? (
-          <Tooltip content={me?.fullName ?? me?.username ?? "Admin User"} placement="right">
+          <Tooltip
+            content={me?.fullName ?? me?.username ?? "Admin User"}
+            placement="right"
+          >
             <div className="flex items-center justify-center">
               <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                 <span className="text-primary font-semibold">
