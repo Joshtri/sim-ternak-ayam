@@ -7,7 +7,15 @@ import TabByJenis from "./TabByJenis";
 import TabByKandang from "./TabByKandang";
 import TabByPetugas from "./TabByPetugas";
 
-export default function LaporanTabs({ laporan }: any) {
+export default function LaporanTabs({
+  laporan,
+  startDate,
+  endDate,
+}: {
+  laporan: any;
+  startDate?: string;
+  endDate?: string;
+}) {
   return (
     <Card>
       <CardBody>
@@ -33,7 +41,11 @@ export default function LaporanTabs({ laporan }: any) {
               </div>
             }
           >
-            <TabByKandang detailPerKandang={laporan.detailPerKandang} />
+            <TabByKandang
+              detailPerKandang={laporan.detailPerKandang}
+              endDate={endDate}
+              startDate={startDate}
+            />
           </Tab>
 
           <Tab
