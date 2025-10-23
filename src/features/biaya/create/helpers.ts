@@ -6,6 +6,7 @@ import type { CreateBiayaDto } from "../types";
 import type { SelectOption } from "@/types/form-fields";
 import type { Operasional } from "@/features/operasional/types";
 import type { User } from "@/features/users-management/services/userService";
+import type { Kandang } from "@/features/kandang/types";
 
 /**
  * Biaya form data interface
@@ -17,19 +18,33 @@ export interface BiayaFormData {
   petugasId: string;
   operasionalId?: string;
   buktiUrl?: string;
+  kandangId?: string; // NEW: Optional kandang ID
+  keterangan?: string; // NEW: Additional notes
+  catatan?: string; // NEW: Optional notes
+  bulan?: number; // NEW: Month (1-12)
+  tahun?: number; // NEW: Year
 }
 
 /**
  * Get default form values
  */
-export const getDefaultBiayaFormValues = (): Partial<BiayaFormData> => ({
-  jenisBiaya: "",
-  tanggal: new Date().toISOString().split("T")[0], // Today's date in YYYY-MM-DD format
-  jumlah: 0,
-  petugasId: "",
-  operasionalId: "",
-  buktiUrl: "",
-});
+export const getDefaultBiayaFormValues = (): Partial<BiayaFormData> => {
+  const currentDate = new Date();
+
+  return {
+    jenisBiaya: "",
+    tanggal: currentDate.toISOString().split("T")[0], // Today's date in YYYY-MM-DD format
+    jumlah: 0,
+    petugasId: "",
+    operasionalId: "",
+    buktiUrl: "",
+    kandangId: "",
+    keterangan: "",
+    catatan: "",
+    bulan: currentDate.getMonth() + 1, // Current month (1-12)
+    tahun: currentDate.getFullYear(), // Current year
+  };
+};
 
 /**
  * Transform form data to CreateBiayaDto before submission
@@ -51,6 +66,26 @@ export const transformBiayaFormData = (data: BiayaFormData): CreateBiayaDto => {
 
   if (data.buktiUrl && data.buktiUrl !== "") {
     dto.buktiUrl = data.buktiUrl;
+  }
+
+  if (data.kandangId && data.kandangId !== "") {
+    dto.kandangId = data.kandangId;
+  }
+
+  if (data.keterangan && data.keterangan !== "") {
+    dto.keterangan = data.keterangan;
+  }
+
+  if (data.catatan && data.catatan !== "") {
+    dto.catatan = data.catatan;
+  }
+
+  if (data.bulan) {
+    dto.bulan = Number(data.bulan);
+  }
+
+  if (data.tahun) {
+    dto.tahun = Number(data.tahun);
   }
 
   return dto;
@@ -89,6 +124,20 @@ export const transformOperasionalsToOptions = (
     label: `${item.jenisKegiatanNama} - ${item.kandangNama}`,
     value: item.id,
     description: `${formatDateIndonesian(item.tanggal)} - ${item.jumlah} unit`,
+  }));
+};
+
+export const transformKandangsToOptions = (
+  kandangs: Kandang[]
+): SelectOption[] => {
+  if (!kandangs || kandangs.length === 0) {
+    return [];
+  }
+
+  return kandangs.map(kandang => ({
+    label: kandang.namaKandang,
+    value: kandang.id,
+    description: `Lokasi: ${kandang.lokasi || "-"} | Kapasitas: ${kandang.kapasitas || "-"} | Petugas: ${kandang.petugasNama || "Tidak ada"}`,
   }));
 };
 
