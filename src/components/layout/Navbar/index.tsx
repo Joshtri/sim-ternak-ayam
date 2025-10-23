@@ -7,7 +7,6 @@ import {
 } from "@heroui/dropdown";
 import {
   Menu,
-  Bell,
   Search,
   Sun,
   Moon,
@@ -22,6 +21,8 @@ import { Link } from "@heroui/react";
 
 import { authService } from "@/features/auth/services/authService";
 import { showToast } from "@/utils/showToast";
+import { NotificationDropdown } from "./NotificationDropdown";
+import { CurrentUser } from "@/features/auth/types";
 
 // ============================================
 // 🎯 NAVBAR COMPONENT
@@ -49,17 +50,6 @@ export function Navbar({
 
   // silence unused prop warning if consumer doesn't use it yet
   void isSidebarCollapsed;
-
-  interface CurrentUser {
-    id?: string;
-    username?: string;
-    email?: string;
-    fullName?: string;
-    noWA?: string;
-    role?: string;
-    createdAt?: string;
-    updateAt?: string;
-  }
 
   const { data: me } = useQuery<CurrentUser>({
     queryKey: ["me"],
@@ -126,30 +116,8 @@ export function Navbar({
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </Button>
 
-          {/* Notifications */}
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <Button isIconOnly variant="light">
-                <div className="relative">
-                  <Bell size={20} />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-danger text-white text-xs rounded-full flex items-center justify-center">
-                    3
-                  </span>
-                </div>
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Notifications">
-              <DropdownItem key="notif1" description="5 menit yang lalu">
-                Stok pakan kandang A menipis
-              </DropdownItem>
-              <DropdownItem key="notif2" description="1 jam yang lalu">
-                Laporan harian tersedia
-              </DropdownItem>
-              <DropdownItem key="notif3" description="2 jam yang lalu">
-                Jadwal vaksinasi besok
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          {/* Notifications - Realtime with auto-refresh */}
+          <NotificationDropdown />
 
           {/* User Menu */}
           <Dropdown placement="bottom-end">
