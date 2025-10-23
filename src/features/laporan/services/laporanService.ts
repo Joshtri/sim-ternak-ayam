@@ -89,4 +89,52 @@ export const laporanService = {
 
     return response.data.data;
   },
+
+  /**
+   * Download PDF for Operational Report
+   * @param kandangId - Kandang UUID
+   * @param startDate - Optional start date (YYYY-MM-DD)
+   * @param endDate - Optional end date (YYYY-MM-DD)
+   * @returns PDF file blob
+   */
+  downloadOperasionalPDF: async (
+    kandangId: string,
+    startDate?: string,
+    endDate?: string
+  ): Promise<Blob> => {
+    const params = new URLSearchParams();
+    if (startDate) params.append("startDate", startDate);
+    if (endDate) params.append("endDate", endDate);
+
+    const url = `/laporan/operasional/pdf/${kandangId}${params.toString() ? `?${params.toString()}` : ""}`;
+    const response = await api.get(url, {
+      responseType: "blob",
+    });
+
+    return response.data;
+  },
+
+  /**
+   * Download PDF for Health Report
+   * @param kandangId - Kandang UUID
+   * @param startDate - Optional start date (YYYY-MM-DD)
+   * @param endDate - Optional end date (YYYY-MM-DD)
+   * @returns PDF file blob
+   */
+  downloadKesehatanPDF: async (
+    kandangId: string,
+    startDate?: string,
+    endDate?: string
+  ): Promise<Blob> => {
+    const params = new URLSearchParams();
+    if (startDate) params.append("startDate", startDate);
+    if (endDate) params.append("endDate", endDate);
+
+    const url = `/laporan/kesehatan/pdf/${kandangId}${params.toString() ? `?${params.toString()}` : ""}`;
+    const response = await api.get(url, {
+      responseType: "blob",
+    });
+
+    return response.data;
+  },
 };
