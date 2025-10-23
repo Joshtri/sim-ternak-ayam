@@ -67,7 +67,11 @@ export default function LaporanOperasional() {
             />
           </div>
 
-          <LaporanTabs laporan={laporan} />
+          <LaporanTabs
+            endDate={laporan.tanggalSelesai}
+            laporan={laporan}
+            startDate={laporan.tanggalMulai}
+          />
         </>
       ) : (
         <div className="text-center text-default-500 py-12">
