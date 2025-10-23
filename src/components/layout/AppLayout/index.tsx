@@ -75,7 +75,7 @@ export function AppLayout({
         />
 
         {/* Page Content */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 sm:p-3">
           <div className="container mx-auto max-w-7xl">
             {/* Breadcrumbs */}
             {!hideBreadcrumbs && (
