@@ -100,12 +100,12 @@ export default function LoginForm() {
             </Button>
 
             {/* Register Link */}
-            <div className="text-center text-sm text-default-500 mt-4">
+            {/* <div className="text-center text-sm text-default-500 mt-4">
               Belum punya akun?{" "}
               <a className="text-primary hover:underline" href="/register">
                 Daftar di sini
               </a>
-            </div>
+            </div> */}
           </div>
         </Card>
       </form>
