@@ -1,7 +1,7 @@
 import React from "react";
 
-import VaksinList from "@/features/vaksin/list";
+import VaksinListDebug from "@/features/vaksin/list/VaksinListDebug";
 
 export default function VaksinListPage() {
-  return <VaksinList />;
+  return <VaksinListDebug />;
 }
