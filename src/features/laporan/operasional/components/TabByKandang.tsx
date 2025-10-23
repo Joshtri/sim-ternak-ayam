@@ -2,7 +2,17 @@
 
 import { Chip } from "@heroui/react";
 
-export default function TabByKandang({ detailPerKandang }: any) {
+import ExportPDFButton from "../../components/ExportPDFButton";
+
+export default function TabByKandang({
+  detailPerKandang,
+  startDate,
+  endDate,
+}: {
+  detailPerKandang: any;
+  startDate?: string;
+  endDate?: string;
+}) {
   if (detailPerKandang.length === 0) {
     return <p className="text-center text-default-500 py-8">Belum ada data</p>;
   }
@@ -14,16 +24,29 @@ export default function TabByKandang({ detailPerKandang }: any) {
           key={idx}
           className="flex justify-between items-center p-4 bg-default-100 rounded-lg"
         >
-          <div>
+          <div className="flex-1">
             <p className="font-semibold">{item.namaKandang}</p>
             <p className="text-sm text-default-500">{item.lokasi}</p>
             <p className="text-xs text-default-400 mt-1">
               Petugas: {item.namaPetugas}
             </p>
           </div>
-          <Chip color="success" variant="flat">
-            {item.jumlahOperasional} operasional
-          </Chip>
+
+          <div className="flex items-center gap-3">
+            <Chip color="success" variant="flat">
+              {item.jumlahOperasional} operasional
+            </Chip>
+
+            <ExportPDFButton
+              endDate={endDate}
+              kandangId={item.kandangId}
+              kandangNama={item.namaKandang}
+              reportType="operasional"
+              size="sm"
+              startDate={startDate}
+              variant="bordered"
+            />
+          </div>
         </div>
       ))}
     </div>
