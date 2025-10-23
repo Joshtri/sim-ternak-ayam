@@ -14,20 +14,27 @@ import {
   User,
   Phone,
   Mail,
+  UserPlus,
+  UserCheck,
 } from "lucide-react";
 
 import { useKandang } from "../hooks/useKandang";
+import { useAsistensByKandang } from "@/features/kandang-asisten/hooks/useKandangAsisten";
 
 import { DetailCard, DetailCardSkeleton } from "@/components/ui/DetailCard";
 import { Badge } from "@/components/ui/Badge";
 import { LinkButton } from "@/components/ui/Button";
 import { PageHeader } from "@/components/common/PageHeader";
+import { Card } from "@/components/ui/Card";
 
 export default function KandangDetail() {
   const { id } = useParams({ strict: false }) as { id?: string };
 
   // Call hook unconditionally but disable it when `id` is missing
   const { data: kandang, isLoading } = useKandang(id ?? "", !!id);
+
+  // Fetch assistants for this kandang
+  const { data: asistens, isLoading: isLoadingAsistens } = useAsistensByKandang(id ?? "", !!id);
 
   // Format dates
   const formatDate = (dateString: string) => {
@@ -216,6 +223,92 @@ export default function KandangDetail() {
           },
         ]}
       />
+
+      {/* Asisten Section */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <UserCheck className="w-6 h-6 text-primary" />
+            <div>
+              <h3 className="text-xl font-bold">Asisten Kandang</h3>
+              <p className="text-sm text-default-500">
+                Daftar asisten yang ditugaskan untuk kandang ini
+              </p>
+            </div>
+          </div>
+          <LinkButton
+            color="primary"
+            href="/kandang-asistens/create"
+            size="sm"
+            startContent={<UserPlus className="w-4 h-4" />}
+            variant="flat"
+          >
+            Tambah Asisten
+          </LinkButton>
+        </div>
+
+        {isLoadingAsistens ? (
+          <div className="text-center py-8 text-default-500">
+            Memuat data asisten...
+          </div>
+        ) : !asistens || asistens.length === 0 ? (
+          <div className="text-center py-12 bg-default-50 rounded-lg border border-dashed border-default-200">
+            <UserPlus className="w-12 h-12 text-default-300 mx-auto mb-3" />
+            <p className="text-default-500 font-medium">
+              Belum ada asisten yang ditugaskan
+            </p>
+            <p className="text-sm text-default-400 mt-1">
+              Klik tombol "Tambah Asisten" untuk menugaskan asisten
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {asistens.map((asisten) => (
+              <div
+                key={asisten.id}
+                className="flex items-start justify-between p-4 bg-default-50 rounded-lg border border-default-200 hover:border-primary-200 transition-colors"
+              >
+                <div className="flex items-start gap-3 flex-1">
+                  <User className="w-5 h-5 text-primary mt-1" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-semibold text-lg">
+                        {asisten.asistenNama}
+                      </h4>
+                      <Badge
+                        color={asisten.isAktif ? "success" : "default"}
+                        size="sm"
+                        variant="flat"
+                      >
+                        {asisten.isAktif ? "Aktif" : "Tidak Aktif"}
+                      </Badge>
+                    </div>
+                    {asisten.catatan && (
+                      <p className="text-sm text-default-600 mt-1">
+                        {asisten.catatan}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-4 mt-2 text-xs text-default-500">
+                      <span>ID: {asisten.asistenId}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <LinkButton
+                    color="warning"
+                    href={`/kandang-asistens/${asisten.id}/edit`}
+                    size="sm"
+                    startContent={<Pencil className="w-3 h-3" />}
+                    variant="flat"
+                  >
+                    Edit
+                  </LinkButton>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
 
       {/* Info Card */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
