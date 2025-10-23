@@ -1,35 +1,82 @@
 import type { FormSchema } from "@/types/form-fields";
 
-import { validateNamaVaksin, validateStok, validateBulan, validateTahun } from "./validations";
+import { validateNamaVaksin, validateStok, validateJenis, validateSatuan, validateHarga, validateBulan, validateTahun } from "./validations";
 
 export const vaksinSchema: FormSchema = {
   sections: [
     {
-      title: "Informasi Vaksin",
-      description: "Masukkan detail vaksin ayam broiler.",
+      title: "Informasi Vaksin & Vitamin",
+      description: "Masukkan detail vaksin atau vitamin ayam broiler.",
       columns: 2,
       fields: [
         {
-          type: "text",
-          name: "namaVaksin",
-          label: "Nama Vaksin",
-          placeholder: "Masukkan nama vaksin",
+          type: "radio",
+          name: "tipe",
+          label: "Tipe",
           required: true,
           colSpan: 2,
-          helperText: "Nama jenis vaksin",
+          helperText: "Pilih tipe: Vaksin atau Vitamin",
+          options: [
+            { label: "Vaksin", value: "0" },
+            { label: "Vitamin", value: "1" },
+          ],
+        },
+
+        {
+          type: "text",
+          name: "namaVaksin",
+          label: "Nama",
+          placeholder: "Masukkan nama vaksin/vitamin",
+          required: true,
+          colSpan: 2,
+          helperText: "Nama vaksin atau vitamin",
           validation: validateNamaVaksin,
+        },
+
+        {
+          type: "text",
+          name: "jenis",
+          label: "Jenis",
+          placeholder: "Masukkan jenis",
+          required: true,
+          colSpan: 2,
+          helperText: "Jenis vaksin atau vitamin (contoh: ND Vaccine, Vitamin B Complex)",
+          validation: validateJenis,
         },
 
         {
           type: "number",
           name: "stok",
-          label: "Stok (unit)",
+          label: "Stok",
           placeholder: "Masukkan jumlah stok",
+          required: true,
+          colSpan: 1,
+          min: 0,
+          helperText: "Jumlah stok",
+          validation: validateStok,
+        },
+
+        {
+          type: "text",
+          name: "satuan",
+          label: "Satuan",
+          placeholder: "Masukkan satuan",
+          required: true,
+          colSpan: 1,
+          helperText: "Satuan (contoh: vial, botol, sachet)",
+          validation: validateSatuan,
+        },
+
+        {
+          type: "currency",
+          name: "hargaPerSatuan",
+          label: "Harga Per Satuan",
+          placeholder: "Masukkan harga",
           required: true,
           colSpan: 2,
           min: 0,
-          helperText: "Jumlah stok vaksin dalam unit",
-          validation: validateStok,
+          helperText: "Harga per satuan dalam Rupiah",
+          validation: validateHarga,
         },
 
         {
