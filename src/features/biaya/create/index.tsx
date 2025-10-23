@@ -17,6 +17,7 @@ import {
   transformBiayaFormData,
   transformUsersToOptions,
   transformOperasionalsToOptions,
+  transformKandangsToOptions,
 } from "./helpers";
 
 import { useUsers } from "@/features/users-management/hooks/useUsers";
@@ -25,6 +26,7 @@ import { FormBuilder } from "@/components/ui/Form/FormBuilder";
 import { Card } from "@/components/ui/Card";
 import FormActions from "@/components/ui/Form/FormActions";
 import { SkeletonForm } from "@/components/ui";
+import { useKandangs } from "@/features/kandang/hooks/useKandang";
 
 /**
  * Handle form submission
@@ -69,6 +71,7 @@ export function BiayaCreateForm() {
   });
   const { data: operasionals, isLoading: isLoadingOperasionals } =
     useOperasionals();
+  const { data: kandangs, isLoading: isLoadingKandangs } = useKandangs();
 
   // Initialize react-hook-form
   const methods = useForm<BiayaFormData>({
@@ -88,6 +91,12 @@ export function BiayaCreateForm() {
 
     return transformOperasionalsToOptions(operasionals);
   }, [operasionals]);
+
+  const kandangsOptions = useMemo(() => {
+    if (!kandangs) return [];
+
+    return transformKandangsToOptions(kandangs);
+  }, [kandangs]);
 
   // Update schema with dynamic options
   const dynamicSchema = useMemo(() => {
@@ -110,18 +119,26 @@ export function BiayaCreateForm() {
             };
           }
 
+          if (field.name === "kandangId" && field.type === "select") {
+            return {
+              ...field,
+              options: kandangsOptions,
+            };
+          }
+
           return field;
         }),
       })),
     };
-  }, [petugasOptions, operasionalOptions]);
+  }, [petugasOptions, operasionalOptions, kandangsOptions]);
 
   const onSubmit = (data: BiayaFormData) => {
     handleFormSubmit(data, createBiaya, navigate);
   };
 
   // Check if any data is loading
-  const isLoadingAnyData = isLoadingUsers || isLoadingOperasionals;
+  const isLoadingAnyData =
+    isLoadingUsers || isLoadingOperasionals || isLoadingKandangs;
 
   return (
     <FormProvider {...methods}>
