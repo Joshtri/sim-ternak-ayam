@@ -1,10 +1,9 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 // Base API URL from environment variables
-// const BASE_URL = import.meta.env["VITE_BASE_API_URL"];
+const BASE_URL = import.meta.env["VITE_BASE_API_URL"];
 
-
-const BASE_URL = "https://localhost:7195/api"; // Replace with your actual base URL
+// const BASE_URL = "https://localhost:7195/api"; // Replace with your actual base URL
 
 // Create axios instance with default config
 export const api = axios.create({
