@@ -1,5 +1,3 @@
-import { Card } from "@/components/ui/Card";
-import { usePemilikDashboard } from "../hooks/useDashboard";
 import {
   AlertCircle,
   TrendingUp,
@@ -11,18 +9,16 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
+import { usePemilikDashboard } from "../hooks/useDashboard";
+
+import { Card } from "@/components/ui/Card";
+import { DashboardSkeleton } from "./DashboardSkeleton";
+
 export function PemilikDashboard() {
   const { data, isLoading, isError } = usePemilikDashboard();
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-default-600">Memuat dashboard...</p>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton variant="pemilik" />;
   }
 
   if (isError || !data) {
@@ -55,7 +51,9 @@ export function PemilikDashboard() {
             <p className="text-xl font-bold">
               Rp {(data.businessKpi.monthlyRevenue / 1000000).toFixed(1)}M
             </p>
-            <p className="text-xs text-default-600 mt-1">Pendapatan Bulan Ini</p>
+            <p className="text-xs text-default-600 mt-1">
+              Pendapatan Bulan Ini
+            </p>
           </div>
         </Card>
 
@@ -95,7 +93,9 @@ export function PemilikDashboard() {
             <p className="text-xl font-bold">
               {data.businessKpi.averageProductivity.toFixed(1)}%
             </p>
-            <p className="text-xs text-default-600 mt-1">Rata-rata Produktivitas</p>
+            <p className="text-xs text-default-600 mt-1">
+              Rata-rata Produktivitas
+            </p>
           </div>
         </Card>
 
@@ -123,7 +123,7 @@ export function PemilikDashboard() {
       {/* Profitability */}
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <DollarSign size={24} className="text-primary" />
+          <DollarSign className="text-primary" size={24} />
           <h2 className="text-xl font-semibold">Analisis Profitabilitas</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -184,8 +184,8 @@ export function PemilikDashboard() {
             <div className="flex justify-between items-center">
               <span className="text-sm text-default-600">Pendapatan</span>
               <div className="flex items-center gap-1">
-                {data.comparisonAnalysis.currentVsPreviousMonth
-                  .revenueChange >= 0 ? (
+                {data.comparisonAnalysis.currentVsPreviousMonth.revenueChange >=
+                0 ? (
                   <TrendingUp className="text-success" size={16} />
                 ) : (
                   <TrendingDown className="text-danger" size={16} />
@@ -315,8 +315,8 @@ export function PemilikDashboard() {
             <div className="flex justify-between items-center">
               <span className="text-sm text-default-600">Kapasitas</span>
               <div className="flex items-center gap-1">
-                {data.comparisonAnalysis.currentVsPreviousYear
-                  .capacityGrowth >= 0 ? (
+                {data.comparisonAnalysis.currentVsPreviousYear.capacityGrowth >=
+                0 ? (
                   <TrendingUp className="text-success" size={16} />
                 ) : (
                   <TrendingDown className="text-danger" size={16} />
@@ -396,7 +396,7 @@ export function PemilikDashboard() {
         {/* Recommendations & Opportunities */}
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Lightbulb size={24} className="text-warning" />
+            <Lightbulb className="text-warning" size={24} />
             <h2 className="text-xl font-semibold">Rekomendasi & Peluang</h2>
           </div>
           <div className="space-y-4">
@@ -436,7 +436,7 @@ export function PemilikDashboard() {
         {/* Risks & Success Factors */}
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle size={24} className="text-danger" />
+            <AlertTriangle className="text-danger" size={24} />
             <h2 className="text-xl font-semibold">Risiko & Faktor Sukses</h2>
           </div>
           <div className="space-y-4">
