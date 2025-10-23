@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 
 import { PetugasDashboard } from "./PetugasDashboard";
-import { OperatorDashboard } from "./OperatorDashboard";
 import { PemilikDashboard } from "./PemilikDashboard";
+import { DashboardOperator } from "./DashboardOperator";
 
 import { authService } from "@/features/auth/services/authService";
 import { Card } from "@/components/ui/Card";
+import { DashboardSkeleton } from "./DashboardSkeleton";
 
 /**
  * Current User Type
@@ -41,14 +42,7 @@ export function DashboardGrid() {
 
   // Loading state
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
-          <p className="mt-4 text-default-600">Memuat dashboard...</p>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton variant="operator" />;
   }
 
   // Error state
@@ -89,7 +83,7 @@ export function DashboardGrid() {
       return <PetugasDashboard />;
 
     case "Operator":
-      return <OperatorDashboard />;
+      return <DashboardOperator />;
 
     case "Pemilik":
       return <PemilikDashboard />;
