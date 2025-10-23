@@ -2,14 +2,18 @@
  * Vaksin Management Helper Functions
  */
 
-import type { CreateVaksinDto } from "../types";
+import type { CreateVaksinDto, VaksinVitaminType } from "../types";
 
 /**
  * Vaksin form data interface
  */
 export interface VaksinFormData {
   namaVaksin: string;
+  jenis: string;
   stok: number;
+  satuan: string;
+  hargaPerSatuan: number;
+  tipe: VaksinVitaminType; // 0 = Vaksin, 1 = Vitamin
   bulan: number;
   tahun: number;
 }
@@ -21,7 +25,11 @@ export const getDefaultVaksinFormValues = (): Partial<VaksinFormData> => {
   const currentDate = new Date();
   return {
     namaVaksin: "",
+    jenis: "",
     stok: 0,
+    satuan: "unit",
+    hargaPerSatuan: 0,
+    tipe: 0, // Default to Vaksin
     bulan: currentDate.getMonth() + 1, // Current month (1-12)
     tahun: currentDate.getFullYear(), // Current year
   };
@@ -35,7 +43,11 @@ export const getDefaultVaksinFormValues = (): Partial<VaksinFormData> => {
 export const transformVaksinFormData = (data: VaksinFormData): CreateVaksinDto => {
   return {
     namaVaksin: data.namaVaksin,
+    jenis: data.jenis,
     stok: Number(data.stok),
+    satuan: data.satuan,
+    hargaPerSatuan: Number(data.hargaPerSatuan),
+    tipe: Number(data.tipe) as VaksinVitaminType,
     bulan: Number(data.bulan),
     tahun: Number(data.tahun),
   };
