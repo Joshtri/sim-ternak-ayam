@@ -11,10 +11,17 @@ import {
   AlertCircle,
   HeartPulse,
   BarChart3,
+  Calendar,
+  Bell,
 } from "lucide-react";
 
-import { NavigationSection } from "@/types/navigation";
-
+import { NavigationSection, UserRole } from "@/types/navigation";
+export interface NavigationItem {
+  label: string;
+  href: string;
+  icon?: React.ReactNode;
+  role?: string[];
+}
 // ============================================
 // 🧭 NAVIGATION CONFIGURATION
 // ============================================
@@ -53,6 +60,13 @@ export const navigationSections: NavigationSection[] = [
         label: "Kandang",
         icon: <Building2 size={20} />,
         href: "/daftar-kandang",
+        allowedRoles: ["pemilik", "operator"],
+      },
+      {
+        id: "kandang-asisten",
+        label: "Kandang Asisten",
+        icon: <Users size={20} />,
+        href: "/kandang-asistens",
         allowedRoles: ["pemilik", "operator"],
       },
       {
@@ -124,6 +138,22 @@ export const navigationSections: NavigationSection[] = [
         icon: <DollarSign size={20} />,
         href: "/daftar-biaya",
         allowedRoles: ["pemilik", "operator", "petugas"],
+        children: [
+          {
+            id: "biaya-list",
+            label: "Daftar Biaya",
+            icon: <DollarSign size={18} />,
+            href: "/daftar-biaya",
+            allowedRoles: ["pemilik", "operator", "petugas"],
+          },
+          {
+            id: "biaya-bulanan",
+            label: "Rekap Bulanan",
+            icon: <Calendar size={18} />,
+            href: "/daftar-biaya/bulanan",
+            allowedRoles: ["pemilik", "operator", "petugas"],
+          },
+        ],
       },
     ],
   },
@@ -153,6 +183,20 @@ export const navigationSections: NavigationSection[] = [
         href: "/laporan-produktivitas",
         allowedRoles: ["pemilik", "operator"],
       },
+      {
+        id: "jurnal-harian",
+        label: "Jurnal Harian",
+        icon: <FileText size={20} />,
+        href: "/jurnal-harian",
+        allowedRoles: ["pemilik", "operator", "petugas"],
+      },
+      {
+        id: "charts-dashboard",
+        label: "Dashboard Charts",
+        icon: <BarChart3 size={20} />,
+        href: "/charts-board",
+        allowedRoles: ["pemilik", "operator"],
+      },
     ],
   },
 
@@ -172,6 +216,13 @@ export const navigationSections: NavigationSection[] = [
         label: "Pengaturan Sistem",
         icon: <Settings size={20} />,
         href: "/settings",
+        allowedRoles: ["pemilik", "operator"],
+      },
+      {
+        id: "Notifications",
+        label: "Pemberitahuan",
+        icon: <Bell size={20} />,
+        href: "/notifications",
         allowedRoles: ["pemilik", "operator"],
       },
     ],
