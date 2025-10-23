@@ -6,7 +6,10 @@ import {
   validateJumlah,
   validatePetugasId,
   validateOperasionalId,
+  validateKandangId,
   validateBuktiUrl,
+  validateKeterangan,
+  validateCatatan,
 } from "./validations";
 
 export const biayaSchema: FormSchema = {
@@ -34,7 +37,8 @@ export const biayaSchema: FormSchema = {
           placeholder: "Pilih tanggal biaya",
           required: true,
           colSpan: 1,
-          helperText: "Tanggal terjadinya pengeluaran",
+          helperText:
+            "Tanggal terjadinya pengeluaran (akan auto-populate bulan dan tahun)",
           validation: validateTanggal,
         },
 
@@ -65,6 +69,19 @@ export const biayaSchema: FormSchema = {
 
         {
           type: "select",
+          name: "kandangId",
+          label: "Kandang (Opsional)",
+          placeholder: "Pilih kandang",
+          required: false,
+          colSpan: 1,
+          helperText:
+            "Opsional: Pilih kandang jika biaya spesifik untuk kandang tertentu",
+          validation: validateKandangId,
+          options: [], // Will be populated dynamically in the component
+        },
+
+        {
+          type: "select",
           name: "operasionalId",
           label: "Operasional (Opsional)",
           placeholder: "Pilih kegiatan operasional",
@@ -73,6 +90,56 @@ export const biayaSchema: FormSchema = {
           helperText: "Opsional: Pilih jika biaya terkait kegiatan operasional",
           validation: validateOperasionalId,
           options: [], // Will be populated dynamically in the component
+        },
+
+        {
+          type: "number",
+          name: "bulan",
+          label: "Bulan",
+          placeholder: "1-12",
+          required: false,
+          colSpan: 1,
+          min: 1,
+          max: 12,
+          helperText:
+            "Bulan (auto-populated dari tanggal, dapat diubah manual)",
+        },
+
+        {
+          type: "number",
+          name: "tahun",
+          label: "Tahun",
+          placeholder: "YYYY",
+          required: false,
+          colSpan: 1,
+          min: 2000,
+          max: 2100,
+          helperText:
+            "Tahun (auto-populated dari tanggal, dapat diubah manual)",
+        },
+
+        {
+          type: "textarea",
+          name: "keterangan",
+          label: "Keterangan (Opsional)",
+          placeholder: "Masukkan keterangan biaya",
+          required: false,
+          colSpan: 2,
+          rows: 2,
+          helperText: "Keterangan tambahan mengenai biaya",
+          validation: validateKeterangan,
+        },
+
+        {
+          type: "textarea",
+          name: "catatan",
+          label: "Catatan (Opsional)",
+          placeholder: "Masukkan catatan",
+          required: false,
+          colSpan: 2,
+          rows: 2,
+          helperText: "Catatan internal mengenai biaya",
+          validation: validateCatatan,
         },
 
         {
