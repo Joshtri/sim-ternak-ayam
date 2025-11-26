@@ -103,36 +103,43 @@ export function FormFieldRenderer({
         </div>
       );
 
-    case "select":
+    case "select": {
+      const options =
+        typeof field.options === "function" ? field.options() : field.options;
+
+      // Don't render if options is a Promise (async)
+      if (options instanceof Promise) {
+        return null;
+      }
+
       return (
         <div className={className}>
           <SelectInput
             {...commonProps}
             description={field.helperText}
             disallowEmptySelection={field.disallowEmptySelection}
-            options={
-              typeof field.options === "function"
-                ? field.options()
-                : field.options
-            }
+            options={options}
             selectionMode={field.selectionMode}
           />
         </div>
       );
+    }
 
-    case "autocomplete":
+    case "autocomplete": {
+      const options =
+        typeof field.options === "function" ? field.options() : field.options;
+
+      // Don't render if options is a Promise (async)
+      if (options instanceof Promise) {
+        return null;
+      }
+
       return (
         <div className={className}>
-          <AutocompleteInput
-            {...commonProps}
-            options={
-              typeof field.options === "function"
-                ? field.options()
-                : field.options
-            }
-          />
+          <AutocompleteInput {...commonProps} options={options} />
         </div>
       );
+    }
 
     case "radio":
       return (

@@ -19,7 +19,6 @@ interface SelectInputProps {
   required?: boolean;
   options: SelectOption[];
   description?: string;
-  // Multiple selection mode
   selectionMode?: "single" | "multiple";
   disallowEmptySelection?: boolean;
 }
@@ -77,8 +76,8 @@ export const SelectInput = ({
               placeholder={placeholder}
               selectedKeys={selectedKeys}
               selectionMode={selectionMode}
-              onSelectionChange={keys => {
-                const keyArray = Array.from(keys as Set<string>);
+              onSelectionChange={(keys: "all" | Set<React.Key>) => {
+                const keyArray: string[] = Array.from(keys as Set<string>);
 
                 if (selectionMode === "multiple") {
                   field.onChange(keyArray);
@@ -87,7 +86,7 @@ export const SelectInput = ({
                 }
               }}
             >
-              {options.map(option => (
+              {options.map((option: SelectOption) => (
                 <SelectItem key={option.value}>{option.label}</SelectItem>
               ))}
             </Select>
