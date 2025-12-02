@@ -11,6 +11,8 @@ export interface Mortalitas extends BaseEntity {
   jumlahAyamSebelumMati: number;
   penyebabKematian: string;
   jumlahAyamSesudahMati: number;
+  fotoMortalitas?: string;
+  fotoMortalitasBase64?: string;
 }
 
 export interface CreateMortalitasDto {
@@ -18,6 +20,8 @@ export interface CreateMortalitasDto {
   tanggalKematian: string;
   jumlahKematian: number;
   penyebabKematian: string;
+  fotoMortalitasBase64?: string;
+  fotoMortalitasFileName?: string;
 }
 
 export interface UpdateMortalitasDto extends Pick<BaseEntity, "id"> {
@@ -25,4 +29,6 @@ export interface UpdateMortalitasDto extends Pick<BaseEntity, "id"> {
   tanggalKematian?: string;
   jumlahKematian?: number;
   penyebabKematian?: string;
+  fotoMortalitasBase64?: string;
+  fotoMortalitasFileName?: string;
 }

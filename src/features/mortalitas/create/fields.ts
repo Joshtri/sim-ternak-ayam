@@ -5,6 +5,7 @@ import {
   validateTanggalKematian,
   validateJumlahKematian,
   validatePenyebabKematian,
+  validateFotoMortalitas,
 } from "./validations";
 
 export const mortalitasSchema: FormSchema = {
@@ -59,6 +60,17 @@ export const mortalitasSchema: FormSchema = {
           rows: 4,
           helperText: "Deskripsi penyebab kematian ayam",
           validation: validatePenyebabKematian,
+        },
+
+        {
+          type: "custom",
+          name: "fotoMortalitas",
+          label: "Foto Mortalitas",
+          required: false,
+          colSpan: 2,
+          helperText: "Upload foto mortalitas (opsional, maksimal 5MB)",
+          validation: validateFotoMortalitas,
+          render: () => null, // Will be rendered in the form component
         },
       ],
     },
