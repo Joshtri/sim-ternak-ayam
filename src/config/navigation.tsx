@@ -5,7 +5,6 @@ import {
   Package,
   Activity,
   FileText,
-  Settings,
   TrendingUp,
   DollarSign,
   AlertCircle,
@@ -13,6 +12,7 @@ import {
   BarChart3,
   Calendar,
   Bell,
+  Info,
 } from "lucide-react";
 
 import { NavigationSection, UserRole } from "@/types/navigation";
@@ -218,6 +218,13 @@ export const navigationSections: NavigationSection[] = [
       //   href: "/settings",
       //   allowedRoles: ["pemilik", "operator"],
       // },
+      {
+        id: "about",
+        label: "Tentang Sistem",
+        icon: <Info size={20} />,
+        href: "/about",
+        allowedRoles: ["pemilik", "operator", "petugas"],
+      },
       {
         id: "Notifications",
         label: "Pemberitahuan",
