@@ -308,6 +308,7 @@ export function BiayaEditForm() {
                     label="Keterangan (Opsional)"
                     name="keterangan"
                     placeholder="Masukkan keterangan tambahan"
+                    required={false}
                   />
                 </div>
 
@@ -316,6 +317,7 @@ export function BiayaEditForm() {
                     label="Catatan (Opsional)"
                     name="catatan"
                     placeholder="Catatan internal"
+                    required={false}
                   />
                 </div>
 

@@ -13,8 +13,6 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthenticatedLayout() {
-  // TODO: Get user role from auth context/store
-  // For now, hardcoded to "operator"
   const userRole = "operator"; // Change this based on your auth implementation
 
   return (
