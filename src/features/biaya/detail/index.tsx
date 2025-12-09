@@ -6,7 +6,6 @@ import {
   Calendar,
   User,
   FileText,
-  Link as LinkIcon,
 } from "lucide-react";
 
 import { useBiayaById } from "../hooks/useBiaya";
@@ -111,7 +110,7 @@ export default function BiayaDetail() {
                 key: "tanggal",
                 label: "Tanggal Biaya",
                 value: (
-                  <Badge color="danger" variant="flat" size="lg">
+                  <Badge color="danger" size="lg" variant="flat">
                     {formatDateIndonesian(biaya.tanggal)}
                   </Badge>
                 ),
@@ -153,6 +152,22 @@ export default function BiayaDetail() {
                 ),
                 fullWidth: true,
               },
+              ...(biaya.kandangNama
+                ? [
+                    {
+                      key: "kandangNama",
+                      label: "Kandang",
+                      value: (
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-warning-700">
+                            {biaya.kandangNama}
+                          </span>
+                        </div>
+                      ),
+                      fullWidth: true,
+                    },
+                  ]
+                : []),
               ...(biaya.operasionalId && biaya.operasionalJenisKegiatan
                 ? [
                     {
@@ -180,28 +195,24 @@ export default function BiayaDetail() {
                   ]),
             ],
           },
-          ...(biaya.buktiUrl
+          ...(biaya.buktiBase64
             ? [
                 {
                   title: "Bukti Pengeluaran",
-                  description: "Link bukti pengeluaran (nota/kwitansi)",
+                  description: "Foto/Dokumen bukti pengeluaran",
                   icon: <FileText className="w-5 h-5" />,
                   columns: 1 as const,
                   items: [
                     {
-                      key: "buktiUrl",
-                      label: "Bukti URL",
+                      key: "buktiBase64",
+                      label: "Bukti Foto",
                       value: (
-                        <div className="flex items-center gap-2">
-                          <LinkIcon className="w-4 h-4 text-primary" />
-                          <a
-                            className="text-primary hover:underline font-medium"
-                            href={biaya.buktiUrl}
-                            rel="noopener noreferrer"
-                            target="_blank"
-                          >
-                            {biaya.buktiUrl}
-                          </a>
+                        <div className="mt-2">
+                          <img
+                            alt="Bukti Pengeluaran"
+                            className="max-w-full h-auto rounded-lg border border-gray-200 shadow-sm max-h-[500px] object-contain"
+                            src={biaya.buktiBase64}
+                          />
                         </div>
                       ),
                       fullWidth: true,
@@ -246,13 +257,10 @@ export default function BiayaDetail() {
         <div className="flex items-start gap-3">
           <Wallet className="w-5 h-5 text-red-600 mt-0.5" />
           <div>
-            <h4 className="font-semibold text-red-900 mb-1">
-              Biaya Tercatat
-            </h4>
+            <h4 className="font-semibold text-red-900 mb-1">Biaya Tercatat</h4>
             <p className="text-sm text-red-700">
               Pengeluaran untuk{" "}
-              <span className="font-semibold">{biaya.jenisBiaya}</span>{" "}
-              sebesar{" "}
+              <span className="font-semibold">{biaya.jenisBiaya}</span> sebesar{" "}
               <span className="font-semibold">
                 {formatCurrency(biaya.jumlah)}
               </span>{" "}
@@ -262,6 +270,12 @@ export default function BiayaDetail() {
               </span>{" "}
               oleh petugas{" "}
               <span className="font-semibold">{biaya.petugasNama}</span>
+              {biaya.kandangNama && (
+                <>
+                  {" "}
+                  di <span className="font-semibold">{biaya.kandangNama}</span>
+                </>
+              )}
               {biaya.operasionalJenisKegiatan && (
                 <>
                   {" "}
@@ -271,22 +285,7 @@ export default function BiayaDetail() {
                   </span>
                 </>
               )}
-              .
-              {biaya.buktiUrl && (
-                <>
-                  {" "}
-                  Bukti pengeluaran tersedia di:{" "}
-                  <a
-                    className="font-semibold underline"
-                    href={biaya.buktiUrl}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Lihat Bukti
-                  </a>
-                  .
-                </>
-              )}
+              .{biaya.buktiBase64 && <> Bukti pengeluaran telah diunggah.</>}
             </p>
           </div>
         </div>

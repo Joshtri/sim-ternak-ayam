@@ -49,6 +49,11 @@ export default function BiayaList() {
       value: (item: Biaya) => item.petugasNama,
     },
     {
+      key: "kandangNama",
+      label: "Kandang",
+      value: (item: Biaya) => item.kandangNama || "-",
+    },
+    {
       key: "tanggal",
       label: "Tanggal",
       value: (item: Biaya) => formatDate(item.tanggal),
@@ -62,20 +67,7 @@ export default function BiayaList() {
         </Badge>
       ),
     },
-    {
-      key: "buktiUrl",
-      label: "Bukti",
-      value: (item: Biaya) =>
-        item.buktiUrl ? (
-          <Badge color="success" variant="flat">
-            Ada
-          </Badge>
-        ) : (
-          <Badge color="default" variant="flat">
-            Tidak Ada
-          </Badge>
-        ),
-    },
+
     { key: "actions", label: "Aksi", align: "center" as const },
   ];
 
@@ -84,6 +76,7 @@ export default function BiayaList() {
     if (!searchQuery) return true;
 
     const query = searchQuery.toLowerCase();
+
     return (
       (item.jenisBiaya?.toLowerCase().includes(query) ?? false) ||
       (item.petugasNama?.toLowerCase().includes(query) ?? false)

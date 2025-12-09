@@ -17,7 +17,7 @@ export interface BiayaFormData {
   jumlah: number;
   petugasId: string;
   operasionalId?: string;
-  buktiUrl?: string;
+  buktiBase64?: string;
   kandangId?: string; // NEW: Optional kandang ID
   keterangan?: string; // NEW: Additional notes
   catatan?: string; // NEW: Optional notes
@@ -37,7 +37,7 @@ export const getDefaultBiayaFormValues = (): Partial<BiayaFormData> => {
     jumlah: 0,
     petugasId: "",
     operasionalId: "",
-    buktiUrl: "",
+    buktiBase64: "",
     kandangId: "",
     keterangan: "",
     catatan: "",
@@ -51,7 +51,10 @@ export const getDefaultBiayaFormValues = (): Partial<BiayaFormData> => {
  * @param data - Raw form data
  * @returns Transformed data ready for API
  */
-export const transformBiayaFormData = (data: BiayaFormData): CreateBiayaDto => {
+export const transformBiayaFormData = (
+  data: BiayaFormData,
+  kategoriBiayaType?: "operasional" | "pembelian"
+): CreateBiayaDto => {
   const dto: CreateBiayaDto = {
     jenisBiaya: data.jenisBiaya,
     tanggal: data.tanggal,
@@ -59,13 +62,18 @@ export const transformBiayaFormData = (data: BiayaFormData): CreateBiayaDto => {
     petugasId: data.petugasId,
   };
 
+  // Map category to number
+  if (kategoriBiayaType) {
+    dto.kategoriBiaya = kategoriBiayaType === "operasional" ? 0 : 1;
+  }
+
   // Only include optional fields if they have values
   if (data.operasionalId && data.operasionalId !== "") {
     dto.operasionalId = data.operasionalId;
   }
 
-  if (data.buktiUrl && data.buktiUrl !== "") {
-    dto.buktiUrl = data.buktiUrl;
+  if (data.buktiBase64 && data.buktiBase64 !== "") {
+    dto.buktiBase64 = data.buktiBase64;
   }
 
   if (data.kandangId && data.kandangId !== "") {

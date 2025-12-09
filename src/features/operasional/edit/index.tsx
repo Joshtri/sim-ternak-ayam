@@ -5,7 +5,7 @@
 
 import type { OperasionalEditFormData } from "./helpers";
 
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useMemo, useEffect } from "react";
 
@@ -91,6 +91,36 @@ export function OperasionalEditForm() {
       methods.reset(getDefaultOperasionalEditFormValues(operasional));
     }
   }, [operasional, methods]);
+
+  // Watch fields for auto-filling
+  const selectedKandangId = useWatch({
+    control: methods.control,
+    name: "kandangId",
+  });
+
+  // Auto-fill petugas based on selected kandang
+  useEffect(() => {
+    // Only auto-fill if user changes kandang, OR on initial load if we want to ensure consistency.
+    // However, for Edit, we usually respect the loaded data.
+    // The requirement is "sama aja kyk di create", which auto-fills when kandang changes.
+    // We should check if the current value in form differs from the kandang's default petugas?
+    // Or just strictly follow the rule: if kandang is selected/changed, set the petugas.
+
+    // To distinguish initial load vs user change, we might check if form is dirty or just do it.
+    // Given the requirement "saat pilih operasional (kandang context here) maka langsung otomatis terisi",
+    // let's apply it whenever selectedKandangId changes and we have the data.
+
+    if (selectedKandangId && kandangs) {
+      const selectedKandang = kandangs.find(k => k.id === selectedKandangId);
+
+      if (selectedKandang && selectedKandang.petugasId) {
+        // We should update the petugasId field
+        // Optional: Check if it's already set to avoid unnecessary updates/renders,
+        // though setValue usually handles that.
+        methods.setValue("petugasId", selectedKandang.petugasId);
+      }
+    }
+  }, [selectedKandangId, kandangs, methods]);
 
   // Transform data to select options
   const jenisKegiatanOptions = useMemo(() => {

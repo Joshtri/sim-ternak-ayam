@@ -99,9 +99,9 @@ export const navigationSections: NavigationSection[] = [
     items: [
       {
         id: "vaksin",
-        label: "Vaksin",
+        label: "Vaksin & Vitamin",
         icon: <Package size={20} />,
-        href: "/daftar-vaksin",
+        href: "/daftar-vaksin-dan-vitamin",
         allowedRoles: ["pemilik", "operator"],
       },
       {
@@ -113,7 +113,7 @@ export const navigationSections: NavigationSection[] = [
       },
       {
         id: "jenis-kegiatan",
-        label: "Jenis Kegiatan",
+        label: "Jenis Kegiatan ( Master Data )",
         icon: <Activity size={20} />,
         href: "/daftar-jenis-kegiatan",
         allowedRoles: ["pemilik", "operator"],
@@ -211,13 +211,13 @@ export const navigationSections: NavigationSection[] = [
         href: "/users-management",
         allowedRoles: ["pemilik"],
       },
-      {
-        id: "settings",
-        label: "Pengaturan Sistem",
-        icon: <Settings size={20} />,
-        href: "/settings",
-        allowedRoles: ["pemilik", "operator"],
-      },
+      // {
+      //   id: "settings",
+      //   label: "Pengaturan Sistem",
+      //   icon: <Settings size={20} />,
+      //   href: "/settings",
+      //   allowedRoles: ["pemilik", "operator"],
+      // },
       {
         id: "Notifications",
         label: "Pemberitahuan",

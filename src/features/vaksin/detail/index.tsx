@@ -16,7 +16,9 @@ import { LinkButton } from "@/components/ui/Button";
 import { PageHeader } from "@/components/common/PageHeader";
 
 export default function VaksinDetail() {
-  const { id } = useParams("/_authenticated/daftar-vaksin/$id" as any) as {
+  const { id } = useParams(
+    "/_authenticated/daftar-vaksin-dan-vitamin/$id" as any
+  ) as {
     id?: string;
   };
 
@@ -41,7 +43,10 @@ export default function VaksinDetail() {
         <PageHeader
           breadcrumbs={[
             { label: "Dashboard", href: "/dashboard" },
-            { label: "Data Vaksin", href: "/daftar-vaksin" },
+            {
+              label: "Data Vaksin & Vitamin",
+              href: "/daftar-vaksin-dan-vitamin",
+            },
             { label: "Detail" },
           ]}
           title="Detail Data Vaksin"
@@ -61,7 +66,7 @@ export default function VaksinDetail() {
           <div className="flex items-center gap-2">
             <LinkButton
               color="default"
-              href="/daftar-vaksin"
+              href="/daftar-vaksin-dan-vitamin"
               size="md"
               startContent={<ArrowLeft className="w-4 h-4" />}
               variant="light"
@@ -70,7 +75,7 @@ export default function VaksinDetail() {
             </LinkButton>
             <LinkButton
               color="warning"
-              href={`/daftar-vaksin/edit/${id}`}
+              href={`/daftar-vaksin-dan-vitamin/${id}/edit`}
               size="md"
               startContent={<Pencil className="w-4 h-4" />}
               variant="solid"
@@ -81,7 +86,10 @@ export default function VaksinDetail() {
         }
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Data Vaksin", href: "/daftar-vaksin" },
+          {
+            label: "Data Vaksin & Vitamin",
+            href: "/daftar-vaksin-dan-vitamin",
+          },
           { label: "Detail" },
         ]}
         description="Informasi lengkap data vaksin"
@@ -177,12 +185,16 @@ export default function VaksinDetail() {
                 Peringatan Stok Rendah
               </h4>
               <p className="text-sm text-orange-700">
-                Stok vaksin <span className="font-semibold">{vaksin.namaVaksin}</span>{" "}
-                untuk periode <span className="font-semibold">{formatMonthYear(vaksin.bulan, vaksin.tahun)}</span>{" "}
+                Stok vaksin{" "}
+                <span className="font-semibold">{vaksin.namaVaksin}</span> untuk
+                periode{" "}
+                <span className="font-semibold">
+                  {formatMonthYear(vaksin.bulan, vaksin.tahun)}
+                </span>{" "}
                 saat ini adalah{" "}
-                <span className="font-semibold">{formatStok(vaksin.stok)}</span>.
-                Segera lakukan pengisian ulang stok untuk menghindari kehabisan
-                vaksin yang dapat mengganggu program vaksinasi ayam.
+                <span className="font-semibold">{formatStok(vaksin.stok)}</span>
+                . Segera lakukan pengisian ulang stok untuk menghindari
+                kehabisan vaksin yang dapat mengganggu program vaksinasi ayam.
               </p>
             </div>
           </div>

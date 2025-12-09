@@ -16,7 +16,10 @@ export interface BiayaEditFormData {
   jumlah: number;
   petugasId: string;
   operasionalId?: string;
-  buktiUrl?: string;
+  buktiBase64?: string;
+  kandangId?: string;
+  keterangan?: string;
+  catatan?: string;
 }
 
 /**
@@ -32,7 +35,10 @@ export const getDefaultBiayaEditFormValues = (
       jumlah: 0,
       petugasId: "",
       operasionalId: "",
-      buktiUrl: "",
+      buktiBase64: "",
+      kandangId: "",
+      keterangan: "",
+      catatan: "",
     };
   }
 
@@ -44,7 +50,10 @@ export const getDefaultBiayaEditFormValues = (
     jumlah: biaya.jumlah || 0,
     petugasId: biaya.petugasId || "",
     operasionalId: biaya.operasionalId || "",
-    buktiUrl: biaya.buktiUrl || "",
+    buktiBase64: biaya.buktiBase64 || "",
+    kandangId: biaya.kandangId || "",
+    keterangan: biaya.keterangan || "",
+    catatan: biaya.catatan || "",
   };
 };
 
@@ -55,7 +64,8 @@ export const getDefaultBiayaEditFormValues = (
  */
 export const transformBiayaEditFormData = (
   data: BiayaEditFormData,
-  id: string
+  id: string,
+  kategoriBiayaType?: "operasional" | "pembelian"
 ): UpdateBiayaDto => {
   const dto: UpdateBiayaDto = {
     id,
@@ -65,13 +75,30 @@ export const transformBiayaEditFormData = (
     petugasId: data.petugasId,
   };
 
+  // Map category to number
+  if (kategoriBiayaType) {
+    dto.kategoriBiaya = kategoriBiayaType === "operasional" ? 0 : 1;
+  }
+
   // Only include optional fields if they have values
   if (data.operasionalId && data.operasionalId !== "") {
     dto.operasionalId = data.operasionalId;
   }
 
-  if (data.buktiUrl && data.buktiUrl !== "") {
-    dto.buktiUrl = data.buktiUrl;
+  if (data.buktiBase64 && data.buktiBase64 !== "") {
+    dto.buktiBase64 = data.buktiBase64;
+  }
+
+  if (data.kandangId && data.kandangId !== "") {
+    dto.kandangId = data.kandangId;
+  }
+
+  if (data.keterangan && data.keterangan !== "") {
+    dto.keterangan = data.keterangan;
+  }
+
+  if (data.catatan && data.catatan !== "") {
+    dto.catatan = data.catatan;
   }
 
   return dto;

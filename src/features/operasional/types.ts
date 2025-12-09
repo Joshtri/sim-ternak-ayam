@@ -13,6 +13,7 @@ export interface Operasional extends BaseEntity {
   pakanNama?: string;
   vaksinId?: string;
   vaksinNama?: string;
+  totalBiaya?: number;
 }
 
 export interface CreateOperasionalDto {

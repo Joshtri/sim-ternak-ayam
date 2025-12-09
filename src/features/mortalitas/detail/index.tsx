@@ -31,8 +31,9 @@ export default function MortalitasDetail() {
     error,
   } = useMortalitasById(id ?? "", !!id);
 
-  // Get image URL - use base64 only
-  const imageUrl = mortalitas?.fotoMortalitasBase64 || null;
+  // Get image URL - prioritize base64, then normal URL
+  const imageUrl =
+    mortalitas?.fotoMortalitasBase64 || mortalitas?.fotoMortalitas || null;
 
   // Format dates with time
   const formatDate = (dateString: string) => {
@@ -153,17 +154,18 @@ export default function MortalitasDetail() {
                               src={imageUrl}
                               alt="Foto Mortalitas"
                               className="w-full max-w-2xl h-auto rounded-lg border border-gray-300 shadow-sm hover:shadow-md transition-all"
-                              onError={(e) => {
+                              onError={e => {
                                 // Fallback if image fails to load
                                 const target = e.target as HTMLImageElement;
                                 target.style.display = "none";
                                 const parent = target.parentElement;
                                 if (parent) {
-                                  parent.innerHTML = '<p class="text-sm text-gray-500 italic">Foto tidak dapat dimuat</p>';
+                                  parent.innerHTML =
+                                    '<p class="text-sm text-gray-500 italic">Foto tidak dapat dimuat</p>';
                                 }
                               }}
                             />
-                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg flex items-center justify-center">
+                            <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg flex items-center justify-center">
                               <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                                 <ZoomIn className="w-8 h-8 text-white" />
                               </div>
@@ -241,7 +243,6 @@ export default function MortalitasDetail() {
       {/* Image Modal */}
       {showImageModal && imageUrl && (
         <div
-      
           className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4"
           onClick={() => setShowImageModal(false)}
         >
@@ -256,7 +257,7 @@ export default function MortalitasDetail() {
               src={imageUrl}
               alt="Foto Mortalitas - Full Size"
               className="w-full h-auto rounded-lg"
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
             />
           </div>
         </div>

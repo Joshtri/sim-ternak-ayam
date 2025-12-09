@@ -37,7 +37,7 @@ const handleFormSubmit = async (
     console.log("Vaksin data created successfully!");
 
     // Navigate back to list
-    navigate({ to: "/daftar-vaksin" });
+    navigate({ to: "/daftar-vaksin-dan-vitamin" });
   } catch (error) {
     console.error("Error creating vaksin data:", error);
   }
@@ -74,7 +74,7 @@ export function VaksinCreateForm() {
           {/* Form actions */}
           <div className="flex justify-end gap-3 mt-6 pt-6 border-t">
             <FormActions
-              backHref="/daftar-vaksin"
+              backHref="/daftar-vaksin-dan-vitamin"
               backLabel="Kembali"
               isSubmitting={
                 methods.formState.isSubmitting || createVaksin.isPending

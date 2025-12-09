@@ -1,9 +1,9 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-// Base API URL from environment variables
-const BASE_URL = import.meta.env["VITE_BASE_API_URL"];
-
-// const BASE_URL = "https://localhost:7195/api"; // Replace with your actual base URL
+// Base API URL based on environment
+const BASE_URL = import.meta.env.PROD
+  ? import.meta.env["VITE_BASE_API_URL"]
+  : "https://localhost:7195/api";
 
 // Create axios instance with default config
 export const api = axios.create({
@@ -41,7 +41,7 @@ api.interceptors.response.use(
     if (error.response) {
       // Skip error handling for blob responses (like PDFs)
       // If the response type was blob, don't try to parse as JSON
-      if (error.config?.responseType === 'blob') {
+      if (error.config?.responseType === "blob") {
         return Promise.reject(error);
       }
 

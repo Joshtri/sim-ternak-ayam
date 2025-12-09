@@ -88,11 +88,11 @@ export default function VaksinList() {
       <ListGrid
         actionButtons={{
           show: {
-            href: (id: string) => `/daftar-vaksin/${id}`,
+            href: (id: string) => `/daftar-vaksin-dan-vitamin/${id}`,
             label: "Detail",
           },
           edit: {
-            href: (id: string) => `/daftar-vaksin/${id}/edit`,
+            href: (id: string) => `/daftar-vaksin-dan-vitamin/${id}/edit`,
             label: "Edit",
           },
           delete: {
@@ -101,7 +101,7 @@ export default function VaksinList() {
           },
         }}
         addButton={{
-          href: "/daftar-vaksin/create",
+          href: "/daftar-vaksin-dan-vitamin/create",
           label: `Tambah Data ${selectedTab}`,
         }}
         columns={columns}

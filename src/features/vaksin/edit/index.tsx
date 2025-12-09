@@ -43,7 +43,7 @@ const handleFormSubmit = async (
     console.log("Vaksin data updated successfully!");
 
     // Navigate back to list
-    navigate({ to: "/daftar-vaksin" });
+    navigate({ to: "/daftar-vaksin-dan-vitamin" });
   } catch (error) {
     console.error("Error updating vaksin data:", error);
   }
@@ -94,7 +94,7 @@ export function VaksinEditForm() {
               {/* Form actions */}
               <div className="flex justify-end gap-3 mt-6 pt-6 border-t">
                 <FormActions
-                  backHref="/daftar-vaksin"
+                  backHref="/daftar-vaksin-dan-vitamin"
                   backLabel="Kembali"
                   isSubmitting={
                     methods.formState.isSubmitting || updateVaksin.isPending

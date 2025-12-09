@@ -58,9 +58,17 @@ export default function VaksinListDebug() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Daftar Vaksin & Vitamin</h1>
-        <p className="text-gray-600">Total data: {vaksins?.length || 0}</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">Daftar Vaksin & Vitamin</h1>
+          <p className="text-gray-600">Total data: {vaksins?.length || 0}</p>
+        </div>
+        <Button
+          color="primary"
+          onPress={() => navigate({ to: "/daftar-vaksin-dan-vitamin/create" })}
+        >
+          Tambah Data
+        </Button>
       </div>
 
       <Tabs
@@ -120,7 +128,10 @@ export default function VaksinListDebug() {
                       size="sm"
                       variant="flat"
                       onPress={() =>
-                        navigate({ to: `/daftar-vaksin/${item.id}` })
+                        navigate({
+                          to: "/daftar-vaksin-dan-vitamin/$id",
+                          params: { id: item.id },
+                        })
                       }
                     >
                       Detail
@@ -130,7 +141,10 @@ export default function VaksinListDebug() {
                       size="sm"
                       variant="flat"
                       onPress={() =>
-                        navigate({ to: `/daftar-vaksin/${item.id}/edit` })
+                        navigate({
+                          to: "/daftar-vaksin-dan-vitamin/$idEdit/edit",
+                          params: { idEdit: item.id },
+                        })
                       }
                     >
                       Edit
@@ -153,20 +167,10 @@ export default function VaksinListDebug() {
         )}
       </div>
 
-      {/* Raw Data untuk Debug */}
-      {/* <details className="mt-8">
-        <summary className="cursor-pointer text-sm text-gray-600 hover:text-gray-800">
-          🔍 Show Raw Data (Debug)
-        </summary>
-        <pre className="mt-2 p-4 bg-gray-100 rounded text-xs overflow-auto">
-          {JSON.stringify(vaksins, null, 2)}
-        </pre>
-      </details> */}
-
       {/* Delete Confirmation Dialog */}
       <ConfirmDialog
-        message={`Apakah Anda yakin ingin menghapus data "${itemToDelete?.name}"?`}
         isOpen={deleteDialogOpen}
+        message={`Apakah Anda yakin ingin menghapus data "${itemToDelete?.name}"?`}
         title={`Hapus Data ${selectedTab}`}
         onClose={() => {
           setDeleteDialogOpen(false);

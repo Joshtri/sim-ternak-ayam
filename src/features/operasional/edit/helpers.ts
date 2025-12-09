@@ -110,7 +110,7 @@ export const transformKandangsToOptions = (kandangs: Kandang[]): SelectOption[] 
   }
 
   return kandangs.map(item => ({
-    label: item.namaKandang,
+    label: `${item.namaKandang} - ${item.petugasNama || "Tanpa Petugas"}`,
     value: item.id,
     description: `Kapasitas: ${item.kapasitas.toLocaleString("id-ID")} ekor - ${item.lokasi}`,
   }));

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useMatchRoute } from "@tanstack/react-router";
+import { Link, useMatchRoute, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn, Tooltip } from "@heroui/react";
@@ -200,7 +200,10 @@ function NavigationItemComponent({
   onItemClick?: () => void;
 }) {
   const matchRoute = useMatchRoute();
-  const isActive = matchRoute({ to: item.href });
+  const location = useLocation();
+  const isActive =
+    matchRoute({ to: item.href }) ||
+    location.pathname.startsWith(`${item.href}/`);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasChildren = item.children && item.children.length > 0;

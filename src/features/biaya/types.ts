@@ -8,13 +8,14 @@ export interface Biaya extends BaseEntity {
   petugasNama: string;
   operasionalId?: string;
   operasionalJenisKegiatan?: string;
-  buktiUrl?: string;
-  kandangId?: string;        // NEW: Optional kandang ID
-  kandangNama?: string;      // NEW: Kandang name
-  keterangan?: string;       // NEW: Additional notes
-  catatan?: string;          // NEW: Optional notes
-  bulan?: number;            // NEW: Month (1-12)
-  tahun?: number;            // NEW: Year
+  buktiBase64?: string;
+  kandangId?: string;
+  kandangNama?: string;
+  keterangan?: string;
+  catatan?: string;
+  bulan?: number;
+  tahun?: number;
+  kategoriBiaya?: number; // NEW: 0 = Operasional, 1 = Pembelian
 }
 
 export interface CreateBiayaDto {
@@ -23,12 +24,13 @@ export interface CreateBiayaDto {
   jumlah: number;
   petugasId: string;
   operasionalId?: string;
-  buktiUrl?: string;
-  kandangId?: string;        // NEW: Optional kandang ID
-  keterangan?: string;       // NEW: Additional notes
-  catatan?: string;          // NEW: Optional notes
-  bulan?: number;            // NEW: Month (1-12)
-  tahun?: number;            // NEW: Year
+  buktiBase64?: string;
+  kandangId?: string;
+  keterangan?: string;
+  catatan?: string;
+  bulan?: number;
+  tahun?: number;
+  kategoriBiaya?: number;
 }
 
 export interface UpdateBiayaDto extends Pick<BaseEntity, "id"> {
@@ -37,12 +39,13 @@ export interface UpdateBiayaDto extends Pick<BaseEntity, "id"> {
   jumlah?: number;
   petugasId?: string;
   operasionalId?: string;
-  buktiUrl?: string;
+  buktiBase64?: string;
   kandangId?: string;
   keterangan?: string;
   catatan?: string;
   bulan?: number;
   tahun?: number;
+  kategoriBiaya?: number;
 }
 
 // NEW: Types for Monthly Costs Recap
@@ -64,6 +67,9 @@ export interface BiayaKandangDetailDto {
 export interface BiayaBulananResponseDto {
   bulan: number;
   tahun: number;
-  totalBiaya: number;
-  detailPerKandang: BiayaKandangDetailDto[];
+  grandTotal: number;
+  grandTotalBiayaListrik: number;
+  grandTotalBiayaAir: number;
+  grandTotalBiayaLainnya: number;
+  perKandang: BiayaKandangDetailDto[];
 }

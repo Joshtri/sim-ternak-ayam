@@ -27,24 +27,25 @@ export default function BiayaBulananPage() {
   });
 
   const months = [
-    { value: 1, label: "Januari" },
-    { value: 2, label: "Februari" },
-    { value: 3, label: "Maret" },
-    { value: 4, label: "April" },
-    { value: 5, label: "Mei" },
-    { value: 6, label: "Juni" },
-    { value: 7, label: "Juli" },
-    { value: 8, label: "Agustus" },
-    { value: 9, label: "September" },
-    { value: 10, label: "Oktober" },
-    { value: 11, label: "November" },
-    { value: 12, label: "Desember" },
+    { key: "1", label: "Januari" },
+    { key: "2", label: "Februari" },
+    { key: "3", label: "Maret" },
+    { key: "4", label: "April" },
+    { key: "5", label: "Mei" },
+    { key: "6", label: "Juni" },
+    { key: "7", label: "Juli" },
+    { key: "8", label: "Agustus" },
+    { key: "9", label: "September" },
+    { key: "10", label: "Oktober" },
+    { key: "11", label: "November" },
+    { key: "12", label: "Desember" },
   ];
 
-  const years = Array.from(
-    { length: 10 },
-    (_, i) => currentDate.getFullYear() - 5 + i
-  );
+  const years = Array.from({ length: 10 }, (_, i) => {
+    const val = (currentDate.getFullYear() - 5 + i).toString();
+
+    return { key: val, label: val };
+  });
 
   return (
     <div className="space-y-6">
@@ -57,27 +58,29 @@ export default function BiayaBulananPage() {
       <Card className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Select
+            className="max-w-xs"
+            items={months}
             label="Bulan"
             placeholder="Pilih bulan"
             selectedKeys={[selectedMonth.toString()]}
-            onChange={e => setSelectedMonth(Number(e.target.value))}
+            onChange={e => {
+              if (e.target.value) setSelectedMonth(Number(e.target.value));
+            }}
           >
-            {months.map(month => (
-              <SelectItem key={month.value.toString()}>
-                {month.label}
-              </SelectItem>
-            ))}
+            {month => <SelectItem key={month.key}>{month.label}</SelectItem>}
           </Select>
 
           <Select
+            className="max-w-xs"
+            items={years}
             label="Tahun"
             placeholder="Pilih tahun"
             selectedKeys={[selectedYear.toString()]}
-            onChange={e => setSelectedYear(Number(e.target.value))}
+            onChange={e => {
+              if (e.target.value) setSelectedYear(Number(e.target.value));
+            }}
           >
-            {years.map(year => (
-              <SelectItem key={year.toString()}>{year}</SelectItem>
-            ))}
+            {year => <SelectItem key={year.key}>{year.label}</SelectItem>}
           </Select>
         </div>
       </Card>
@@ -107,12 +110,13 @@ export default function BiayaBulananPage() {
             <div className="space-y-2">
               <p className="text-sm text-default-600">Total Biaya Bulan Ini</p>
               <p className="text-3xl font-bold text-primary">
-                Rp {(data.totalBiaya || 0).toLocaleString("id-ID")}
+                Rp {(data.grandTotal || 0).toLocaleString("id-ID")}
               </p>
               <p className="text-xs text-default-500">
                 {
-                  months.find(m => m.value === (data.bulan || selectedMonth))
-                    ?.label
+                  months.find(
+                    m => m.key === (data.bulan || selectedMonth).toString()
+                  )?.label
                 }{" "}
                 {data.tahun || selectedYear}
               </p>
@@ -123,7 +127,7 @@ export default function BiayaBulananPage() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Rincian Per Kandang</h3>
 
-            {!data.detailPerKandang || data.detailPerKandang.length === 0 ? (
+            {!data.perKandang || data.perKandang.length === 0 ? (
               <Card className="p-12">
                 <div className="text-center text-default-500">
                   <p className="text-lg font-semibold">Tidak ada data</p>
@@ -134,7 +138,7 @@ export default function BiayaBulananPage() {
               </Card>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {data.detailPerKandang.map((kandang, index) => (
+                {data.perKandang.map((kandang, index) => (
                   <Card
                     key={kandang.kandangId || index}
                     className="p-6 space-y-4"
