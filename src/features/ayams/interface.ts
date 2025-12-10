@@ -6,6 +6,14 @@ export interface Ayam extends BaseEntity {
   tanggalMasuk: string;
   jumlahMasuk: number;
   petugasKandangNama: string;
+  jumlahSudahDipanen: number;
+  jumlahMortalitas: number;
+  sisaAyamHidup: number;
+  persentaseSurvival: number;
+  persentaseDipanen: number;
+  persentaseMortalitas: number;
+  bisaDipanen: boolean;
+  perluPerhatianKesehatan: boolean;
   search?: string;
   page?: number;
   pageSize?: number;

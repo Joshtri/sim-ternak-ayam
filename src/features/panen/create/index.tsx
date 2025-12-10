@@ -5,7 +5,7 @@
 
 import type { PanenFormData } from "./helpers";
 
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, UseFormSetError } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 
@@ -32,7 +32,8 @@ import { SkeletonForm } from "@/components/ui";
 const handleFormSubmit = async (
   data: PanenFormData,
   createPanen: any,
-  navigate: any
+  navigate: any,
+  setError: UseFormSetError<PanenFormData>
 ) => {
   try {
     // Transform data before sending to API
@@ -47,8 +48,29 @@ const handleFormSubmit = async (
 
     // Navigate back to list
     navigate({ to: "/daftar-panen" });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating panen data:", error);
+
+    // Handle 400 Validation Errors
+    if (
+      error.response &&
+      error.response.status === 400 &&
+      error.response.data?.errors
+    ) {
+      const apiErrors = error.response.data.errors;
+
+      Object.keys(apiErrors).forEach(key => {
+        // Convert PascalCase (API) to camelCase (Form)
+        // e.g. BeratRataRata -> beratRataRata
+        const fieldName = (key.charAt(0).toLowerCase() +
+          key.slice(1)) as keyof PanenFormData;
+
+        setError(fieldName, {
+          type: "server",
+          message: apiErrors[key][0],
+        });
+      });
+    }
   }
 };
 
@@ -65,8 +87,7 @@ export function PanenCreateForm() {
 
   // Fetch ayams for dropdown
   const { data: ayams, isLoading: isLoadingAyams } = useAyams();
-  const { data: meData, isLoading: isLoadingMe } =
-    useCurrentUser<ICurrentUser>();
+  const { data: meData } = useCurrentUser<ICurrentUser>();
 
   // Initialize react-hook-form
   const methods = useForm<PanenFormData>({
@@ -119,7 +140,7 @@ export function PanenCreateForm() {
   }, [ayamOptions]);
 
   const onSubmit = (data: PanenFormData) => {
-    handleFormSubmit(data, createPanen, navigate);
+    handleFormSubmit(data, createPanen, navigate, methods.setError);
   };
 
   return (

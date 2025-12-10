@@ -1,23 +1,19 @@
-/**
- * Enhanced Operasional Create Form
- * Form for creating new operasional data with dynamic fields and biaya integration
- */
-
+// Enhanced Operasional Create Form
 import type { CreateOperasionalDto } from "../types";
 
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { useCreateOperasional } from "../hooks/useOperasional";
+import {
+  useCreateOperasionalWithValidation,
+  useOperasionalFormData,
+  useValidateStock,
+} from "../hooks/useOperasional";
 
-import { useJenisKegiatans } from "@/features/jenis-kegiatan/hooks/useJenisKegiatan";
 import { useKandangs } from "@/features/kandang/hooks/useKandang";
 import { useUsers } from "@/features/users-management/hooks/useUsers";
-import { usePakans } from "@/features/pakan/hooks/usePakan";
-import { useVaksins } from "@/features/vaksin/hooks/useVaksin";
-import { usePakanById } from "@/features/pakan/hooks/usePakan";
-import { useVaksinById } from "@/features/vaksin/hooks/useVaksin";
+// Removed explicit pakan/vaksin hooks usage in favor of form-data endpoint
 import { Card } from "@/components/ui/Card";
 import { SkeletonForm } from "@/components/ui";
 import FormActions from "@/components/ui/Form/FormActions";
@@ -25,6 +21,7 @@ import { SelectInput } from "@/components/ui/Inputs/SelectInput";
 import { DatePickerInput } from "@/components/ui/Inputs/DatePickerInput";
 import { NumberInput } from "@/components/ui/Inputs/NumberInput";
 import { Badge } from "@/components/ui/Badge";
+import { showToast } from "@/utils/showToast";
 
 type ResourceType = "none" | "pakan" | "vaksin";
 
@@ -43,18 +40,23 @@ interface OperasionalFormData {
 
 export function OperasionalCreateForm() {
   const navigate = useNavigate();
-  const createOperasional = useCreateOperasional();
-  // const createBiaya = useCreateBiaya();
+  // Using new hooks
+  const createOperasional = useCreateOperasionalWithValidation();
+  const validateStock = useValidateStock();
 
-  // Fetch data for dropdowns
-  const { data: jenisKegiatans, isLoading: isLoadingJenisKegiatans } =
-    useJenisKegiatans();
+  // Use single hook for form data
+  const { data: formData, isLoading: isLoadingFormData } =
+    useOperasionalFormData();
+
+  // Extract data from formData response
+  const jenisKegiatans = formData?.jenisKegiatan || [];
+  const vaksins = formData?.vaksins || [];
+  const pakans = formData?.pakans || [];
+
   const { data: kandangs, isLoading: isLoadingKandangs } = useKandangs();
   const { data: users, isLoading: isLoadingUsers } = useUsers({
     role: "petugas",
   });
-  const { data: pakans, isLoading: isLoadingPakans } = usePakans();
-  const { data: vaksins, isLoading: isLoadingVaksins } = useVaksins();
 
   // Initialize react-hook-form
   const methods = useForm<OperasionalFormData>({
@@ -90,47 +92,83 @@ export function OperasionalCreateForm() {
     control: methods.control,
     name: "vaksinId",
   });
-  // const selectedTanggal = useWatch({
-  //   control: methods.control,
-  //   name: "tanggal",
-  // });
   const jumlahValue = useWatch({ control: methods.control, name: "jumlah" });
-
-  // Get selected jenis kegiatan details
-  const selectedJenisKegiatan = useMemo(() => {
-    if (!jenisKegiatans || !selectedJenisKegiatanId) return null;
-
-    return jenisKegiatans.find(jk => jk.id === selectedJenisKegiatanId);
-  }, [jenisKegiatans, selectedJenisKegiatanId]);
 
   // Determine if this activity requires pakan or vaksin based on radio selection
   const requiresPakan = resourceType === "pakan";
   const requiresVaksin = resourceType === "vaksin";
-  // const requiresBiaya = requiresPakan || requiresVaksin;
 
-  // Fetch stock data for selected pakan
-  const { data: selectedPakan } = usePakanById(
-    selectedPakanId || "",
-    !!selectedPakanId && requiresPakan
+  // Selected resource details from local data (from form-data endpoint)
+  const selectedPakan = useMemo(
+    () => pakans.find((p: any) => p.id === selectedPakanId),
+    [pakans, selectedPakanId]
   );
 
-  // Fetch stock data for selected vaksin
-  const { data: selectedVaksin } = useVaksinById(
-    selectedVaksinId || "",
-    !!selectedVaksinId && requiresVaksin
+  const selectedVaksin = useMemo(
+    () => vaksins.find((v: any) => v.id === selectedVaksinId),
+    [vaksins, selectedVaksinId]
   );
-
-  // Auto-fill jenisBiaya removed as it's no longer needed for manual input
 
   // Clear pakan/vaksin when resource type changes
   useEffect(() => {
-    if (!requiresPakan) {
-      methods.setValue("pakanId", "");
-    }
-    if (!requiresVaksin) {
-      methods.setValue("vaksinId", "");
-    }
+    if (!requiresPakan) methods.setValue("pakanId", "");
+    if (!requiresVaksin) methods.setValue("vaksinId", "");
   }, [requiresPakan, requiresVaksin, methods]);
+
+  // Real-time stock validation effect
+  const [stockValidationMsg, setStockValidationMsg] = useState<string | null>(
+    null
+  );
+
+  useEffect(() => {
+    const checkStock = async () => {
+      if (
+        (requiresPakan && selectedPakanId) ||
+        (requiresVaksin && selectedVaksinId)
+      ) {
+        if (jumlahValue > 0) {
+          try {
+            // Pass object directly since useValidateStock defines mutationFn taking object
+            const result = await validateStock.mutateAsync({
+              vaksinId: requiresVaksin ? selectedVaksinId : undefined,
+              pakanId: requiresPakan ? selectedPakanId : undefined,
+              jumlah: Number(jumlahValue),
+            });
+
+            if (!result.success) {
+              setStockValidationMsg(result.message);
+              methods.setError("jumlah", { message: result.message });
+            } else {
+              setStockValidationMsg(null);
+              methods.clearErrors("jumlah");
+            }
+          } catch (e: any) {
+            console.error("Stock validation check failed", e);
+            setStockValidationMsg(e.message || "Validasi stok gagal");
+          }
+        }
+      } else {
+        setStockValidationMsg(null);
+        methods.clearErrors("jumlah");
+      }
+    };
+
+    // Check immediately if we have all values, otherwise debounce
+    if (jumlahValue > 0 && (selectedPakanId || selectedVaksinId)) {
+      const timeoutId = setTimeout(checkStock, 500);
+
+      return () => clearTimeout(timeoutId);
+    } else {
+      setStockValidationMsg(null);
+      methods.clearErrors("jumlah");
+    }
+  }, [
+    jumlahValue,
+    selectedPakanId,
+    selectedVaksinId,
+    requiresPakan,
+    requiresVaksin,
+  ]);
 
   // Auto-fill petugas based on selected kandang
   const selectedKandangId = useWatch({
@@ -150,10 +188,8 @@ export function OperasionalCreateForm() {
 
   // Transform data to select options
   const jenisKegiatanOptions = useMemo(() => {
-    if (!jenisKegiatans) return [];
-
-    return jenisKegiatans.map(jk => ({
-      label: jk.namaKegiatan,
+    return jenisKegiatans.map((jk: any) => ({
+      label: jk.nama || jk.namaKegiatan,
       value: jk.id,
       description: jk.deskripsi,
     }));
@@ -180,22 +216,18 @@ export function OperasionalCreateForm() {
   }, [users]);
 
   const pakanOptions = useMemo(() => {
-    if (!pakans) return [];
-
-    return pakans.map(p => ({
-      label: `${p.namaPakan} (Periode: ${p.bulan}/${p.tahun})`,
+    return pakans.map((p: any) => ({
+      label: p.info || `${p.namaPakan} - Sisa: ${p.stokTersisaKg} kg`,
       value: p.id,
-      description: `Stok: ${p.stokKg.toLocaleString("id-ID")} kg`,
+      description: p.statusStok ? `Status: ${p.statusStok}` : undefined,
     }));
   }, [pakans]);
 
   const vaksinOptions = useMemo(() => {
-    if (!vaksins) return [];
-
-    return vaksins.map(v => ({
-      label: `${v.namaVaksin} (Periode: ${v.bulan}/${v.tahun})`,
+    return vaksins.map((v: any) => ({
+      label: v.info || `${v.namaVaksin} - Sisa: ${v.stokTersisa}`,
       value: v.id,
-      description: `Stok: ${v.stok.toLocaleString("id-ID")} dosis`,
+      description: v.statusStok ? `Status: ${v.statusStok}` : undefined,
     }));
   }, [vaksins]);
 
@@ -205,31 +237,24 @@ export function OperasionalCreateForm() {
     if (requiresVaksin) return "Jumlah (dosis)";
 
     return "Jumlah";
-  }, [requiresPakan, requiresVaksin, selectedJenisKegiatan]);
+  }, [requiresPakan, requiresVaksin]);
 
-  // Get available stock
+  // Get available stock (from local data)
   const availableStock = useMemo(() => {
-    if (requiresPakan && selectedPakan) return selectedPakan.stokKg;
-    if (requiresVaksin && selectedVaksin) return selectedVaksin.stok;
+    if (requiresPakan && selectedPakan)
+      return selectedPakan.stokTersisaKg ?? selectedPakan.stokKg;
+    if (requiresVaksin && selectedVaksin)
+      return selectedVaksin.stokTersisa ?? selectedVaksin.stok;
 
     return null;
   }, [requiresPakan, requiresVaksin, selectedPakan, selectedVaksin]);
-
-  // Validate stock
-  const stockError = useMemo(() => {
-    if (availableStock !== null && jumlahValue > availableStock) {
-      return `Jumlah melebihi stok tersedia (${availableStock.toLocaleString("id-ID")})`;
-    }
-
-    return null;
-  }, [availableStock, jumlahValue]);
 
   // Handle form submission
   const onSubmit = async (data: OperasionalFormData) => {
     try {
       // Validate stock before submission
-      if (stockError) {
-        methods.setError("jumlah", { message: stockError });
+      if (stockValidationMsg) {
+        methods.setError("jumlah", { message: stockValidationMsg });
 
         return;
       }
@@ -268,20 +293,30 @@ export function OperasionalCreateForm() {
       // Create operasional first (biaya created automatically on backend)
       await createOperasional.mutateAsync(operasionalData);
 
-      // Navigate back to list
+      showToast({
+        title: "Sukses",
+        description: "Data operasional berhasil disimpan",
+        color: "success",
+      });
       navigate({ to: "/daftar-operasional" });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating operasional:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Terjadi kesalahan saat menyimpan data";
+
+      showToast({
+        title: "Gagal",
+        description: errorMessage,
+        color: "error",
+      });
     }
   };
 
   // Check if any data is loading
   const isLoadingAnyData =
-    isLoadingJenisKegiatans ||
-    isLoadingKandangs ||
-    isLoadingUsers ||
-    isLoadingPakans ||
-    isLoadingVaksins;
+    isLoadingFormData || isLoadingKandangs || isLoadingUsers;
 
   // Calculate estimated cost
 
@@ -450,17 +485,37 @@ export function OperasionalCreateForm() {
                         <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-blue-900">
-                              Stok Awal (Periode{" "}
-                              {requiresPakan && selectedPakan
-                                ? `${selectedPakan.bulan}/${selectedPakan.tahun}`
-                                : requiresVaksin && selectedVaksin
-                                  ? `${selectedVaksin.bulan}/${selectedVaksin.tahun}`
-                                  : "-"}
-                              ):
+                              Stok Tersedia:
                             </span>
                             <span className="text-sm font-bold text-blue-900">
                               {availableStock.toLocaleString("id-ID")}{" "}
                               {requiresPakan ? "kg" : "dosis"}
+                              {selectedPakan?.statusStok && (
+                                <Badge
+                                  className="ml-2"
+                                  color={
+                                    selectedPakan.statusStok === "Aman"
+                                      ? "success"
+                                      : "danger"
+                                  }
+                                  variant="flat"
+                                >
+                                  {selectedPakan.statusStok}
+                                </Badge>
+                              )}
+                              {selectedVaksin?.statusStok && (
+                                <Badge
+                                  className="ml-2"
+                                  color={
+                                    selectedVaksin.statusStok === "Aman"
+                                      ? "success"
+                                      : "danger"
+                                  }
+                                  variant="flat"
+                                >
+                                  {selectedVaksin.statusStok}
+                                </Badge>
+                              )}
                             </span>
                           </div>
 
@@ -497,13 +552,15 @@ export function OperasionalCreateForm() {
                       name="jumlah"
                     />
                     <p className="mt-1 text-xs text-gray-500">
-                      {stockError ||
+                      {stockValidationMsg ||
                         (availableStock !== null
                           ? `Maksimal: ${availableStock.toLocaleString("id-ID")}`
                           : "Jumlah/quantity kegiatan yang dilakukan")}
                     </p>
-                    {stockError && (
-                      <p className="mt-1 text-sm text-red-600">{stockError}</p>
+                    {stockValidationMsg && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {stockValidationMsg}
+                      </p>
                     )}
                   </div>
 

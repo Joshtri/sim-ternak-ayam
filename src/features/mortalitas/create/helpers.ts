@@ -38,7 +38,6 @@ export const getDefaultMortalitasFormValues =
  */
 export const transformMortalitasFormData = (
   data: MortalitasFormData
-
 ): CreateMortalitasDto => {
   const payload: CreateMortalitasDto = {
     ayamId: data.ayamId,
@@ -66,11 +65,20 @@ export const transformAyamsToOptions = (ayams: Ayam[]): SelectOption[] => {
     return [];
   }
 
-  return ayams.map(ayam => ({
-    label: `${ayam.kandangNama} - Masuk: ${new Date(ayam.tanggalMasuk).toLocaleDateString("id-ID")}`,
-    value: ayam.id,
-    description: `Jumlah: ${ayam.jumlahMasuk.toLocaleString("id-ID")} ekor`,
-  }));
+  return ayams.map(ayam => {
+    const masukDate = new Date(ayam.tanggalMasuk).toLocaleDateString("id-ID");
+    const statusPanen = ayam.bisaDipanen ? "Siap Panen" : "Belum Siap";
+    const statusKesehatan = ayam.perluPerhatianKesehatan
+      ? "Perlu Perhatian"
+      : "Sehat";
+    const jumlahSisa = ayam.sisaAyamHidup?.toLocaleString("id-ID") ?? "0";
+
+    return {
+      label: `${ayam.kandangNama} - Sisa: ${jumlahSisa} Ekor`,
+      value: ayam.id,
+      description: `Masuk: ${masukDate} | ${statusPanen} | ${statusKesehatan}`,
+    };
+  });
 };
 
 /**

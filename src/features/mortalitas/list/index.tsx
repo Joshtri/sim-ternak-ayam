@@ -67,11 +67,18 @@ export default function MortalitasList() {
       label: "Penanggung Jawab Kandang",
       value: (item: Mortalitas) => item.petugasNama,
     },
+
+    {
+      key: "kandangNama",
+      label: "Nama Kandang",
+      value: (item: Mortalitas) => item.kandangNama,
+    },
     {
       key: "tanggalKematian",
       label: "Tanggal Kematian",
       value: (item: Mortalitas) => formatDate(item.tanggalKematian),
     },
+
     {
       key: "jumlahKematian",
       label: "Jumlah Kematian (ekor)",

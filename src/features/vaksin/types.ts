@@ -13,6 +13,11 @@ export interface Vaksin extends BaseEntity {
   jenis?: string; // Optional, might not exist in response
   satuan?: string; // Optional, might not exist in response
   hargaPerSatuan?: number; // Optional, might not exist in response
+  stokTersisa?: number;
+  stokTerpakai?: number;
+  statusStok?: "Aman" | "Menipis" | "Kritis" | "Habis";
+  isStokCukup?: boolean;
+  rekomendasi?: string;
 }
 
 export interface CreateVaksinDto {

@@ -95,6 +95,7 @@ interface ListGridProps {
   // Delete confirmation
   deleteConfirmTitle?: string;
   deleteConfirmMessage?: (item: any) => string;
+  layout?: "table" | "grid" | "auto";
 }
 
 export function ListGrid({
@@ -122,9 +123,15 @@ export function ListGrid({
   deleteConfirmTitle = "Konfirmasi Hapus",
   deleteConfirmMessage = item =>
     `Apakah Anda yakin ingin menghapus "${item.name || "item ini"}"?`,
+  layout = "auto",
 }: ListGridProps) {
-  const isMobileDevice = useMediaQuery("maxWidth: 768px");
-  const isMobile = isMobileProp ?? isMobileDevice;
+  // Use 1024px to include tablets in "mobile" view by default
+  const isMobileDevice = useMediaQuery("(max-width: 1024px)");
+
+  // Determine actual layout mode
+  const isGridView =
+    layout === "grid" ||
+    (layout === "auto" && (isMobileProp ?? isMobileDevice));
 
   // Auto-transform data to rows if data prop is provided
   const rows = useMemo(() => {
@@ -303,10 +310,9 @@ export function ListGrid({
               </div>
             ))}
 
-          {/* Actions for mobile */}
-          {item.actions && (
+          {item["actions"] && (
             <div className="flex justify-end pt-2 border-t border-gray-100">
-              {item.actions}
+              {item["actions"]}
             </div>
           )}
         </div>
@@ -383,7 +389,7 @@ export function ListGrid({
         <PageHeader
           actions={
             <div className="flex items-center gap-2">
-              {!isMobile && renderOptionsMenu()}
+              {!isGridView && renderOptionsMenu()}
               {renderAddButton || customActions}
             </div>
           }
@@ -404,7 +410,7 @@ export function ListGrid({
         )}
 
         {loading ? (
-          isMobile ? (
+          isGridView ? (
             renderMobileSkeleton()
           ) : (
             <SkeletonTable columns={columns.length} rows={pageSize} />
@@ -415,9 +421,9 @@ export function ListGrid({
               <div className="text-gray-400 text-sm">Data kosong.</div>
             </div>
           ))
-        ) : isMobile ? (
+        ) : isGridView ? (
           <div className="space-y-4">
-            <div className="grid gap-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {paginatedRows.map((item, index) =>
                 renderMobileCard(item, index)
               )}

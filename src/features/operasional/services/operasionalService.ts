@@ -79,4 +79,32 @@ export const operasionalService = {
   deleteOperasional: async (id: string): Promise<void> => {
     await api.delete(`/operasionals/${id}`);
   },
+
+  getFormData: async (): Promise<any> => {
+    const response = await api.get<ApiResponse<any>>("/operasionals/form-data");
+    return response.data.data;
+  },
+
+  createOperasionalWithValidation: async (
+    data: Partial<CreateOperasionalDto>
+  ): Promise<any> => {
+    const response = await api.post<ApiResponse<any>>(
+      "/operasionals/create-with-validation",
+      data
+    );
+    return response.data;
+  },
+
+  validateStock: async (data: {
+    vaksinId?: string;
+    pakanId?: string;
+    jumlah: number;
+  }): Promise<any> => {
+    const response = await api.post<ApiResponse<any>>(
+      "/operasionals/validate-stock",
+      data
+    );
+    return response.data;
+  },
 };
+

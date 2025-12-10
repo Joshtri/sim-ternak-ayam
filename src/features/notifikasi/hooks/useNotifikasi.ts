@@ -14,7 +14,7 @@ export function useNotifications(params?: NotificationQueryParams) {
   return useQuery({
     queryKey: ["notifications", "list", params],
     queryFn: () => notifikasiService.getNotifications(params),
-    refetchInterval: 30000, // Auto refresh every 30 seconds
+    refetchInterval: 300000, // Auto refresh every 30 seconds
   });
 }
 
@@ -25,7 +25,7 @@ export function useUnreadCount() {
   return useQuery({
     queryKey: ["notifications", "unread-count"],
     queryFn: () => notifikasiService.getUnreadCount(),
-    refetchInterval: 15000, // Auto refresh every 15 seconds
+    refetchInterval: 150000, // Auto refresh every 15 seconds
   });
 }
 

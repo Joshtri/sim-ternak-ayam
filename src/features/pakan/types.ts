@@ -5,6 +5,10 @@ export interface Pakan extends BaseEntity {
   stokKg: number;
   bulan: number;
   tahun: number;
+  stokTersisa?: number;
+  stokTerpakai?: number;
+  statusStok?: "Aman" | "Menipis" | "Kritis" | "Habis";
+  isStokCukup?: boolean;
 }
 
 export interface CreatePakanDto {

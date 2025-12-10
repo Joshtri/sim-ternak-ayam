@@ -5,7 +5,7 @@
 
 import type { MortalitasFormData } from "./helpers";
 
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, UseFormSetError } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
@@ -33,7 +33,8 @@ import { showToast } from "@/utils/showToast";
 const handleFormSubmit = async (
   data: MortalitasFormData,
   createMortalitas: any,
-  navigate: any
+  navigate: any,
+  setError: UseFormSetError<MortalitasFormData>
 ) => {
   try {
     // Transform data before sending to API
@@ -48,8 +49,28 @@ const handleFormSubmit = async (
 
     // Navigate back to list
     navigate({ to: "/daftar-mortalitas" });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating mortalitas data:", error);
+
+    // Handle 400 Validation Errors
+    if (
+      error.response &&
+      error.response.status === 400 &&
+      error.response.data?.errors
+    ) {
+      const apiErrors = error.response.data.errors;
+
+      Object.keys(apiErrors).forEach(key => {
+        // Convert PascalCase (API) to camelCase (Form)
+        const fieldName = (key.charAt(0).toLowerCase() +
+          key.slice(1)) as keyof MortalitasFormData;
+
+        setError(fieldName, {
+          type: "server",
+          message: apiErrors[key][0],
+        });
+      });
+    }
   }
 };
 
@@ -65,7 +86,8 @@ export function MortalitasCreateForm() {
   const createMortalitas = useCreateMortalitas();
 
   // Fetch current user to get managed kandangs
-  const { data: meData, isLoading: isLoadingMe } = useCurrentUser<ICurrentUser>();
+  const { data: meData, isLoading: isLoadingMe } =
+    useCurrentUser<ICurrentUser>();
 
   // Fetch ayams for dropdown
   const { data: ayams, isLoading: isLoadingAyams } = useAyams();
@@ -92,7 +114,9 @@ export function MortalitasCreateForm() {
         (meData.kandangsManaged ?? []).map((k: any) => String(k.id))
       );
 
-      return ayams.filter(ayam => managedKandangIds.has(String(ayam.kandangId)));
+      return ayams.filter(ayam =>
+        managedKandangIds.has(String(ayam.kandangId))
+      );
     }
 
     // For other roles (Pemilik, Admin, etc.), show all ayams
@@ -127,7 +151,9 @@ export function MortalitasCreateForm() {
   }, [ayamOptions]);
 
   // Handle file selection
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
 
     if (!file) {
@@ -135,28 +161,39 @@ export function MortalitasCreateForm() {
       setPreviewUrl("");
       methods.setValue("fotoMortalitasBase64", "");
       methods.setValue("fotoMortalitasFileName", "");
+
       return;
     }
 
     // Validate file type
-    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    const validTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
+
     if (!validTypes.includes(file.type)) {
       showToast({
         title: "Format Tidak Valid",
         description: "Format foto harus JPG, PNG, GIF, atau WebP",
         color: "error",
       });
+
       return;
     }
 
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
     if (file.size > maxSize) {
       showToast({
         title: "Ukuran Terlalu Besar",
         description: "Ukuran foto maksimal 5MB",
         color: "error",
       });
+
       return;
     }
 
@@ -195,14 +232,17 @@ export function MortalitasCreateForm() {
     methods.setValue("fotoMortalitasFileName", "");
 
     // Reset file input
-    const fileInput = document.getElementById("fotoMortalitas") as HTMLInputElement;
+    const fileInput = document.getElementById(
+      "fotoMortalitas"
+    ) as HTMLInputElement;
+
     if (fileInput) {
       fileInput.value = "";
     }
   };
 
   const onSubmit = (data: MortalitasFormData) => {
-    handleFormSubmit(data, createMortalitas, navigate);
+    handleFormSubmit(data, createMortalitas, navigate, methods.setError);
   };
 
   const isLoading = isLoadingAyams || isLoadingMe;
@@ -227,15 +267,16 @@ export function MortalitasCreateForm() {
                   Foto Mortalitas (Opsional)
                 </label>
                 <p className="text-xs text-gray-500 mb-3">
-                  Upload foto mortalitas (maksimal 5MB, format: JPG, PNG, GIF, WebP)
+                  Upload foto mortalitas (maksimal 5MB, format: JPG, PNG, GIF,
+                  WebP)
                 </p>
 
                 {/* File input */}
                 {!selectedFile && (
                   <div className="flex items-center justify-center w-full">
                     <label
-                      htmlFor="fotoMortalitas"
                       className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                      htmlFor="fotoMortalitas"
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
@@ -245,22 +286,27 @@ export function MortalitasCreateForm() {
                           viewBox="0 0 24 24"
                         >
                           <path
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                           />
                         </svg>
                         <p className="mb-2 text-sm text-gray-500">
-                          <span className="font-semibold">Klik untuk upload</span> atau drag and drop
+                          <span className="font-semibold">
+                            Klik untuk upload
+                          </span>{" "}
+                          atau drag and drop
                         </p>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF, WebP (MAX. 5MB)</p>
+                        <p className="text-xs text-gray-500">
+                          PNG, JPG, GIF, WebP (MAX. 5MB)
+                        </p>
                       </div>
                       <input
+                        accept="image/*"
+                        className="hidden"
                         id="fotoMortalitas"
                         type="file"
-                        className="hidden"
-                        accept="image/*"
                         onChange={handleFileChange}
                       />
                     </label>
@@ -272,15 +318,15 @@ export function MortalitasCreateForm() {
                   <div className="mt-4">
                     <div className="relative inline-block">
                       <img
-                        src={previewUrl}
                         alt="Preview"
                         className="w-full max-w-md h-auto rounded-lg border border-gray-300"
+                        src={previewUrl}
                       />
                       <button
-                        type="button"
-                        onClick={handleRemoveFile}
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors"
                         title="Hapus foto"
+                        type="button"
+                        onClick={handleRemoveFile}
                       >
                         <svg
                           className="w-4 h-4"
@@ -289,16 +335,17 @@ export function MortalitasCreateForm() {
                           viewBox="0 0 24 24"
                         >
                           <path
+                            d="M6 18L18 6M6 6l12 12"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
                           />
                         </svg>
                       </button>
                     </div>
                     <p className="text-sm text-gray-600 mt-2">
-                      {selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
+                      {selectedFile.name} (
+                      {(selectedFile.size / 1024).toFixed(2)} KB)
                     </p>
                   </div>
                 )}

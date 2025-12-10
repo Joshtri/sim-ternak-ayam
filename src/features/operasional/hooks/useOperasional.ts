@@ -175,3 +175,43 @@ export function useDeleteOperasional() {
     },
   });
 }
+
+/**
+ * Hook to fetch form data for operasional
+ */
+export function useOperasionalFormData() {
+  return useQuery({
+    queryKey: [...operasionalKeys.all, "form-data"],
+    queryFn: () => operasionalService.getFormData(),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/**
+ * Hook to create a new operasional with stock validation
+ */
+export function useCreateOperasionalWithValidation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Partial<CreateOperasionalDto>) =>
+      operasionalService.createOperasionalWithValidation(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: operasionalKeys.lists() });
+      return data;
+    },
+  });
+}
+
+/**
+ * Hook to validate stock
+ */
+export function useValidateStock() {
+  return useMutation({
+    mutationFn: (data: {
+      vaksinId?: string;
+      pakanId?: string;
+      jumlah: number;
+    }) => operasionalService.validateStock(data),
+  });
+}

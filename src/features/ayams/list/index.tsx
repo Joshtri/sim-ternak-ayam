@@ -7,14 +7,13 @@ import { useDeleteAyam, useAyams } from "../hooks/useAyams";
 import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
 import { useCurrentUser } from "@/features/auth/hooks/useAuth";
 import { ICurrentUser } from "@/interfaces/common";
+import { Badge } from "@/components/ui/Badge";
 
 export default function AyamsList() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: meData, isLoading: isLoadingMe } =
     useCurrentUser<ICurrentUser>();
-
-  console.log(meData);
 
   const { data: ayams, isLoading: isLoadingAyams } = useAyams({
     search: searchQuery,
@@ -48,7 +47,7 @@ export default function AyamsList() {
 
     {
       key: "penanggungJawabKandang",
-      label: "Penanggung Jawab Kandang",
+      label: "Penanggung Jawab",
       value: (ayam: Ayam) => ayam.petugasKandangNama,
     },
     {
@@ -67,8 +66,34 @@ export default function AyamsList() {
     },
     {
       key: "jumlahMasuk",
-      label: "Jumlah Masuk (ekor)",
+      label: "Jml Masuk",
       value: (ayam: Ayam) => ayam.jumlahMasuk.toLocaleString("id-ID"),
+    },
+    {
+      key: "sisaAyamHidup",
+      label: "Sisa (Ekor)",
+      value: (ayam: Ayam) => ayam.sisaAyamHidup.toLocaleString("id-ID"),
+    },
+    {
+      key: "statusPanen",
+      label: "Status Panen",
+      value: (ayam: Ayam) => (
+        <Badge color={ayam.bisaDipanen ? "success" : "default"} variant="flat">
+          {ayam.bisaDipanen ? "Siap Panen" : "Belum Siap"}
+        </Badge>
+      ),
+    },
+    {
+      key: "kesehatan",
+      label: "Kesehatan",
+      value: (ayam: Ayam) => (
+        <Badge
+          color={ayam.perluPerhatianKesehatan ? "danger" : "success"}
+          variant="flat"
+        >
+          {ayam.perluPerhatianKesehatan ? "Cek Kesehatan" : "Sehat"}
+        </Badge>
+      ),
     },
     { key: "actions", label: "Aksi", align: "center" as const },
   ];

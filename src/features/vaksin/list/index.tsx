@@ -35,14 +35,45 @@ export default function VaksinList() {
       ),
     },
     {
-      key: "stok",
-      label: "Stok",
+      key: "stokTersisa",
+      label: "Sisa Stok",
       value: (item: Vaksin) => {
-        const isLowStock = item.stok < 50;
+        const sisa = item.stokTersisa ?? item.stok;
+        const status = item.statusStok;
+
+        let color: "success" | "warning" | "danger" | "default" = "success";
+
+        if (status === "Menipis") color = "warning";
+        if (status === "Kritis" || status === "Habis") color = "danger";
 
         return (
-          <Badge color={isLowStock ? "danger" : "success"} variant="flat">
-            {item.stok.toLocaleString("id-ID")} unit
+          <Badge color={color} variant="flat">
+            {sisa.toLocaleString("id-ID")} unit
+          </Badge>
+        );
+      },
+    },
+    // {
+    //   key: "stokTerpakai",
+    //   label: "Terpakai",
+    //   value: (item: Vaksin) =>
+    //     `${(item.stokTerpakai ?? 0).toLocaleString("id-ID")} unit`,
+    // },
+    {
+      key: "statusStok",
+      label: "Status",
+      value: (item: Vaksin) => {
+        if (!item.statusStok) return "-";
+
+        let color: "success" | "warning" | "danger" | "default" = "success";
+        if (item.statusStok === "Aman") color = "success";
+        if (item.statusStok === "Menipis") color = "warning";
+        if (item.statusStok === "Kritis" || item.statusStok === "Habis")
+          color = "danger";
+
+        return (
+          <Badge color={color} variant="solid">
+            {item.statusStok}
           </Badge>
         );
       },

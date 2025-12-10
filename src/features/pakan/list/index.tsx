@@ -22,14 +22,45 @@ export default function PakanList() {
       value: (item: Pakan) => item.namaPakan,
     },
     {
-      key: "stokKg",
-      label: "Stok",
+      key: "stokTersisa",
+      label: "Sisa Stok",
       value: (item: Pakan) => {
-        const isLowStock = item.stokKg < 100; // Adjust threshold as needed
+        const sisa = item.stokTersisa ?? item.stokKg;
+        const status = item.statusStok;
+
+        let color: "success" | "warning" | "danger" | "default" = "success";
+
+        if (status === "Menipis") color = "warning";
+        if (status === "Kritis" || status === "Habis") color = "danger";
 
         return (
-          <Badge color={isLowStock ? "danger" : "success"} variant="flat">
-            {item.stokKg.toLocaleString("id-ID")} kg
+          <Badge color={color} variant="flat">
+            {sisa.toLocaleString("id-ID")} kg
+          </Badge>
+        );
+      },
+    },
+    // {
+    //   key: "stokTerpakai",
+    //   label: "Terpakai",
+    //   value: (item: Pakan) =>
+    //     `${(item.stokTerpakai ?? 0).toLocaleString("id-ID")} kg`,
+    // },
+    {
+      key: "statusStok",
+      label: "Status",
+      value: (item: Pakan) => {
+        if (!item.statusStok) return "-";
+
+        let color: "success" | "warning" | "danger" | "default" = "success";
+        if (item.statusStok === "Aman") color = "success";
+        if (item.statusStok === "Menipis") color = "warning";
+        if (item.statusStok === "Kritis" || item.statusStok === "Habis")
+          color = "danger";
+
+        return (
+          <Badge color={color} variant="solid">
+            {item.statusStok}
           </Badge>
         );
       },

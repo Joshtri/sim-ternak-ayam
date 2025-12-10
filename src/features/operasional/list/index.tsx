@@ -30,10 +30,36 @@ export default function OperasionalList() {
       key: "jenisKegiatanNama",
       label: "Jenis Kegiatan",
       value: (item: Operasional) => (
-        <span className="font-semibold">
-          {item.jenisKegiatanNama || "-"}
-        </span>
+        <span className="font-semibold">{item.jenisKegiatanNama || "-"}</span>
       ),
+    },
+    {
+      key: "detailItem",
+      label: "Item Digunakan",
+      value: (item: Operasional) => {
+        if (item.pakanNama) {
+          return (
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-gray-500">Pakan</span>
+              <span className="font-medium text-warning-600">
+                {item.pakanNama}
+              </span>
+            </div>
+          );
+        }
+        if (item.vaksinNama) {
+          return (
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-gray-500">Vaksin</span>
+              <span className="font-medium text-secondary-600">
+                {item.vaksinNama}
+              </span>
+            </div>
+          );
+        }
+
+        return <span className="text-gray-400">-</span>;
+      },
     },
     {
       key: "kandangNama",
@@ -55,11 +81,34 @@ export default function OperasionalList() {
     {
       key: "jumlah",
       label: "Jumlah",
-      value: (item: Operasional) => (
-        <Badge color="primary" variant="flat">
-          {item.jumlah.toLocaleString("id-ID")}
-        </Badge>
-      ),
+      value: (item: Operasional) => {
+        let unit = "";
+        let color: "primary" | "warning" | "secondary" | "default" = "default";
+        let label = "Jumlah";
+
+        if (item.pakanNama) {
+          unit = "kg";
+          color = "warning";
+          label = "Pakan";
+        } else if (item.vaksinNama) {
+          unit = "dosis";
+          color = "secondary";
+          label = "Vaksin";
+        } else {
+          color = "primary";
+        }
+
+        return (
+          <div className="flex flex-col items-start gap-1">
+            <span className="text-[10px] uppercase text-gray-400 font-bold">
+              {label}
+            </span>
+            <Badge color={color} variant="flat">
+              {item.jumlah.toLocaleString("id-ID")} {unit}
+            </Badge>
+          </div>
+        );
+      },
     },
     { key: "actions", label: "Aksi", align: "center" as const },
   ];
@@ -69,6 +118,7 @@ export default function OperasionalList() {
     if (!searchQuery) return true;
 
     const query = searchQuery.toLowerCase();
+
     return (
       (item.jenisKegiatanNama?.toLowerCase().includes(query) ?? false) ||
       (item.kandangNama?.toLowerCase().includes(query) ?? false)
