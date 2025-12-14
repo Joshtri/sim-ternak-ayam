@@ -15,7 +15,7 @@ export interface Biaya extends BaseEntity {
   catatan?: string;
   bulan?: number;
   tahun?: number;
-  kategoriBiaya?: number; // NEW: 0 = Operasional, 1 = Pembelian
+  kategoriBiaya?: number; // 0 = Operasional, 1 = Pembelian
 }
 
 export interface CreateBiayaDto {
@@ -30,7 +30,7 @@ export interface CreateBiayaDto {
   catatan?: string;
   bulan?: number;
   tahun?: number;
-  kategoriBiaya?: number;
+  kategoriBiaya?: number; // 0 = Operasional, 1 = Pembelian
 }
 
 export interface UpdateBiayaDto extends Pick<BaseEntity, "id"> {
@@ -50,17 +50,22 @@ export interface UpdateBiayaDto extends Pick<BaseEntity, "id"> {
 
 // NEW: Types for Monthly Costs Recap
 export interface BiayaItemDto {
+  id: string;
   jenisBiaya: string;
   jumlah: number;
   tanggal: string;
   keterangan?: string;
   catatan?: string;
+  kategoriBiaya?: number;
 }
 
 export interface BiayaKandangDetailDto {
   kandangId?: string;
   kandangNama: string;
   totalBiaya: number;
+  totalBiayaListrik?: number;
+  totalBiayaAir?: number;
+  totalBiayaLainnya?: number;
   detailBiaya: BiayaItemDto[];
 }
 
@@ -68,8 +73,9 @@ export interface BiayaBulananResponseDto {
   bulan: number;
   tahun: number;
   grandTotal: number;
-  grandTotalBiayaListrik: number;
-  grandTotalBiayaAir: number;
-  grandTotalBiayaLainnya: number;
+  // Specific grand totals per category if needed
+  totalBiayaListrik?: number;
+  totalBiayaAir?: number;
+  totalBiayaLainnya?: number;
   perKandang: BiayaKandangDetailDto[];
 }
