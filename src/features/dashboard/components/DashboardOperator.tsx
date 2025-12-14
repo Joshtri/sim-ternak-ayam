@@ -463,7 +463,7 @@ export function DashboardOperator() {
             </div>
 
             {/* View All Link */}
-            {notifications.length > 0 && (
+            {/* {notifications.length > 0 && (
               <div className="mt-4 pt-4 border-t">
                 <Link
                   className="text-sm text-primary hover:underline font-medium flex items-center justify-center gap-1"
@@ -473,7 +473,7 @@ export function DashboardOperator() {
                   <ExternalLink size={14} />
                 </Link>
               </div>
-            )}
+            )} */}
           </Card>
         </div>
       </div>
