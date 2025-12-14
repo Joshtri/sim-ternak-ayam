@@ -5,12 +5,14 @@ export interface KandangAsisten extends BaseEntity {
   kandangNama: string;
   asistenId: string;
   asistenNama: string;
+  asistenEmail?: string; // New
+  asistenNoWA?: string;  // New
   catatan?: string;
   isAktif: boolean;
 }
 
 export interface CreateKandangAsistenDto {
-  kandangId: string;      // UUIDbu
+  kandangId: string;      // UUID
   asistenId: string;      // UUID (must be Petugas role)
   catatan?: string;       // Optional notes
   isAktif: boolean;       // Default: true
@@ -26,6 +28,8 @@ export interface KandangAsistenResponseDto extends BaseEntity {
   kandangNama: string;
   asistenId: string;
   asistenNama: string;
+  asistenEmail?: string; // New
+  asistenNoWA?: string;  // New
   catatan?: string;
   isAktif: boolean;
 }
