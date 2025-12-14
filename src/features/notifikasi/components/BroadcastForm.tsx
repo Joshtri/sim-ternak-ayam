@@ -29,7 +29,7 @@ export function BroadcastForm({ onSuccess }: BroadcastFormProps) {
     message: "",
     type: "info",
     priority: "medium",
-    target_role: "all",
+    targetRole: "all",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,7 +41,7 @@ export function BroadcastForm({ onSuccess }: BroadcastFormProps) {
           message: "",
           type: "info",
           priority: "medium",
-          target_role: "all",
+          targetRole: "all",
         });
         onSuccess?.();
       },
@@ -111,11 +111,11 @@ export function BroadcastForm({ onSuccess }: BroadcastFormProps) {
 
           <Select
             label="Target Role"
-            selectedKeys={[formData.target_role || "all"]}
+            selectedKeys={[formData.targetRole || "all"]}
             onChange={e =>
               setFormData({
                 ...formData,
-                target_role: e.target.value as any,
+                targetRole: e.target.value as any,
               })
             }
           >
