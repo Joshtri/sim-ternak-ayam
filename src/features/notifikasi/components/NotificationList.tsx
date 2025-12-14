@@ -163,13 +163,13 @@ export function NotificationList({
         </Card>
       ))}
 
-      {compact && notifications && notifications.length > (maxItems || 0) && (
+      {/* {compact && notifications && notifications.length > (maxItems || 0) && (
         <div className="p-2 text-center border-t">
           <Button as="a" href="/notifications" size="sm" variant="light">
             Lihat semua notifikasi
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

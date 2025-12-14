@@ -108,12 +108,12 @@ export function NotificationDropdown() {
           <div className="flex justify-between items-center">
             <span className="font-semibold">Notifikasi</span>
             {unreadCount > 0 && (
-              <Link
-                className="text-xs text-primary hover:underline"
-                to="/notifikasi"
-              >
-                Lihat semua ({unreadCount})
-              </Link>
+              // <Link
+              //   className="text-xs text-primary hover:underline"
+              //   to="/notifikasi"
+              // >
+              //   Lihat semua ({unreadCount})
+              // </Link>
             )}
           </div>
         </DropdownItem>
