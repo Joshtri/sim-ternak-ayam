@@ -1,7 +1,8 @@
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 // Link from router removed because this form uses a plain anchor for the register link
-import { Mail, Lock, LogIn } from "lucide-react";
+import { Mail, Lock, LogIn, Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 
 import { useLogin } from "../hooks/useAuth";
@@ -14,6 +15,10 @@ interface LoginFormData {
 }
 
 export default function LoginForm() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
   const methods = useForm<LoginFormData>({
     defaultValues: {
       username: "",
@@ -76,12 +81,31 @@ export default function LoginForm() {
                   message: "Password minimal 6 karakter",
                 },
               })}
+              endContent={
+                <button
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility}
+                >
+                  {isVisible ? (
+                    <EyeOff
+                      className="text-default-400 pointer-events-none"
+                      size={18}
+                    />
+                  ) : (
+                    <Eye
+                      className="text-default-400 pointer-events-none"
+                      size={18}
+                    />
+                  )}
+                </button>
+              }
               errorMessage={methods.formState.errors.password?.message}
               isInvalid={!!methods.formState.errors.password}
               label="Password"
               placeholder="Masukkan password Anda"
               startContent={<Lock className="text-default-400" size={18} />}
-              type="password"
+              type={isVisible ? "text" : "password"}
               variant="bordered"
             />
 

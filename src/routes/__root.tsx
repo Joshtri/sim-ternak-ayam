@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, ErrorComponent } from "@tanstack/react-router";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Route = createRootRoute({
@@ -25,7 +25,8 @@ function ErrorBoundary({ error }: { error: Error }) {
           Oops! Terjadi Kesalahan
         </h2>
         <p className="mb-4 text-red-700">
-          Maaf, terjadi kesalahan yang tidak terduga. Silakan coba refresh halaman atau hubungi administrator.
+          Maaf, terjadi kesalahan yang tidak terduga. Silakan coba refresh
+          halaman atau hubungi administrator.
         </p>
         {import.meta.env.DEV && (
           <details className="mt-4 rounded bg-white p-4">
@@ -39,8 +40,8 @@ function ErrorBoundary({ error }: { error: Error }) {
           </details>
         )}
         <button
-          onClick={() => window.location.reload()}
           className="mt-4 w-full rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+          onClick={() => window.location.reload()}
         >
           Refresh Halaman
         </button>

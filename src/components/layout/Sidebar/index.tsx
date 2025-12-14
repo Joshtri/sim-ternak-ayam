@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useMatchRoute, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
@@ -83,7 +83,9 @@ export function Sidebar({
           <div className="text-3xl">🐔</div>
           {!isCollapsed && (
             <div>
-              <h1 className="font-bold text-lg">Ternak Ayam</h1>
+              <Link to="/dashboard" className="font-bold text-lg">
+                Ternak Ayam
+              </Link>
               {/* <p className="text-xs text-default-500">Manajemen Broiler</p> */}
             </div>
           )}
@@ -201,12 +203,23 @@ function NavigationItemComponent({
 }) {
   const matchRoute = useMatchRoute();
   const location = useLocation();
+
+  // Enhanced active check
   const isActive =
     matchRoute({ to: item.href }) ||
+    location.pathname === item.href ||
     location.pathname.startsWith(`${item.href}/`);
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasChildren = item.children && item.children.length > 0;
+
+  // Auto-expand group if active
+  useEffect(() => {
+    if (isActive && hasChildren) {
+      setIsExpanded(true);
+    }
+  }, [isActive, hasChildren]);
 
   // Handle click - close mobile sidebar
   const handleClick = () => {
@@ -224,7 +237,9 @@ function NavigationItemComponent({
             "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg",
             "transition-all duration-200",
             "hover:bg-default-100",
-            isActive && "bg-primary/10 text-primary"
+            isActive
+              ? "bg-primary/20 text-primary font-bold shadow-sm"
+              : "text-default-700 hover:text-default-900"
           )}
           onClick={() => setIsExpanded(!isExpanded)}
         >
@@ -271,7 +286,7 @@ function NavigationItemComponent({
         "transition-all duration-200",
         "hover:bg-default-100",
         isActive
-          ? "bg-primary/10 text-primary font-semibold"
+          ? "bg-primary text-white shadow-md font-bold"
           : "text-default-700 hover:text-default-900",
         isCollapsed && "justify-center"
       )}

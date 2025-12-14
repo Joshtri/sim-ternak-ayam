@@ -281,7 +281,7 @@ export function ListGrid({
     return (
       <div
         key={item.key}
-        className="relative bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"
+        className="relative bg-white dark:bg-content1 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden"
       >
         {/* Blue top border */}
         <div className="h-1 bg-blue-500" />
@@ -294,14 +294,14 @@ export function ListGrid({
                 key={`${item.key}-${column.key}`}
                 className={`flex flex-col ${
                   columnIndex !== columns.length - 2
-                    ? "pb-3 border-b border-gray-100"
+                    ? "pb-3 border-b border-gray-100 dark:border-gray-700"
                     : ""
                 }`}
               >
-                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
                   {column.label}
                 </div>
-                <div className="text-sm text-gray-900 font-medium">
+                <div className="text-sm text-gray-900 dark:text-gray-100 font-medium">
                   {typeof item[column.key] === "object" &&
                   item[column.key] !== null
                     ? item[column.key]
@@ -311,7 +311,7 @@ export function ListGrid({
             ))}
 
           {item["actions"] && (
-            <div className="flex justify-end pt-2 border-t border-gray-100">
+            <div className="flex justify-end pt-2 border-t border-gray-100 dark:border-gray-700">
               {item["actions"]}
             </div>
           )}
@@ -325,21 +325,21 @@ export function ListGrid({
       {Array.from({ length: pageSize }).map((_, index) => (
         <div
           key={index}
-          className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"
+          className="bg-white dark:bg-content1 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden"
         >
-          <div className="h-1 bg-gray-200 animate-pulse" />
+          <div className="h-1 bg-gray-200 dark:bg-gray-700 animate-pulse" />
           <div className="p-4 space-y-3">
             {columns.map((_, columnIndex) => (
               <div
                 key={columnIndex}
                 className={`${
                   columnIndex !== columns.length - 1
-                    ? "pb-3 border-b border-gray-100"
+                    ? "pb-3 border-b border-gray-100 dark:border-gray-700"
                     : ""
                 }`}
               >
-                <div className="h-3 bg-gray-200 rounded w-1/3 mb-2 animate-pulse" />
-                <div className="h-4 bg-gray-200 rounded w-2/3 animate-pulse" />
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-2 animate-pulse" />
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 animate-pulse" />
               </div>
             ))}
           </div>

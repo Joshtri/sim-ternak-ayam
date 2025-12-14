@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import AppLayout from "@/components/layout/AppLayout";
 
@@ -9,6 +9,17 @@ import AppLayout from "@/components/layout/AppLayout";
 // Semua route di dalam _authenticated/ folder akan wrapped dengan AppLayout
 
 export const Route = createFileRoute("/_authenticated")({
+  beforeLoad: ({ location }) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: AuthenticatedLayout,
 });
 

@@ -47,14 +47,15 @@ api.interceptors.response.use(
 
       switch (error.response.status) {
         case 401:
-          // Unauthorized - clear token but do not force a navigation here.
-          // Forcing a global redirect here can be annoying (navigates the user
-          // away immediately). Instead, clear the token and let UI components
-          // decide how to respond (they can show a toast or trigger a redirect).
+          // Unauthorized - clear token and force logout
           try {
             localStorage.removeItem("authToken");
             if (api.defaults.headers.common) {
               delete (api.defaults.headers.common as any).Authorization;
+            }
+            // Redirect to login page if we are not already there
+            if (window.location.pathname !== "/login") {
+              window.location.href = "/login";
             }
           } catch { }
           break;
