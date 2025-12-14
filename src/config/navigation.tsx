@@ -13,6 +13,7 @@ import {
   Calendar,
   Bell,
   Info,
+  Calculator,
 } from "lucide-react";
 
 import { NavigationSection, UserRole } from "@/types/navigation";
@@ -118,6 +119,13 @@ export const navigationSections: NavigationSection[] = [
         href: "/daftar-jenis-kegiatan",
         allowedRoles: ["pemilik", "operator"],
       },
+      {
+        id: "harga-pasar",
+        label: "Harga Pasar",
+        icon: <DollarSign size={20} />,
+        href: "/harga-pasar",
+        allowedRoles: ["pemilik", "operator"],
+      },
     ],
   },
 
@@ -195,6 +203,13 @@ export const navigationSections: NavigationSection[] = [
         label: "Dashboard Charts",
         icon: <BarChart3 size={20} />,
         href: "/charts-board",
+        allowedRoles: ["pemilik", "operator"],
+      },
+      {
+        id: "analisis-keuntungan",
+        label: "Analisis Keuntungan",
+        icon: <Calculator size={20} />,
+        href: "/harga-pasar/analisis",
         allowedRoles: ["pemilik", "operator"],
       },
     ],
