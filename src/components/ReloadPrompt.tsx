@@ -10,9 +10,11 @@ export function ReloadPrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
-      console.log("SW Registered: " + r);
+      // eslint-disable-next-line no-console
+      console.log("SW Registered:", r);
     },
     onRegisterError(error) {
+      // eslint-disable-next-line no-console
       console.log("SW registration error", error);
     },
   });
@@ -66,11 +68,7 @@ export function ReloadPrompt() {
               className="bg-white/20 text-white hover:bg-white/30"
               size="sm"
               variant="flat"
-              onPress={() => setIsInstallable(false)} // This assumes usePwaInstall exposes a setter or we just hide it locally. Wait, the hook doesn't expose a setter for removing the prompt.
-              // Actually I should just ignore it or add a close mechanism.
-              // Let's assume I can hack the hook or update the hook, OR just use internal state here to hide it?
-              // But best to update hook? No, I'll just use the hook as is and maybe wrap it.
-              // Ah, I can't set isInstallable from here.
+              onPress={() => setIsInstallable(false)}
             >
               Nanti
             </Button>
