@@ -1,20 +1,24 @@
 import { BaseEntity } from "@/interfaces/common";
 
-// Type for Vaksin/Vitamin (API returns string)
-export type VaksinVitaminType = "Vaksin" | "Vitamin";
+// Enum values for Vaksin/Vitamin
+export enum VaksinVitaminTypeEnum {
+  Vaksin = 0,
+  Vitamin = 1,
+}
 
 export interface Vaksin extends BaseEntity {
   namaVaksin: string;
   stok: number;
+  stokAwal?: number;
+  stokTerpakai?: number;
+  stokTersisa?: number;
   bulan: number;
   tahun: number;
-  tipe: string; // "Vaksin" or "Vitamin" as string from API
-  tipeNama: string; // Display name from API
-  jenis?: string; // Optional, might not exist in response
-  satuan?: string; // Optional, might not exist in response
-  hargaPerSatuan?: number; // Optional, might not exist in response
-  stokTersisa?: number;
-  stokTerpakai?: number;
+  tipe: number; // Enum value (0 or 1)
+  tipeNama: string; // "Vaksin" or "Vitamin"
+  jenis?: string;
+  satuan?: string;
+  hargaPerSatuan?: number;
   statusStok?: "Aman" | "Menipis" | "Kritis" | "Habis";
   isStokCukup?: boolean;
   rekomendasi?: string;
@@ -25,7 +29,8 @@ export interface CreateVaksinDto {
   stok: number;
   bulan: number;
   tahun: number;
-  tipe: VaksinVitaminType; // "Vaksin" or "Vitamin"
+  tipe: VaksinVitaminTypeEnum;
+  stokAwal?: number;
 }
 
 export interface UpdateVaksinDto extends Pick<BaseEntity, "id"> {
@@ -33,7 +38,7 @@ export interface UpdateVaksinDto extends Pick<BaseEntity, "id"> {
   stok?: number;
   bulan?: number;
   tahun?: number;
-  tipe?: VaksinVitaminType;
+  tipe?: VaksinVitaminTypeEnum;
 }
 
 export interface UpdateStockDto {
