@@ -1,4 +1,16 @@
-import { Info, Activity, Home, TrendingUp } from "lucide-react";
+import {
+  Activity,
+  Home,
+  TrendingUp,
+  ArrowRight,
+  Package,
+  ClipboardList,
+  DollarSign,
+  CheckCircle2,
+  Users,
+  Layers,
+  AlertTriangle,
+} from "lucide-react";
 
 import { Card } from "@/components/ui/Card";
 import { PageHeader } from "@/components/common/PageHeader";
@@ -7,13 +19,106 @@ export default function AboutPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Tentang", href: "/about" },
-        ]}
-        description="Informasi mengenai metode perhitungan yang digunakan dalam dashboard sistem."
-        title="Tentang & Rumus Perhitungan"
+        description="Informasi mengenai metode perhitungan dan alur kerja (SOP) sistem."
+        title="Tentang & Panduan Sistem"
       />
+
+      {/* Workflow / SOP Section */}
+      <Card className="p-6 border-l-4 border-l-primary shadow-sm bg-gradient-to-r from-white to-default-50 dark:from-default-50 dark:to-default-100">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-default-900 flex items-center gap-2">
+            <ClipboardList className="text-primary" size={28} />
+            Alur Kerja Pengisian Data (SOP)
+          </h2>
+          <p className="text-default-600 mt-1 max-w-3xl">
+            Panduan urutan pengisian data berdasarkan dependensi sistem.
+            <span className="font-semibold text-primary block mt-1">
+              Prinsip Utama: Data Induk (Parent) harus ada sebelum Data Anak
+              (Child) bisa dibuat.
+            </span>
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+          {/* Connecting Line for Desktop */}
+          <div className="hidden md:block absolute top-6 left-0 w-full h-1 bg-default-200 -z-10 translate-y-4" />
+
+          <WorkflowStep
+            bgColor="bg-blue-600"
+            checklist={[
+              "Buat Akun Pengguna (Role: User/Petugas)",
+              "Isi Master Jenis Kegiatan",
+              "Buat Kandang & Assign Petugas",
+              "Tambah Asisten Kandang (Opsional)",
+            ]}
+            color="text-blue-600"
+            description="Fondasi sistem. User & Jenis Kegiatan harus tersedia sebelum membuat Kandang."
+            icon={Users}
+            step="1"
+            title="Setup & Master Data"
+          />
+
+          <ArrowDivider className="hidden md:flex" />
+
+          <WorkflowStep
+            bgColor="bg-orange-600"
+            checklist={[
+              "Isi Master Stok (Pakan & Vaksin)",
+              "Input Batch Ayam Masuk (Check-In)",
+            ]}
+            color="text-orange-600"
+            description="Persiapan aset. Stok & Batch Ayam harus ada sebelum kegiatan harian dicatat."
+            icon={Package}
+            step="2"
+            title="Inventaris & Produksi"
+          />
+
+          <ArrowDivider className="hidden md:flex" />
+
+          <WorkflowStep
+            bgColor="bg-green-600"
+            checklist={[
+              "Catat Operasional (Konsumsi Stok)",
+              "Isi Jurnal Harian (Catatan Shift)",
+              "Catat Mortalitas (Jika ada insiden)",
+            ]}
+            color="text-green-600"
+            description="Rutin harian. Data ini membutuhkan referensi ke Kandang, Stok, & Jenis Kegiatan."
+            icon={Activity}
+            step="3"
+            title="Harian & Operasional"
+          />
+
+          <ArrowDivider className="hidden md:flex" />
+
+          <WorkflowStep
+            bgColor="bg-purple-600"
+            checklist={[
+              "Catat Biaya (Pengeluaran)",
+              "Input Realisasi Panen (Ayam Keluar)",
+              "Tutup Periode (Selesai)",
+            ]}
+            color="text-purple-600"
+            description="Hasil akhir. Biaya dicatat per kejadian, Panen menutup siklus batch ayam."
+            icon={DollarSign}
+            step="4"
+            title="Keuangan & Panen"
+          />
+        </div>
+
+        <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-lg flex gap-3 text-sm text-yellow-800 dark:text-yellow-200">
+          <AlertTriangle className="shrink-0 mt-0.5" size={18} />
+          <div>
+            <span className="font-bold">Kenapa urutan ini penting?</span>
+            <p className="mt-1 opacity-90">
+              Sistem menggunakan relasi data yang ketat. Contoh: Anda tidak bisa
+              mencatat <em>Operasional/Pakan</em> jika <em>Stok Pakan</em> belum
+              diinput, dan tidak bisa mencatat <em>Mortalitas</em> jika data{" "}
+              <em>Ayam</em> belum masuk di kandang tersebut.
+            </p>
+          </div>
+        </div>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Productivity Formulas */}
@@ -31,7 +136,7 @@ export default function AboutPage() {
               title="Rata-rata Berat (kg)"
             />
             <FormulaItem
-              description="Akumulasi jumlah ekor ayam yang dipanen dalam bulan ini. (Dapat juga menampilkan total kg panen jika dikonfigurasi)."
+              description="Akumulasi jumlah ekor ayam yang dipanen dalam bulan ini."
               formula="Jumlah Ekor Dipanen (bulan berjalan)"
               title="Total Panen Bulan Ini"
             />
@@ -41,7 +146,7 @@ export default function AboutPage() {
               title="Rata-rata Mortalitas (%)"
             />
             <FormulaItem
-              description="Rasio efisiensi pakan. Semakin rendah nilai FCR, semakin efisien penggunaan pakan terhadap pembentukan bobot ayam."
+              description="Rasio efisiensi pakan. Semakin rendah nilai FCR, semakin efisien penggunaan pakan."
               formula="(Total Pakan Dikonsumsi (kg)) ÷ (Total Bobot Panen (kg))"
               title="FCR (Feed Conversion Ratio)"
             />
@@ -78,7 +183,7 @@ export default function AboutPage() {
               title="Mortalitas (Absolut & %)"
             />
             <FormulaItem
-              description="Indikator kesehatan kandang (Normal, Warning, Critical) berdasarkan parameter seperti % Mortalitas atau % Utilisasi."
+              description="Indikator kesehatan kandang (Normal, Warning, Critical) berdasarkan parameter."
               formula="Berdasarkan Threshold (Batas Aman)"
               title="Status Kandang"
             />
@@ -95,35 +200,77 @@ export default function AboutPage() {
                   <span className="font-medium text-warning">Warning:</span>{" "}
                   Jika mendekati batas threshold
                 </li>
-                <li>
-                  <span className="font-medium text-success">Normal:</span> Jika
-                  situasi terkendali di bawah threshold
-                </li>
               </ul>
             </div>
           </div>
         </Card>
       </div>
+    </div>
+  );
+}
 
-      <Card className="p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800">
-        <div className="flex items-start gap-3">
-          <Info className="text-blue-600 dark:text-blue-400 mt-1" size={24} />
-          <div>
-            <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
-              Catatan Penting
-            </h3>
-            <p className="text-blue-800 dark:text-blue-200 mt-1">
-              Data yang ditampilkan di dashboard diambil secara{" "}
-              <strong>real-time</strong> atau <strong>periodik</strong> dari
-              database sistem. Rumus di atas adalah logika dasar yang digunakan
-              sistem untuk mengolah data mentah menjadi informasi statistik yang
-              Anda lihat. Jika terdapat ketidaksesuaian, mohon periksa
-              kelengkapan input data (seperti data panen, data kematian harian,
-              dan pencatatan pakan).
-            </p>
-          </div>
-        </div>
-      </Card>
+// Helper component for workflow steps
+function WorkflowStep({
+  step,
+  title,
+  icon: Icon,
+  description,
+  checklist,
+  color,
+  bgColor,
+}: {
+  step: string;
+  title: string;
+  icon: any;
+  description: string;
+  checklist: string[];
+  color: string;
+  bgColor: string;
+}) {
+  return (
+    <div className="relative bg-white dark:bg-default-50 p-4 rounded-xl border border-default-200 shadow-sm z-10 flex flex-col h-full hover:shadow-md transition-shadow">
+      <div
+        className={`absolute -top-3 -left-2 w-8 h-8 rounded-full ${bgColor} text-white flex items-center justify-center font-bold text-sm border-2 border-white dark:border-default-100 shadow-md`}
+      >
+        {step}
+      </div>
+
+      <div className={`mb-3 flex items-center gap-2 ${color}`}>
+        <Icon size={24} />
+        <h3 className="font-bold text-default-900">{title}</h3>
+      </div>
+
+      <p className="text-xs text-default-500 mb-4 h-[4.5em] overflow-hidden leading-relaxed">
+        {description}
+      </p>
+
+      <div className="mt-auto bg-default-50 rounded-lg p-3">
+        <ul className="space-y-2">
+          {checklist.map((item, idx) => (
+            <li
+              key={idx}
+              className="flex items-start gap-2 text-xs text-default-700"
+            >
+              <CheckCircle2
+                className="text-primary shrink-0 mt-0.5"
+                size={14}
+              />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+// Decorative arrow divider
+function ArrowDivider({ className }: { className?: string }) {
+  return (
+    <div
+      className={`items-center justify-center text-default-300 w-8 self-center -mx-6 z-0 ${className}`}
+    >
+      <ArrowRight size={24} />
     </div>
   );
 }
@@ -141,7 +288,7 @@ function FormulaItem({
   return (
     <div className="border-b border-default-100 last:border-0 pb-3 last:pb-0">
       <h4 className="font-semibold text-default-800 flex items-center gap-2">
-        <Activity className="text-default-400" size={16} />
+        <Layers className="text-default-400" size={16} />
         {title}
       </h4>
       <div className="mt-1 ml-6">
