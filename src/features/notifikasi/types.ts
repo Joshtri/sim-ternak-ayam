@@ -60,8 +60,8 @@ export interface BroadcastNotificationDto {
   message: string;
   type?: NotificationType;
   priority?: NotificationPriority;
-  link_url?: string;
-  target_role?: "Petugas" | "Operator" | "Pemilik" | "all";
+  linkUrl?: string;
+  targetRole?: "Petugas" | "Operator" | "Pemilik" | "all";
 }
 
 // ============================================
