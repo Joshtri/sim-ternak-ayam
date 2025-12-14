@@ -68,7 +68,7 @@ export default function AyamDetail() {
             </LinkButton>
             <LinkButton
               color="warning"
-              href={`/daftar-ayam/edit/${id}`}
+              href={`/daftar-ayam/${id}/edit`}
               size="md"
               startContent={<Pencil className="w-4 h-4" />}
               variant="solid"
