@@ -11,8 +11,10 @@ import {
 
 import { usePemilikDashboard } from "../hooks/useDashboard";
 
-import { Card } from "@/components/ui/Card";
 import { DashboardSkeleton } from "./DashboardSkeleton";
+
+import { Card } from "@/components/ui/Card";
+import { BroadcastForm } from "@/features/notifikasi/components/BroadcastForm";
 
 export function PemilikDashboard() {
   const { data, isLoading, isError } = usePemilikDashboard();
@@ -473,6 +475,11 @@ export function PemilikDashboard() {
           </div>
         </Card>
       </div>
+
+      {/* Communication & Announcements */}
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <BroadcastForm />
+      </div> */}
     </div>
   );
 }
