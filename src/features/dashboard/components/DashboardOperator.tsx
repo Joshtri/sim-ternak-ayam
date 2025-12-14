@@ -1,34 +1,35 @@
 import type { Notification } from "@/features/notifikasi/types";
 
-import {
-  AlertCircle,
-  Home,
-  Users,
-  TrendingUp,
-  Activity,
-  Bell,
-  Check,
-  Trash2,
-  ExternalLink,
-  AlertTriangle,
-  Info,
-  CheckCircle,
-  XCircle,
-  Clock,
-  MessageSquare,
-} from "lucide-react";
 import { Button } from "@heroui/button";
 import { Link } from "@tanstack/react-router";
+import {
+  Activity,
+  AlertCircle,
+  AlertTriangle,
+  Bell,
+  Check,
+  CheckCircle,
+  Clock,
+  ExternalLink,
+  Home,
+  Info,
+  MessageSquare,
+  Trash2,
+  TrendingUp,
+  Users,
+  XCircle,
+} from "lucide-react";
 
 import { useOperatorDashboard } from "../hooks/useDashboard";
 
-import {
-  useNotifications,
-  useMarkAsRead,
-  useDeleteNotification,
-} from "@/features/notifikasi/hooks/useNotifikasi";
-import { Card } from "@/components/ui/Card";
 import { DashboardSkeleton } from "./DashboardSkeleton";
+
+import { Card } from "@/components/ui/Card";
+import {
+  useDeleteNotification,
+  useMarkAsRead,
+  useNotifications,
+} from "@/features/notifikasi/hooks/useNotifikasi";
 
 export function DashboardOperator() {
   const { data, isLoading, isError } = useOperatorDashboard();
@@ -348,6 +349,9 @@ export function DashboardOperator() {
               </div>
             </Card>
           )}
+
+          {/* Tools / Widgets */}
+          {/* <ProfitCalculator /> */}
         </div>
 
         {/* Right Column - 1/3 width - NOTIFICATIONS */}
@@ -411,20 +415,20 @@ export function DashboardOperator() {
                         </span>
                       )}
                       <span className="whitespace-nowrap">
-                        {getTimeAgo(notif.created_at)}
+                        {getTimeAgo(notif.createdAt)}
                       </span>
                     </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-1 pl-7">
-                      {notif.link_url && (
+                      {notif.linkUrl && (
                         <Button
                           as={Link}
                           className="h-7 text-xs"
                           color="primary"
                           size="sm"
                           startContent={<ExternalLink size={12} />}
-                          to={notif.link_url}
+                          to={notif.linkUrl}
                           variant="flat"
                         >
                           Lihat
@@ -463,7 +467,7 @@ export function DashboardOperator() {
               <div className="mt-4 pt-4 border-t">
                 <Link
                   className="text-sm text-primary hover:underline font-medium flex items-center justify-center gap-1"
-                  to="/notifikasi"
+                  to='/notifikasi'
                 >
                   Lihat Semua Notifikasi
                   <ExternalLink size={14} />
