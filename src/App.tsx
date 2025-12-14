@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider } from "@tanstack/react-router";
 
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { ReloadPrompt } from "./components/ReloadPrompt";
 
 // import { TanStackRouterDevelopmentTools } from "./components/utils/development-tools/TanStackRouterDevelopmentTools";
 
@@ -23,6 +24,7 @@ const App = ({ router }: AppProps): FunctionComponent => {
           {/* <InteractiveCursor /> */}
           <RouterProvider router={router} />
           <ToastProvider maxVisibleToasts={3000} placement="top-right" />
+          <ReloadPrompt />
 
           <ReactQueryDevtools initialIsOpen={false} position="bottom" />
         </QueryClientProvider>
