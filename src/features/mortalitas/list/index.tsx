@@ -22,7 +22,7 @@ export default function MortalitasList() {
 
     if (roleNormalized === "petugas" && meData?.kandangsManaged?.length) {
       // For Petugas, filter by first kandang or you can add dropdown to select
-      return String(meData.kandangsManaged[0].id);
+      return String(meData.kandangsManaged[0]);
     }
 
     return undefined;
