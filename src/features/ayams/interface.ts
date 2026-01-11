@@ -19,10 +19,24 @@ export interface Ayam extends BaseEntity {
   pageSize?: number;
 }
 
+export interface KandangCapacityInfo {
+  kandangId: string;
+  namaKandang: string;
+  kapasitasKandang: number;
+  totalAyamHidup: number;
+  sisaAyamDariPeriodeSebelumnya: number;
+  kapasitasTersedia: number;
+  periodeAyamSisa: string | null;
+  adaSisaAyam: boolean;
+  persentasePengisian: number;
+}
+
 export interface CreateAyamDto {
   kandangId: string;
   tanggalMasuk: string;
   jumlahMasuk: number;
+  forceInput?: boolean;
+  alasanInput?: string | null;
 }
 
 export interface UpdateAyamDto extends Pick<BaseEntity, "id"> {
@@ -36,6 +50,7 @@ export interface AyamFilters extends BaseResponseApi {
   search?: string;
   page?: number;
   pageSize?: number;
+  period?: string;
 }
 
 // export interface AyamFilters {

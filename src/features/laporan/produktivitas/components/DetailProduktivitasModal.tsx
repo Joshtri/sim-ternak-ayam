@@ -11,15 +11,24 @@ interface DetailProduktivitasModalProps {
   petugasId: string;
   isOpen: boolean;
   onClose: () => void;
+  year?: number | string;
+  month?: number | string;
+  hasKandang?: boolean;
 }
 
 export default function DetailProduktivitasModal({
   petugasId,
   isOpen,
   onClose,
+  year,
+  month,
+  hasKandang,
 }: DetailProduktivitasModalProps) {
   const { data: detail, isLoading } = useProduktivitasById(
     petugasId || "",
+    year,
+    month,
+    hasKandang,
     !!petugasId
   );
 

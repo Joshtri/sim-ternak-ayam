@@ -1,5 +1,6 @@
 import type {
   Kandang,
+  KandangDetail,
   CreateKandangDto,
   UpdateKandangDto,
   KandangFilters,
@@ -24,8 +25,10 @@ export const kandangService = {
   /**
    * Get a single kandang by ID
    */
-  getKandang: async (id: string): Promise<Kandang> => {
-    const response = await api.get<ApiResponse<Kandang>>(`/kandangs/${id}`);
+  getKandang: async (id: string): Promise<KandangDetail> => {
+    const response = await api.get<ApiResponse<KandangDetail>>(
+      `/kandangs/${id}`
+    );
 
     // Return the data directly from the response
     return response.data.data;
@@ -56,8 +59,6 @@ export const kandangService = {
     // Return the data directly from the response
     return response.data.data;
   },
-
-
 
   /**
    * Delete a kandang

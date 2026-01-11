@@ -1,17 +1,15 @@
-import { CreateMortalitasDto, Mortalitas, UpdateMortalitasDto } from "../types";
+import { Mortalitas, UpdateMortalitasDto, MortalitasFilters } from "../types";
 
 import api, { ApiResponse, PaginatedResponse } from "@/lib/axios";
 
 export const mortalitasService = {
-  getMortalitas: async (filters?: {
-    kandangId?: string;
-    search?: string;
-    page?: number;
-    pageSize?: number;
-  }): Promise<Mortalitas[]> => {
+  getMortalitas: async (filters?: MortalitasFilters): Promise<Mortalitas[]> => {
     const params: Record<string, any> = {};
 
     if (filters) {
+      if (filters.period) {
+        params["period"] = filters.period;
+      }
       // Convert kandangId to string if provided
       if (filters.kandangId && filters.kandangId.trim() !== "") {
         params["kandangId"] = filters.kandangId;
@@ -45,15 +43,19 @@ export const mortalitasService = {
     return response.data.data;
   },
 
-  createMortalitas: async (
-    data: Partial<CreateMortalitasDto>
-  ): Promise<CreateMortalitasDto> => {
-    const response = await api.post<ApiResponse<CreateMortalitasDto>>(
-      "/mortalitas",
+  createMortalitas: async (data: any): Promise<any> => {
+    const response = await api.post<ApiResponse<any>>("/mortalitas", data);
+
+    return response.data.data;
+  },
+
+  createMortalitasAutoFifo: async (data: any): Promise<any> => {
+    const response = await api.post<ApiResponse<any>>(
+      "/mortalitas/auto-fifo",
       data
     );
 
-    return response.data.data;
+    return response.data;
   },
 
   updateMortalitas: async (

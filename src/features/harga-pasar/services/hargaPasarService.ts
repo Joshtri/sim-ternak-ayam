@@ -2,6 +2,11 @@ import {
     CreateHargaPasarPayload,
     HargaPasar,
     UpdateHargaPasarPayload,
+    EstimasiKeuntunganParams,
+    EstimasiKeuntunganResult,
+    KeuntunganPanenResult,
+    LaporanKeuntunganBulanan,
+    RingkasanKeuntunganTahunan,
 } from "../types";
 
 import api, { ApiResponse } from "@/lib/axios";
@@ -73,7 +78,7 @@ export const hargaPasarService = {
     },
 
     updateStatus: async (id: string, isAktif: boolean): Promise<void> => {
-        await api.put(`/harga_pasar/${id}/status?isAktif=${isAktif}`);
+        await api.patch(`/harga_pasar/${id}/status?isAktif=${isAktif}`);
     },
 
     deactivateAll: async (): Promise<void> => {

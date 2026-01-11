@@ -48,9 +48,14 @@ export const dashboardService = {
   /**
    * Get Pemilik dashboard data
    */
-  getPemilikDashboard: async (): Promise<PemilikDashboardData> => {
+  /**
+   * Get Pemilik dashboard data
+   */
+  getPemilikDashboard: async (month?: string): Promise<PemilikDashboardData> => {
+    const params = month ? { month } : {};
     const response = await api.get<ApiResponse<PemilikDashboardData>>(
-      "/dashboard/pemilik"
+      "/dashboard/pemilik",
+      { params }
     );
     return response.data.data;
   },

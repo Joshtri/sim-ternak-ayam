@@ -15,7 +15,7 @@ import { showToast } from "@/utils/showToast";
 export const operasionalKeys = {
   all: ["operasional"] as const,
   lists: () => [...operasionalKeys.all, "list"] as const,
-  list: (filters?: OperasionalFilters) =>
+  list: (filters?: OperasionalFilters | any) =>
     [...operasionalKeys.lists(), filters] as const,
   details: () => [...operasionalKeys.all, "detail"] as const,
   detail: (id: string) => [...operasionalKeys.details(), id] as const,
@@ -28,7 +28,7 @@ export const operasionalKeys = {
 /**
  * Hook to fetch all operasionals with optional filters
  */
-export function useOperasionals(filters?: OperasionalFilters) {
+export function useOperasionals(filters?: OperasionalFilters | any) {
   return useQuery({
     queryKey: operasionalKeys.list(filters),
     queryFn: () => operasionalService.getOperasionals(filters),

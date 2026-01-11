@@ -17,8 +17,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+
 import { useLaporanKeuntunganBulanan } from "@/features/harga-pasar/hooks/useHargaPasarAnalysis";
-import { formatCurrency } from "@/utils/format";
 
 export function MonthlyAnalysis() {
   const currentYear = new Date().getFullYear();
@@ -81,7 +81,7 @@ export function MonthlyAnalysis() {
         </div>
       ) : laporan ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Card>
               <CardBody>
                 <p className="text-small text-default-500 uppercase font-bold">
@@ -125,7 +125,39 @@ export function MonthlyAnalysis() {
             <Card>
               <CardBody>
                 <p className="text-small text-default-500 uppercase font-bold">
-                  Rata-rata Harga
+                  Total Berat
+                </p>
+                <p className="text-2xl font-bold text-primary">
+                  {laporan.total.totalBerat.toLocaleString("id-ID", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{" "}
+                  <span className="text-sm font-normal text-default-400">
+                    kg
+                  </span>
+                </p>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardBody>
+                <p className="text-small text-default-500 uppercase font-bold">
+                  Rata-rata Berat/Ekor
+                </p>
+                <p className="text-2xl font-bold text-warning">
+                  {laporan.total.rataRataBeratPerEkor.toLocaleString("id-ID", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{" "}
+                  <span className="text-sm font-normal text-default-400">
+                    kg
+                  </span>
+                </p>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardBody>
+                <p className="text-small text-default-500 uppercase font-bold">
+                  Rata-rata Harga/Kg
                 </p>
                 <p className="text-2xl font-bold">
                   {new Intl.NumberFormat("id-ID", {
@@ -143,7 +175,7 @@ export function MonthlyAnalysis() {
               <h3 className="text-lg font-bold">Grafik Keuntungan Harian</h3>
             </CardHeader>
             <CardBody>
-              <ResponsiveContainer width="100%" height={350}>
+              <ResponsiveContainer height={350} width="100%">
                 <BarChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis

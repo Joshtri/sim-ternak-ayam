@@ -14,9 +14,16 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  Input,
+  Select,
+  SelectItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  SelectSection,
 } from "@heroui/react";
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { EllipsisIcon } from "lucide-react";
+import { EllipsisIcon, FilterIcon } from "lucide-react";
 
 import { SkeletonTable } from "../Skeletons";
 
@@ -31,6 +38,20 @@ import { ConfirmDialog } from "./ConfirmDialog";
 import { PageHeader } from "@/components/common/PageHeader";
 import SearchBar from "@/components/ui/SearchBar";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+
+interface FilterOption {
+  label: string;
+  value: string;
+}
+
+export interface FilterConfig {
+  key: string;
+  label?: string;
+  type: "select" | "text" | "date" | "month";
+  placeholder?: string;
+  options?: FilterOption[];
+  className?: string;
+}
 
 interface Column {
   key: string;
@@ -73,6 +94,12 @@ interface ListGridProps {
 
   searchPlaceholder?: string;
   onSearch?: (value: string) => void;
+
+  // Filter Toolbar
+  filters?: FilterConfig[];
+  filterValues?: Record<string, any>;
+  onFilterChange?: (values: Record<string, any>) => void;
+
   columns: Column[];
 
   // NEW! Auto-mapping: pass raw data array instead of manually mapping rows
@@ -107,6 +134,9 @@ export function ListGrid({
   actions: customActions,
   searchPlaceholder = "Cari...",
   onSearch,
+  filters,
+  filterValues = {},
+  onFilterChange,
   columns,
   data,
   keyField = "id",
@@ -153,6 +183,20 @@ export function ListGrid({
   const [sortKey, setSortKey] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Internal state for filters if not fully controlled (though we prefer controlled via props for URL params)
+  // If onFilterChange is used, we assume parent might manage state, but we can also trigger it directly.
+
+  const handleFilterChange = (key: string, value: string) => {
+    const newFilters = { ...filterValues, [key]: value };
+
+    // If empty string or "all", set to undefined to remove parameter.
+    if (value === "" || value === null || value === undefined) {
+      newFilters[key] = undefined;
+    }
+
+    onFilterChange?.(newFilters);
+  };
 
   // Delete confirmation dialog state
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -399,14 +443,123 @@ export function ListGrid({
           onOptionsClick={onOptionsClick}
         />
 
-        {onSearch && (
-          <SearchBar
-            placeholder={searchPlaceholder}
-            onSearch={val => {
-              setSearchQuery(val);
-              onSearch?.(val);
-            }}
-          />
+        {/* Filters and Search Toolbar */}
+        {/* Filters and Search Toolbar */}
+        {(onSearch || filters) && (
+          <div className="flex flex-col md:flex-row gap-4 items-end">
+            {/* Search Bar */}
+            {onSearch && (
+              <div className="w-full md:flex-1">
+                <SearchBar
+                  placeholder={searchPlaceholder}
+                  onSearch={val => {
+                    setSearchQuery(val);
+                    onSearch?.(val);
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Filter Button & Popover */}
+            {filters && filters.length > 0 && (
+              <Popover placement="bottom-end">
+                <PopoverTrigger>
+                  <Button
+                    className="font-medium"
+                    color="primary"
+                    startContent={<FilterIcon className="w-4 h-4" />}
+                    variant="flat"
+                  >
+                    Filter
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-4">
+                  <div className="flex flex-col gap-4 w-full">
+                    <div className="text-small font-bold text-default-600">
+                      Filter Data
+                    </div>
+                    {filters.map(filter => (
+                      <div key={filter.key} className="w-full">
+                        {filter.type === "select" ? (
+                          <Select
+                            label={filter.label}
+                            labelPlacement="outside"
+                            placeholder={filter.placeholder}
+                            selectedKeys={
+                              filterValues[filter.key]
+                                ? [filterValues[filter.key]]
+                                : []
+                            }
+                            size="sm"
+                            onChange={e =>
+                              handleFilterChange(filter.key, e.target.value)
+                            }
+                          >
+                            {filter.options &&
+                            filter.options.some(opt => opt.value === "all") ? (
+                              <>
+                                <SelectItem key="all">Semua</SelectItem>
+                                <SelectSection showDivider title="Bulan">
+                                  {filter.options
+                                    .filter(opt => opt.value !== "all")
+                                    .map(opt => (
+                                      <SelectItem key={opt.value}>
+                                        {opt.label}
+                                      </SelectItem>
+                                    ))}
+                                </SelectSection>
+                              </>
+                            ) : (
+                              (filter.options || []).map(opt => (
+                                <SelectItem key={opt.value}>
+                                  {opt.label}
+                                </SelectItem>
+                              ))
+                            )}
+                          </Select>
+                        ) : (
+                          <Input
+                            label={filter.label}
+                            labelPlacement="outside"
+                            placeholder={filter.placeholder}
+                            size="sm"
+                            type={filter.type}
+                            value={filterValues[filter.key] || ""}
+                            onValueChange={val =>
+                              handleFilterChange(filter.key, val)
+                            }
+                          />
+                        )}
+                      </div>
+                    ))}
+                    {Object.keys(filterValues).length > 0 && (
+                      <Button
+                        className="self-end"
+                        color="danger"
+                        size="sm"
+                        variant="light"
+                        onPress={() => {
+                          // Create an object with all filter keys set to undefined to clear them
+                          const clearState = filters?.reduce(
+                            (acc, filter) => {
+                              acc[filter.key] = undefined;
+
+                              return acc;
+                            },
+                            {} as Record<string, any>
+                          );
+
+                          onFilterChange?.(clearState || {});
+                        }}
+                      >
+                        Clear Filter
+                      </Button>
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
         )}
 
         {loading ? (
@@ -506,6 +659,7 @@ export function ListGrid({
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDialog
+        backdrop="opaque"
         confirmLabel="Hapus"
         isLoading={isDeleting}
         isOpen={isDeleteDialogOpen}

@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Input } from "@heroui/react";
 import {
   AlertCircle,
   TrendingUp,
@@ -16,7 +18,11 @@ import { DashboardSkeleton } from "./DashboardSkeleton";
 import { Card } from "@/components/ui/Card";
 
 export function PemilikDashboard() {
-  const { data, isLoading, isError } = usePemilikDashboard();
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    new Date().toISOString().slice(0, 7)
+  );
+
+  const { data, isLoading, isError } = usePemilikDashboard(selectedMonth);
 
   if (isLoading) {
     return <DashboardSkeleton variant="pemilik" />;
@@ -37,11 +43,24 @@ export function PemilikDashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard Pemilik</h1>
-        <p className="text-default-600 mt-1">
-          Ringkasan bisnis dan analisis strategis
-        </p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Dashboard Pemilik</h1>
+          <p className="text-default-600 mt-1">
+            Ringkasan bisnis dan analisis strategis
+          </p>
+        </div>
+        <div className="w-full md:w-auto">
+          <Input
+            className="w-full md:w-48"
+            description="Pilih bulan laporan"
+            label="Periode"
+            type="month"
+            value={selectedMonth}
+            variant="bordered"
+            onChange={e => setSelectedMonth(e.target.value)}
+          />
+        </div>
       </div>
 
       {/* Business KPI */}

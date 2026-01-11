@@ -20,6 +20,18 @@ export interface MortalitasEditFormData {
 }
 
 /**
+ * Helper to format date to YYYY-MM-DD using local time
+ */
+const formatDateToLocalInput = (dateString?: string): string => {
+  const date = dateString ? new Date(dateString) : new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
+/**
  * Get default form values from existing mortalitas data
  */
 export const getDefaultMortalitasEditFormValues = (
@@ -28,7 +40,8 @@ export const getDefaultMortalitasEditFormValues = (
   if (!mortalitas) {
     return {
       ayamId: "",
-      tanggalKematian: new Date().toISOString().split("T")[0],
+
+      tanggalKematian: formatDateToLocalInput(),
       jumlahKematian: 0,
       penyebabKematian: "",
       fotoMortalitasBase64: "",
@@ -38,9 +51,7 @@ export const getDefaultMortalitasEditFormValues = (
 
   return {
     ayamId: mortalitas.ayamId || "",
-    tanggalKematian: mortalitas.tanggalKematian
-      ? new Date(mortalitas.tanggalKematian).toISOString().split("T")[0]
-      : new Date().toISOString().split("T")[0],
+    tanggalKematian: formatDateToLocalInput(mortalitas.tanggalKematian),
     jumlahKematian: mortalitas.jumlahKematian || 0,
     penyebabKematian: mortalitas.penyebabKematian || "",
     fotoMortalitasBase64: "",

@@ -7,7 +7,7 @@ export interface Pakan extends BaseEntity {
   tahun: number;
   stokTersisa?: number;
   stokTerpakai?: number;
-  statusStok?: "Aman" | "Menipis" | "Kritis" | "Habis";
+  statusStok?: string;
   isStokCukup?: boolean;
 }
 

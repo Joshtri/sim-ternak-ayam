@@ -28,7 +28,7 @@ export const ayamSchema: FormSchema = {
         {
           type: "date",
           name: "tanggalMasuk",
-          label: "Tanggal Masuk",
+          label: "Periode Tanggal Masuk",
           placeholder: "Pilih tanggal masuk",
           required: true,
           colSpan: 2,

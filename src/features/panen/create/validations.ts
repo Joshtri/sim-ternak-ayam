@@ -3,11 +3,16 @@
  * Validation rules for panen create/edit forms
  */
 
-/**
- * Validate ayamId
- */
+export const validateKandangId = {
+  required: "Kandang harus dipilih",
+  pattern: {
+    value: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    message: "Format ID kandang tidak valid",
+  },
+};
+
 export const validateAyamId = {
-  required: "Data ayam harus dipilih",
+  required: "Ayam harus dipilih",
   pattern: {
     value: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
     message: "Format ID ayam tidak valid",

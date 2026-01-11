@@ -23,8 +23,23 @@ export const laporanKeys = {
 
   // Produktivitas keys
   produktivitas: () => [...laporanKeys.all, "produktivitas"] as const,
+  produktivitasWithFilters: (
+    year?: string | number,
+    month?: string | number,
+    hasKandang?: boolean
+  ) => [...laporanKeys.produktivitas(), { year, month, hasKandang }] as const,
   produktivitasDetail: (petugasId: string) =>
     [...laporanKeys.produktivitas(), petugasId] as const,
+  produktivitasDetailWithFilters: (
+    petugasId: string,
+    year?: string | number,
+    month?: string | number,
+    hasKandang?: boolean
+  ) =>
+    [
+      ...laporanKeys.produktivitasDetail(petugasId),
+      { year, month, hasKandang },
+    ] as const,
 };
 
 /**
@@ -64,10 +79,15 @@ export function useLaporanOperasional(filters?: LaporanOperasionalFilters) {
 /**
  * Hook to fetch productivity analysis for all petugas
  */
-export function useProduktivitas() {
+export function useProduktivitas(
+  year?: string | number,
+  month?: string | number,
+  hasKandang?: boolean
+) {
   return useQuery({
-    queryKey: laporanKeys.produktivitas(),
-    queryFn: () => laporanService.getAnalisisProduktivitas(),
+    queryKey: laporanKeys.produktivitasWithFilters(year, month, hasKandang),
+    queryFn: () =>
+      laporanService.getAnalisisProduktivitas(year, month, hasKandang),
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -75,10 +95,22 @@ export function useProduktivitas() {
 /**
  * Hook to fetch productivity analysis for specific petugas
  */
-export function useProduktivitasById(petugasId: string, enabled = true) {
+export function useProduktivitasById(
+  petugasId: string,
+  year?: string | number,
+  month?: string | number,
+  hasKandang?: boolean,
+  enabled = true
+) {
   return useQuery({
-    queryKey: laporanKeys.produktivitasDetail(petugasId),
-    queryFn: () => laporanService.getAnalisisProduktivitasById(petugasId),
+    queryKey: laporanKeys.produktivitasDetailWithFilters(
+      petugasId,
+      year,
+      month,
+      hasKandang
+    ),
+    queryFn: () =>
+      laporanService.getAnalisisProduktivitasById(petugasId, year, month),
     enabled: enabled && !!petugasId,
     staleTime: 5 * 60 * 1000,
   });

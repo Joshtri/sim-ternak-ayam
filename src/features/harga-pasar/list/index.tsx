@@ -8,7 +8,7 @@ import {
 } from "../hooks/useHargaPasar";
 import { HargaPasar } from "../types";
 
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { ListGrid } from "@/components/ui/ListGrid";
 
 export default function HargaPasarListPage() {
   // const navigate = useNavigate();

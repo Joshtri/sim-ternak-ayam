@@ -5,6 +5,9 @@ import {
   Syringe,
   Calendar,
   AlertCircle,
+  Activity,
+  CheckCircle2,
+  Layers,
 } from "lucide-react";
 
 import { useVaksinById } from "../hooks/useVaksin";
@@ -12,6 +15,7 @@ import { formatStok, isLowStock, formatMonthYear } from "../create/helpers";
 
 import { DetailCard, DetailCardSkeleton } from "@/components/ui/DetailCard";
 import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { PageHeader } from "@/components/common/PageHeader";
 
@@ -200,6 +204,95 @@ export default function VaksinDetail() {
           </div>
         </div>
       )}
+
+      {/* Analisis Status Stok Card */}
+      <Card className="p-6 border-l-4 border-l-purple-500 shadow-sm bg-gradient-to-r from-white to-default-50 dark:from-default-50 dark:to-default-100">
+        <div className="mb-6">
+          <h3 className="text-lg font-bold text-default-900 flex items-center gap-2">
+            <Activity className="text-purple-600" size={24} />
+            Analisis Status Stok
+          </h3>
+          <p className="text-sm text-default-600">
+            Penjelasan logika sistem dalam menentukan status ketersediaan
+            vaksin.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Logic 1: Ketersediaan Stok */}
+          <div className="bg-white dark:bg-default-100 rounded-lg border border-default-200 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-semibold text-default-800 flex items-center gap-2">
+                <CheckCircle2
+                  className={
+                    vaksin.isStokCukup ? "text-success" : "text-danger"
+                  }
+                  size={18}
+                />
+                Kecukupan Stok
+              </h4>
+              {vaksin.isStokCukup ? (
+                <Badge className="text-xs" color="success" variant="solid">
+                  CUKUP
+                </Badge>
+              ) : (
+                <Badge className="text-xs" color="danger" variant="solid">
+                  KURANG
+                </Badge>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <div className="bg-default-50 p-2 rounded text-xs font-mono text-default-700">
+                Logic:{" "}
+                <span className="font-bold">
+                  isStokCukup = {String(vaksin.isStokCukup).toUpperCase()}
+                </span>
+              </div>
+
+              <p className="text-xs text-default-500">
+                Sistem mendeteksi sisa stok{" "}
+                <strong>{formatStok(vaksin.stok)} unit</strong>.
+                {vaksin.isStokCukup
+                  ? " Jumlah ini dinilai aman untuk operasional periode berjalan."
+                  : " Jumlah ini berada di bawah batas aman, memicu alert 'Low Stock'."}
+              </p>
+            </div>
+          </div>
+
+          {/* Logic 2: Level Status */}
+          <div className="bg-white dark:bg-default-100 rounded-lg border border-default-200 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-semibold text-default-800 flex items-center gap-2">
+                <Layers className="text-blue-600" size={18} />
+                Level Status
+              </h4>
+              <Badge className="text-xs" color="primary" variant="flat">
+                {vaksin.statusStok || "Level Unknown"}
+              </Badge>
+            </div>
+
+            <div className="space-y-3">
+              <div className="bg-default-50 p-2 rounded text-xs font-mono text-default-700">
+                Status: <span className="font-bold">{vaksin.statusStok}</span>
+              </div>
+
+              <p className="text-xs text-default-500">
+                Level status ditentukan berdasarkan interval jumlah stok. Level
+                saat ini menunjukkan bahwa stok dalam kondisi
+                {vaksin.statusStok?.includes("Level 3")
+                  ? " Optimal (Aman)"
+                  : vaksin.statusStok?.includes("Level 2")
+                    ? " Perlu Pantauan"
+                    : vaksin.statusStok?.includes("Level 1")
+                      ? " Warning"
+                      : " Kritis"}
+                .
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }

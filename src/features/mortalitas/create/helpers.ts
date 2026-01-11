@@ -2,7 +2,6 @@
  * Mortalitas Management Helper Functions
  */
 
-import type { CreateMortalitasDto } from "../types";
 import type { SelectOption } from "@/types/form-fields";
 import type { Ayam } from "@/features/ayams/interface";
 
@@ -10,12 +9,15 @@ import type { Ayam } from "@/features/ayams/interface";
  * Mortalitas form data interface
  */
 export interface MortalitasFormData {
-  ayamId: string;
+  kandangId: string;
   tanggalKematian: string;
   jumlahKematian: number;
   penyebabKematian: string;
   fotoMortalitasBase64?: string;
   fotoMortalitasFileName?: string;
+  mode: "auto-fifo" | "manual-split";
+  jumlahDariAyamLama?: number;
+  jumlahDariAyamBaru?: number;
 }
 
 /**
@@ -23,12 +25,15 @@ export interface MortalitasFormData {
  */
 export const getDefaultMortalitasFormValues =
   (): Partial<MortalitasFormData> => ({
-    ayamId: "",
+    kandangId: "",
     tanggalKematian: new Date().toISOString().split("T")[0], // Today's date in YYYY-MM-DD format
     jumlahKematian: 0,
     penyebabKematian: "",
     fotoMortalitasBase64: "",
     fotoMortalitasFileName: "",
+    mode: "auto-fifo",
+    jumlahDariAyamLama: 0,
+    jumlahDariAyamBaru: 0,
   });
 
 /**
@@ -38,13 +43,19 @@ export const getDefaultMortalitasFormValues =
  */
 export const transformMortalitasFormData = (
   data: MortalitasFormData
-): CreateMortalitasDto => {
-  const payload: CreateMortalitasDto = {
-    ayamId: data.ayamId,
-    tanggalKematian: data.tanggalKematian,
+): any => {
+  const payload: any = {
+    kandangId: data.kandangId,
+    tanggalKematian: new Date(data.tanggalKematian).toISOString(),
     jumlahKematian: Number(data.jumlahKematian),
     penyebabKematian: data.penyebabKematian,
+    mode: data.mode,
   };
+
+  if (data.mode === "manual-split") {
+    payload.jumlahDariAyamLama = Number(data.jumlahDariAyamLama || 0);
+    payload.jumlahDariAyamBaru = Number(data.jumlahDariAyamBaru || 0);
+  }
 
   // Add photo fields if provided
   if (data.fotoMortalitasBase64) {
@@ -73,8 +84,14 @@ export const transformAyamsToOptions = (ayams: Ayam[]): SelectOption[] => {
       : "Sehat";
     const jumlahSisa = ayam.sisaAyamHidup?.toLocaleString("id-ID") ?? "0";
 
+    const periodDate = new Date(ayam.tanggalMasuk);
+    const periode = periodDate.toLocaleDateString("id-ID", {
+      month: "long",
+      year: "numeric",
+    });
+
     return {
-      label: `${ayam.kandangNama} - Sisa: ${jumlahSisa} Ekor`,
+      label: `${ayam.kandangNama} - Sisa: ${jumlahSisa} / periode ${periode}`,
       value: ayam.id,
       description: `Masuk: ${masukDate} | ${statusPanen} | ${statusKesehatan}`,
     };

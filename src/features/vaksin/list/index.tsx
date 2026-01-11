@@ -5,7 +5,7 @@ import { Tabs, Tab } from "@heroui/react";
 
 import { useDeleteVaksin, useVaksins } from "../hooks/useVaksin";
 
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { ListGrid } from "@/components/ui/ListGrid";
 import { Badge } from "@/components/ui/Badge";
 
 export default function VaksinList() {
@@ -27,10 +27,10 @@ export default function VaksinList() {
       label: "Tipe",
       value: (item: Vaksin) => (
         <Badge
-          color={item.tipe === "Vaksin" ? "primary" : "secondary"}
+          color={item.tipeNama === "Vaksin" ? "primary" : "secondary"}
           variant="flat"
         >
-          {item.tipeNama || item.tipe}
+          {item.tipeNama || "Unknown"}
         </Badge>
       ),
     },
@@ -39,12 +39,19 @@ export default function VaksinList() {
       label: "Sisa Stok",
       value: (item: Vaksin) => {
         const sisa = item.stokTersisa ?? item.stok;
-        const status = item.statusStok;
+        const status = item.statusStok || "";
 
-        let color: "success" | "warning" | "danger" | "default" = "success";
+        let color: "success" | "warning" | "danger" | "default" = "default";
 
-        if (status === "Menipis") color = "warning";
-        if (status === "Kritis" || status === "Habis") color = "danger";
+        // Logic warna berdasarkan Level
+        if (status.includes("Level 3")) color = "success";
+        else if (status.includes("Level 2")) color = "warning";
+        else if (status.includes("Level 1") || status.includes("Level 0"))
+          color = "danger";
+        // Fallback backward compatibility
+        else if (status === "Aman") color = "success";
+        else if (status === "Menipis") color = "warning";
+        else if (status === "Kritis" || status === "Habis") color = "danger";
 
         return (
           <Badge color={color} variant="flat">
@@ -65,11 +72,18 @@ export default function VaksinList() {
       value: (item: Vaksin) => {
         if (!item.statusStok) return "-";
 
-        let color: "success" | "warning" | "danger" | "default" = "success";
-        if (item.statusStok === "Aman") color = "success";
-        if (item.statusStok === "Menipis") color = "warning";
-        if (item.statusStok === "Kritis" || item.statusStok === "Habis")
+        const status = item.statusStok;
+        let color: "success" | "warning" | "danger" | "default" = "default";
+
+        // Logic warna berdasarkan Level
+        if (status.includes("Level 3")) color = "success";
+        else if (status.includes("Level 2")) color = "warning";
+        else if (status.includes("Level 1") || status.includes("Level 0"))
           color = "danger";
+        // Fallback backward compatibility
+        else if (status === "Aman") color = "success";
+        else if (status === "Menipis") color = "warning";
+        else if (status === "Kritis" || status === "Habis") color = "danger";
 
         return (
           <Badge color={color} variant="solid">
@@ -90,7 +104,7 @@ export default function VaksinList() {
   const filteredData =
     vaksins?.filter(item => {
       // Filter by type based on selected tab
-      if (item.tipe !== selectedTab) return false;
+      if (item.tipeNama !== selectedTab) return false;
 
       // Filter by search query
       if (!searchQuery) return true;
@@ -99,7 +113,6 @@ export default function VaksinList() {
 
       return (
         item.namaVaksin?.toLowerCase().includes(query) ||
-        item.tipe?.toLowerCase().includes(query) ||
         item.tipeNama?.toLowerCase().includes(query)
       );
     }) || [];

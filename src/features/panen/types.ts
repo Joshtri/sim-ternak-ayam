@@ -21,3 +21,10 @@ export interface UpdatePanenDto extends Pick<BaseEntity, "id"> {
   jumlahEkorPanen?: number;
   beratRataRata?: number;
 }
+
+export interface CreatePanenAutoFifoDto {
+  kandangId: string;
+  tanggalPanen: string;
+  jumlahEkorPanen: number;
+  beratRataRata: number;
+}

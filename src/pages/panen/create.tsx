@@ -1,4 +1,4 @@
-import PanenCreateForm from "@/features/panen/create";
+import { PanenCreateForm } from "@/features/panen/create";
 
 export default function PanenCreatePage() {
   return <PanenCreateForm />;

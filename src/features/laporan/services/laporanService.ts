@@ -3,13 +3,14 @@
  * API service layer for all report endpoints
  */
 
-import api, { ApiResponse } from "@/lib/axios";
 import {
   KesehatanAyam,
   LaporanOperasional,
   LaporanOperasionalFilters,
   Produktivitas,
 } from "../types";
+
+import api, { ApiResponse } from "@/lib/axios";
 
 export const laporanService = {
   /**
@@ -65,11 +66,32 @@ export const laporanService = {
 
   /**
    * Get productivity analysis for all petugas
+   * @param year - Optional year filter
+   * @param month - Optional month filter
    * @returns Array of petugas productivity data
    */
-  getAnalisisProduktivitas: async (): Promise<Produktivitas[]> => {
+  /**
+   * Get productivity analysis for all petugas
+   * @param year - Optional year filter
+   * @param month - Optional month filter
+   * @param hasKandang - Optional filter (true: with kandang, false: without kandang)
+   * @returns Array of petugas productivity data
+   */
+  getAnalisisProduktivitas: async (
+    year?: string | number,
+    month?: string | number,
+    hasKandang?: boolean
+  ): Promise<Produktivitas[]> => {
+    const params = new URLSearchParams();
+
+    if (year) params.append("year", String(year));
+    if (month) params.append("month", String(month));
+    if (hasKandang !== undefined)
+      params.append("hasKandang", String(hasKandang));
+
     const response = await api.get<ApiResponse<Produktivitas[]>>(
-      "/laporan/produktivitas"
+      `/laporan/produktivitas`,
+      { params }
     );
 
     return response.data.data;
@@ -78,13 +100,23 @@ export const laporanService = {
   /**
    * Get productivity analysis for specific petugas
    * @param petugasId - Petugas UUID
+   * @param year - Optional year filter
+   * @param month - Optional month filter
    * @returns Productivity data for specific petugas
    */
   getAnalisisProduktivitasById: async (
-    petugasId: string
+    petugasId: string,
+    year?: string | number,
+    month?: string | number
   ): Promise<Produktivitas> => {
+    const params = new URLSearchParams();
+
+    if (year) params.append("year", String(year));
+    if (month) params.append("month", String(month));
+
     const response = await api.get<ApiResponse<Produktivitas>>(
-      `/laporan/produktivitas/${petugasId}`
+      `/laporan/produktivitas/${petugasId}`,
+      { params }
     );
 
     return response.data.data;
@@ -103,6 +135,7 @@ export const laporanService = {
     endDate?: string
   ): Promise<Blob> => {
     const params = new URLSearchParams();
+
     if (startDate) params.append("startDate", startDate);
     if (endDate) params.append("endDate", endDate);
 
@@ -127,6 +160,7 @@ export const laporanService = {
     endDate?: string
   ): Promise<Blob> => {
     const params = new URLSearchParams();
+
     if (startDate) params.append("startDate", startDate);
     if (endDate) params.append("endDate", endDate);
 

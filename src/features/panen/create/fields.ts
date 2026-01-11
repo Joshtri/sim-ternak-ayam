@@ -1,7 +1,7 @@
 import type { FormSchema } from "@/types/form-fields";
 
 import {
-  validateAyamId,
+  validateKandangId,
   validateTanggalPanen,
   validateJumlahEkorPanen,
   validateBeratRataRata,
@@ -16,13 +16,13 @@ export const panenSchema: FormSchema = {
       fields: [
         {
           type: "select",
-          name: "ayamId",
-          label: "Data Ayam",
-          placeholder: "Pilih data ayam",
+          name: "kandangId",
+          label: "Kandang",
+          placeholder: "Pilih kandang",
           required: true,
           colSpan: 2,
-          helperText: "Pilih data ayam yang akan dipanen",
-          validation: validateAyamId,
+          helperText: "Pilih kandang yang akan dipanen",
+          validation: validateKandangId,
           options: [], // Will be populated dynamically in the component
         },
 

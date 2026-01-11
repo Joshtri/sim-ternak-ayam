@@ -2,7 +2,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { mortalitasService } from "../services/mortalitasService";
-import { CreateMortalitasDto, Mortalitas, UpdateMortalitasDto } from "../types";
+import {
+  CreateMortalitasDto,
+  UpdateMortalitasDto,
+  MortalitasFilters,
+} from "../types";
 
 import { getErrorMessage } from "@/lib/axios";
 import { showToast } from "@/utils/showToast";
@@ -11,7 +15,7 @@ import { showToast } from "@/utils/showToast";
 export const mortalitasKeys = {
   all: ["mortalitas"] as const,
   lists: () => [...mortalitasKeys.all, "list"] as const,
-  list: (filters?: Mortalitas) =>
+  list: (filters?: MortalitasFilters) =>
     [...mortalitasKeys.lists(), JSON.stringify(filters ?? {})] as const,
   details: () => [...mortalitasKeys.all, "detail"] as const,
   detail: (id: string) => [...mortalitasKeys.details(), id] as const,
@@ -20,12 +24,8 @@ export const mortalitasKeys = {
 /**
  * Hook to fetch all mortalitas
  */
-export function useMortalitas(filters?: {
-  kandangId?: string;
-  search?: string;
-  page?: number;
-  pageSize?: number;
-}) {
+
+export function useMortalitas(filters?: MortalitasFilters) {
   return useQuery({
     queryKey: mortalitasKeys.list(filters as any),
     queryFn: () => mortalitasService.getMortalitas(filters),

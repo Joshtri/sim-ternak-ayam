@@ -39,7 +39,7 @@ export default function TabByKandang({
 
             <ExportPDFButton
               endDate={endDate}
-              kandangId={item.kandangId}
+              kandangId={item.kandangId || item.id}
               kandangNama={item.namaKandang}
               reportType="operasional"
               size="sm"

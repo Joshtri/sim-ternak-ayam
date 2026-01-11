@@ -13,6 +13,20 @@ export interface Mortalitas extends BaseEntity {
   jumlahAyamSesudahMati: number;
   fotoMortalitas?: string;
   fotoMortalitasBase64?: string;
+  persentaseMortalitas?: number;
+  kapasitasKandang?: number;
+  persentaseUtilisasiSebelum?: number;
+  persentaseUtilisasiSesudah?: number;
+  statusDampak?: string;
+  rekomendasi?: string;
+}
+
+export interface MortalitasFilters {
+  kandangId?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+  period?: string;
 }
 
 export interface CreateMortalitasDto {

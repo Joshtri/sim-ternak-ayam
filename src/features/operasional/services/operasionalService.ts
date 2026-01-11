@@ -9,20 +9,27 @@ import api, { ApiResponse, PaginatedResponse } from "@/lib/axios";
 
 export const operasionalService = {
   getOperasionals: async (
-    filters?: OperasionalFilters
+    filters?: OperasionalFilters | any
   ): Promise<Operasional[]> => {
-    let url = "/operasionals";
-    const params = new URLSearchParams();
+    const params: Record<string, any> = {};
 
-    if (filters?.startDate && filters?.endDate) {
-      url = "/operasionals/by-date-range";
-      params.append("startDate", filters.startDate);
-      params.append("endDate", filters.endDate);
+    if (filters) {
+      if (filters.period) params.period = filters.period;
+      if (filters.kandangId) params.kandangId = filters.kandangId;
+      if (filters.petugasId) params.petugasId = filters.petugasId;
+      if (filters.pakanId) params.pakanId = filters.pakanId;
+      if (filters.vaksinId) params.vaksinId = filters.vaksinId;
+      if (filters.search) params.search = filters.search;
+
+      // Keep existing date range logic if needed, or pass as params if backend supports it
+      if (filters.startDate) params.startDate = filters.startDate;
+      if (filters.endDate) params.endDate = filters.endDate;
     }
 
-    const response = await api.get<PaginatedResponse<Operasional>>(
-      `${url}${params.toString() ? `?${params.toString()}` : ""}`
-    );
+    // Default to base endpoint, assuming it handles filters
+    const response = await api.get<PaginatedResponse<Operasional>>("/operasionals", {
+      params,
+    });
 
     return response.data.data;
   },

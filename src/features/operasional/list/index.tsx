@@ -1,16 +1,112 @@
 import type { Operasional } from "../types";
 
-import { useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 
 import { useDeleteOperasional, useOperasionals } from "../hooks/useOperasional";
 
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { useKandangs } from "@/features/kandang/hooks/useKandang";
+import { useUsers } from "@/features/users-management/hooks/useUsers";
+import { usePakans } from "@/features/pakan/hooks/usePakan";
+import { useVaksins } from "@/features/vaksin/hooks/useVaksin";
+import { ListGrid } from "@/components/ui/ListGrid";
 import { Badge } from "@/components/ui/Badge";
 
 export default function OperasionalList() {
+  const navigate = useNavigate();
+  const search = useSearch({ from: "/_authenticated/daftar-operasional/" });
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: operasionals, isLoading } = useOperasionals();
+  const currentFilters = search as any;
+
+  // Fetch data for OPTIONS
+  const { data: kandangs } = useKandangs();
+  const { data: users } = useUsers();
+  const { data: pakans } = usePakans();
+  const { data: vaksins } = useVaksins();
+
+  // 1. Period Options
+  const monthOptions = useMemo(() => {
+    const options = [{ label: "Semua", value: "all" }];
+    const today = new Date();
+
+    for (let i = 0; i < 24; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const label = d.toLocaleDateString("id-ID", {
+        month: "long",
+        year: "numeric",
+      });
+
+      options.push({ label, value });
+    }
+
+    return options;
+  }, []);
+
+  // 2. Kandang Options
+  const kandangOptions = useMemo(() => {
+    const options = [{ label: "Semua Kandang", value: "all" }];
+
+    if (kandangs) {
+      kandangs.forEach((k: any) => {
+        options.push({
+          label: k.name || k.nama || k.kandangNama || "Kandang",
+          value: k.id,
+        });
+      });
+    }
+
+    return options;
+  }, [kandangs]);
+
+  // 3. Petugas Options (filter users by role 'petugas' if possible, or just Show All)
+  // Assuming 'role' property exists on user
+  const petugasOptions = useMemo(() => {
+    const options = [{ label: "Semua Petugas", value: "all" }];
+
+    if (users) {
+      users
+        .filter((u: any) => u.role?.toLowerCase() === "petugas")
+        .forEach((u: any) => {
+          options.push({ label: u.fullName || u.username, value: u.id });
+        });
+    }
+
+    return options;
+  }, [users]);
+
+  // 4. Pakan Options
+  const pakanOptions = useMemo(() => {
+    const options = [{ label: "Semua Pakan", value: "all" }];
+
+    if (pakans) {
+      pakans.forEach((p: any) => {
+        options.push({ label: p.nama, value: p.id });
+      });
+    }
+
+    return options;
+  }, [pakans]);
+
+  // 5. Vaksin Options
+  const vaksinOptions = useMemo(() => {
+    const options = [{ label: "Semua Vaksin", value: "all" }];
+
+    if (vaksins) {
+      vaksins.forEach((v: any) => {
+        options.push({ label: v.nama, value: v.id });
+      });
+    }
+
+    return options;
+  }, [vaksins]);
+
+  // Use server-side filtering
+  const { data: operasionals, isLoading } = useOperasionals({
+    ...currentFilters,
+    search: searchQuery,
+  });
 
   const deleteOperasional = useDeleteOperasional();
 
@@ -113,18 +209,6 @@ export default function OperasionalList() {
     { key: "actions", label: "Aksi", align: "center" as const },
   ];
 
-  // Filter data based on search query
-  const filteredData = operasionals?.filter(item => {
-    if (!searchQuery) return true;
-
-    const query = searchQuery.toLowerCase();
-
-    return (
-      (item.jenisKegiatanNama?.toLowerCase().includes(query) ?? false) ||
-      (item.kandangNama?.toLowerCase().includes(query) ?? false)
-    );
-  });
-
   return (
     <ListGrid
       actionButtons={{
@@ -146,12 +230,55 @@ export default function OperasionalList() {
         label: "Tambah Data Operasional",
       }}
       columns={columns}
-      data={filteredData}
+      data={operasionals}
       deleteConfirmMessage={(item: Operasional) =>
         `Apakah Anda yakin ingin menghapus data operasional "${item.jenisKegiatanNama}" pada kandang "${item.kandangNama}"?`
       }
       deleteConfirmTitle="Hapus Data Operasional"
       description="Kelola data kegiatan operasional harian peternakan ayam broiler"
+      filterValues={currentFilters}
+      filters={[
+        {
+          key: "period",
+          label: "Periode",
+          type: "select",
+          placeholder: "Pilih Periode",
+          options: monthOptions,
+          className: "w-full md:w-36",
+        },
+        {
+          key: "kandangId",
+          label: "Kandang",
+          type: "select",
+          placeholder: "Pilih Kandang",
+          options: kandangOptions,
+          className: "w-full md:w-36",
+        },
+        {
+          key: "petugasId",
+          label: "Petugas",
+          type: "select",
+          placeholder: "Pilih Petugas",
+          options: petugasOptions,
+          className: "w-full md:w-36",
+        },
+        {
+          key: "pakanId",
+          label: "Pakan",
+          type: "select",
+          placeholder: "Pilih Pakan",
+          options: pakanOptions,
+          className: "w-full md:w-36",
+        },
+        {
+          key: "vaksinId",
+          label: "Vaksin",
+          type: "select",
+          placeholder: "Pilih Vaksin",
+          options: vaksinOptions,
+          className: "w-full md:w-36",
+        },
+      ]}
       keyField="id"
       loading={isLoading}
       nameField="jenisKegiatanNama"
@@ -159,6 +286,14 @@ export default function OperasionalList() {
       searchPlaceholder="Cari berdasarkan jenis kegiatan atau kandang..."
       showPagination={true}
       title="Data Operasional"
+      onFilterChange={newValues => {
+        navigate({
+          search: (prev: any) => ({
+            ...prev,
+            ...newValues,
+          }),
+        } as any);
+      }}
       onSearch={value => setSearchQuery(value)}
     />
   );

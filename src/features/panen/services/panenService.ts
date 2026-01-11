@@ -1,10 +1,20 @@
-import { CreatePanenDto, Panen, UpdatePanenDto } from "../types";
+import { Panen, UpdatePanenDto } from "../types";
 
 import api, { ApiResponse, PaginatedResponse } from "@/lib/axios";
 
 export const panenService = {
-  getPanens: async (): Promise<Panen[]> => {
-    const response = await api.get<PaginatedResponse<Panen>>("/panens");
+  getPanens: async (filters?: any): Promise<Panen[]> => {
+    const params: Record<string, any> = {};
+
+    if (filters) {
+      if (filters.period) params["period"] = filters.period;
+      if (filters.kandangId) params["kandangId"] = filters.kandangId;
+      if (filters.search) params["search"] = filters.search;
+    }
+
+    const response = await api.get<PaginatedResponse<Panen>>("/panens", {
+      params,
+    });
 
     return response.data.data;
   },
@@ -15,15 +25,19 @@ export const panenService = {
     return response.data.data;
   },
 
-  createPanen: async (
-    data: Partial<CreatePanenDto>
-  ): Promise<CreatePanenDto> => {
-    const response = await api.post<ApiResponse<CreatePanenDto>>(
-      "/panens",
+  createPanen: async (data: any): Promise<any> => {
+    const response = await api.post<ApiResponse<any>>("/panens", data);
+
+    return response.data.data;
+  },
+
+  createPanenAutoFifo: async (data: any): Promise<any> => {
+    const response = await api.post<ApiResponse<any>>(
+      "/panens/auto-fifo",
       data
     );
 
-    return response.data.data;
+    return response.data;
   },
 
   updatePanen: async (

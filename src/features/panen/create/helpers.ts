@@ -2,7 +2,6 @@
  * Panen Management Helper Functions
  */
 
-import type { CreatePanenDto } from "../types";
 import type { SelectOption } from "@/types/form-fields";
 import type { Ayam } from "@/features/ayams/interface";
 
@@ -10,34 +9,60 @@ import type { Ayam } from "@/features/ayams/interface";
  * Panen form data interface
  */
 export interface PanenFormData {
-  ayamId: string;
+  kandangId: string;
   tanggalPanen: string;
   jumlahEkorPanen: number;
   beratRataRata: number;
+  mode: "auto-fifo" | "manual-split";
+  jumlahDariAyamLama?: number;
+  jumlahDariAyamBaru?: number;
 }
+
+/**
+ * Helper to format date to YYYY-MM-DD using local time
+ */
+const formatDateToLocalInput = (dateString?: string): string => {
+  const date = dateString ? new Date(dateString) : new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
 
 /**
  * Get default form values
  */
 export const getDefaultPanenFormValues = (): Partial<PanenFormData> => ({
-  ayamId: "",
-  tanggalPanen: new Date().toISOString().split("T")[0], // Today's date in YYYY-MM-DD format
+  kandangId: "",
+  tanggalPanen: formatDateToLocalInput(), // Uses local time YYYY-MM-DD
   jumlahEkorPanen: 0,
   beratRataRata: 0,
+  mode: "manual-split",
+  jumlahDariAyamLama: 0,
+  jumlahDariAyamBaru: 0,
 });
 
 /**
- * Transform form data to CreatePanenDto before submission
+ * Transform form data to CreatePanenAutoFifoDto before submission
  * @param data - Raw form data
  * @returns Transformed data ready for API
  */
-export const transformPanenFormData = (data: PanenFormData): CreatePanenDto => {
-  return {
-    ayamId: data.ayamId,
-    tanggalPanen: data.tanggalPanen,
+export const transformPanenFormData = (data: PanenFormData): any => {
+  const payload: any = {
+    kandangId: data.kandangId,
+    tanggalPanen: new Date(data.tanggalPanen).toISOString(),
     jumlahEkorPanen: Number(data.jumlahEkorPanen),
     beratRataRata: Number(data.beratRataRata),
+    mode: data.mode,
   };
+
+  if (data.mode === "manual-split") {
+    payload.jumlahDariAyamLama = Number(data.jumlahDariAyamLama || 0);
+    payload.jumlahDariAyamBaru = Number(data.jumlahDariAyamBaru || 0);
+  }
+
+  return payload;
 };
 
 /**
@@ -57,9 +82,10 @@ export const transformAyamsToOptions = (ayams: Ayam[]): SelectOption[] => {
       ? "Perlu Perhatian"
       : "Sehat";
     const jumlahSisa = ayam.sisaAyamHidup?.toLocaleString("id-ID") ?? "0";
+    const petugas = ayam.petugasKandangNama || "-";
 
     return {
-      label: `${ayam.kandangNama} - Sisa: ${jumlahSisa} Ekor`,
+      label: `${ayam.kandangNama} - Sisa: ${jumlahSisa} (Petugas: ${petugas})`,
       value: ayam.id,
       description: `Masuk: ${masukDate} | ${statusPanen} | ${statusKesehatan}`,
     };

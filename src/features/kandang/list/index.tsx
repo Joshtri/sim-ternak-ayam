@@ -1,10 +1,10 @@
 // import { ListGrid } from "@/components/ui/";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { useDeleteKandang, useKandangs } from "../hooks/useKandang";
 import { Kandang } from "../types";
 
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { ListGrid } from "@/components/ui/ListGrid";
 
 export default function KandangList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,6 +26,16 @@ export default function KandangList() {
       key: "kapasitas",
       label: "Kapasitas",
       value: (kandang: any) => kandang.kapasitas,
+    },
+    {
+      key: "terisi",
+      label: "Terisi",
+      value: (kandang: any) => `${kandang.jumlahAyamTerisi ?? 0} Ekor`,
+    },
+    {
+      key: "persentase",
+      label: "Persentase",
+      value: (kandang: any) => `${(kandang.persentaseTerisi ?? 0).toFixed(2)}%`,
     },
     {
       key: "petugas-nama",

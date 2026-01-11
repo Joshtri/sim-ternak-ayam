@@ -8,6 +8,9 @@ import {
   AlertTriangle,
   X,
   ZoomIn,
+  Activity,
+  TrendingDown,
+  Info,
 } from "lucide-react";
 
 import { useMortalitasById } from "../hooks/useMortalitas";
@@ -112,7 +115,7 @@ export default function MortalitasDetail() {
                 label: "Jumlah Kematian",
                 value: (
                   <span className="text-lg font-bold text-danger">
-                    {formatJumlah(mortalitas.jumlahKematian)}
+                    {formatJumlah(mortalitas.jumlahKematian)} Ekor
                   </span>
                 ),
               },
@@ -121,20 +124,10 @@ export default function MortalitasDetail() {
                 label: "Penyebab Kematian",
                 value: (
                   <div className="bg-warning-50 border border-warning-200 rounded-lg p-3 mt-2">
-                    <p className="text-warning-800 whitespace-pre-wrap">
+                    <p className="text-warning-800 whitespace-pre-wrap font-medium">
                       {mortalitas.penyebabKematian}
                     </p>
                   </div>
-                ),
-                fullWidth: true,
-              },
-              {
-                key: "ayamId",
-                label: "ID Ayam",
-                value: (
-                  <code className="text-xs bg-default-100 px-2 py-1 rounded">
-                    {mortalitas.ayamId}
-                  </code>
                 ),
                 fullWidth: true,
               },
@@ -151,14 +144,16 @@ export default function MortalitasDetail() {
                             onClick={() => setShowImageModal(true)}
                           >
                             <img
-                              src={imageUrl}
                               alt="Foto Mortalitas"
                               className="w-full max-w-2xl h-auto rounded-lg border border-gray-300 shadow-sm hover:shadow-md transition-all"
+                              src={imageUrl}
                               onError={e => {
                                 // Fallback if image fails to load
                                 const target = e.target as HTMLImageElement;
+
                                 target.style.display = "none";
                                 const parent = target.parentElement;
+
                                 if (parent) {
                                   parent.innerHTML =
                                     '<p class="text-sm text-gray-500 italic">Foto tidak dapat dimuat</p>';
@@ -184,6 +179,108 @@ export default function MortalitasDetail() {
             ],
           },
           {
+            title: "Analisis Dampak",
+            description: "Evaluasi dampak kejadian mortalitas",
+            icon: <Activity className="w-5 h-5" />,
+            columns: 2,
+            items: [
+              {
+                key: "statusDampak",
+                label: "Status Dampak",
+                value: (
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${
+                      mortalitas.statusDampak === "High"
+                        ? "bg-red-100 text-red-700 border border-red-200"
+                        : mortalitas.statusDampak === "Medium"
+                          ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                          : "bg-green-100 text-green-700 border border-green-200"
+                    }`}
+                  >
+                    {mortalitas.statusDampak || "-"}
+                  </span>
+                ),
+              },
+              {
+                key: "persentaseMortalitas",
+                label: "Persentase Mortalitas",
+                value: `${(mortalitas.persentaseMortalitas ?? 0).toFixed(4)}%`,
+              },
+              {
+                key: "rekomendasi",
+                label: "Rekomendasi Tindakan",
+                value: (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <div className="flex gap-2">
+                      <Info className="w-4 h-4 text-blue-500 mt-0.5" />
+                      <p className="text-blue-800 text-sm">
+                        {mortalitas.rekomendasi ||
+                          "Tidak ada rekomendasi spesifik."}
+                      </p>
+                    </div>
+                  </div>
+                ),
+                fullWidth: true,
+              },
+            ],
+          },
+          {
+            title: "Statistik Populasi",
+            description: "Perubahan populasi ayam di kandang",
+            icon: <TrendingDown className="w-5 h-5" />,
+            columns: 2,
+            items: [
+              {
+                key: "jumlahAyamSebelumMati",
+                label: "Populasi Awal (Sebelum)",
+                value: `${formatJumlah(mortalitas.jumlahAyamSebelumMati)} Ekor`,
+              },
+              {
+                key: "jumlahAyamSesudahMati",
+                label: "Populasi Akhir (Sesudah)",
+                value: `${formatJumlah(mortalitas.jumlahAyamSesudahMati)} Ekor`,
+              },
+              {
+                key: "kapasitasKandang",
+                label: "Kapasitas Kandang",
+                value: `${formatJumlah(mortalitas.kapasitasKandang ?? 0)} Ekor`,
+              },
+              {
+                key: "utilisasi",
+                label: "Utilisasi Kandang",
+                value: (
+                  <div className="flex flex-col gap-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Sebelum:</span>
+                      <span>
+                        {(mortalitas.persentaseUtilisasiSebelum ?? 0).toFixed(
+                          2
+                        )}
+                        %
+                      </span>
+                    </div>
+                    <div className="flex justify-between font-medium">
+                      <span className="text-gray-500">Sesudah:</span>
+                      <span
+                        className={
+                          mortalitas.persentaseUtilisasiSesudah !==
+                          mortalitas.persentaseUtilisasiSebelum
+                            ? "text-danger"
+                            : ""
+                        }
+                      >
+                        {(mortalitas.persentaseUtilisasiSesudah ?? 0).toFixed(
+                          2
+                        )}
+                        %
+                      </span>
+                    </div>
+                  </div>
+                ),
+              },
+            ],
+          },
+          {
             title: "Informasi Sistem",
             description: "Data sistem dan riwayat perubahan",
             icon: <Calendar className="w-5 h-5" />,
@@ -198,6 +295,26 @@ export default function MortalitasDetail() {
                   </code>
                 ),
                 fullWidth: true,
+              },
+              {
+                key: "ayamId",
+                label: "ID Ayam",
+                value: (
+                  <code className="text-xs bg-default-100 px-2 py-1 rounded">
+                    {mortalitas.ayamId}
+                  </code>
+                ),
+                fullWidth: true,
+              },
+              {
+                key: "kandangNama",
+                label: "Lokasi Kandang",
+                value: mortalitas.kandangNama,
+              },
+              {
+                key: "petugasNama",
+                label: "Petugas Pelapor",
+                value: mortalitas.petugasNama,
               },
               {
                 key: "createdAt",
@@ -254,9 +371,9 @@ export default function MortalitasDetail() {
           </button>
           <div className="max-w-7xl max-h-[90vh] overflow-auto">
             <img
-              src={imageUrl}
               alt="Foto Mortalitas - Full Size"
               className="w-full h-auto rounded-lg"
+              src={imageUrl}
               onClick={e => e.stopPropagation()}
             />
           </div>

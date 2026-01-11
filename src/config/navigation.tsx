@@ -219,13 +219,13 @@ export const navigationSections: NavigationSection[] = [
   {
     title: "Pengaturan",
     items: [
-      {
-        id: "users",
-        label: "Manajemen Pengguna",
-        icon: <Users size={20} />,
-        href: "/users-management",
-        allowedRoles: ["pemilik"],
-      },
+      // {
+      //   id: "users",
+      //   label: "Manajemen Pengguna",
+      //   icon: <Users size={20} />,
+      //   href: "/users-management",
+      //   allowedRoles: ["pemilik"],
+      // },
       // {
       //   id: "settings",
       //   label: "Pengaturan Sistem",

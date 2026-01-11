@@ -11,6 +11,7 @@ import {
   SelectItem,
   Spinner,
   useDisclosure,
+  Input,
 } from "@heroui/react";
 import { TrendingUp } from "lucide-react";
 
@@ -25,9 +26,31 @@ export default function ProduktivitasList() {
   const [selectedPetugasId, setSelectedPetugasId] = useState<string | null>(
     null
   );
+
+  // Filter state (YYYY-MM)
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("");
+  const [hasKandang, setHasKandang] = useState<string>("all");
+
+  // Derived filters
+  const selectedYear = selectedPeriod
+    ? selectedPeriod.split("-")[0]
+    : undefined;
+  const selectedMonth = selectedPeriod
+    ? selectedPeriod.split("-")[1]
+    : undefined;
+
+  const filterHasKandang = useMemo(() => {
+    if (hasKandang === "all") return undefined;
+    return hasKandang === "true";
+  }, [hasKandang]);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data: produktivitasData, isLoading } = useProduktivitas();
+  const { data: produktivitasData, isLoading } = useProduktivitas(
+    selectedYear,
+    selectedMonth,
+    filterHasKandang
+  );
 
   // Sort data
   const sortedData = useMemo(() => {
@@ -65,12 +88,37 @@ export default function ProduktivitasList() {
     // <AppLayout>
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
           <h1 className="text-2xl font-bold">Analisis Produktivitas Petugas</h1>
           <p className="text-default-500">
             Performance dan produktivitas pengelolaan kandang
           </p>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-end gap-2 w-full md:w-auto">
+          <Input
+            className="w-full md:w-48"
+            // description="Pilih periode laporan"
+            label="Periode"
+            type="month"
+            value={selectedPeriod}
+            variant="bordered"
+            onChange={e => setSelectedPeriod(e.target.value)}
+          />
+          <Select
+            className="w-full md:w-48"
+            label="Status Kandang"
+            placeholder="Semua Status"
+            selectedKeys={[hasKandang]}
+            variant="bordered"
+            onChange={e => setHasKandang(e.target.value)}
+          >
+            <SelectItem key="all">Semua Petugas</SelectItem>
+            <SelectItem key="true">Mengelola Kandang</SelectItem>
+            <SelectItem key="false">Tanpa Kandang</SelectItem>
+          </Select>
         </div>
       </div>
 
@@ -133,8 +181,11 @@ export default function ProduktivitasList() {
         onClose={handleCloseModal}
       /> */}
       <DetailProduktivitasModal
+        hasKandang={filterHasKandang}
         isOpen={isOpen}
+        month={selectedMonth}
         petugasId={selectedPetugasId || ""}
+        year={selectedYear}
         onClose={handleCloseModal}
       />
     </div>

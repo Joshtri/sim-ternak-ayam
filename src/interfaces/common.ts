@@ -10,14 +10,14 @@ export interface BaseResponseApi {
   limit?: number;
 }
 
-export interface ICurrentUser {
-  id: string;
+export interface ICurrentUser extends BaseEntity {
+  // id: string;
   username: string;
   email?: string;
   fullName?: string;
   noWA?: string;
   role?: string;
   kandangsManaged?: string[]; // Array of kandang IDs the user manages
-  createdAt?: string;
-  updateAt?: string;
+  // createdAt?: string;
+  // updateAt?: string;
 }

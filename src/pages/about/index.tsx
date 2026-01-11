@@ -11,6 +11,7 @@ import {
   Layers,
   AlertTriangle,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import { Card } from "@/components/ui/Card";
 import { PageHeader } from "@/components/common/PageHeader";
@@ -22,6 +23,29 @@ export default function AboutPage() {
         description="Informasi mengenai metode perhitungan dan alur kerja (SOP) sistem."
         title="Tentang & Panduan Sistem"
       />
+
+      {/* Quick Navigation Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <Link to="/about-threshold">
+          <Card className="p-5 hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-danger">
+            <div className="flex items-start gap-4">
+              <div className="shrink-0 w-12 h-12 rounded-full bg-danger/10 flex items-center justify-center">
+                <AlertTriangle className="text-danger" size={24} />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-default-900 mb-1 flex items-center gap-2">
+                  Threshold & Standar
+                  <ArrowRight className="text-primary" size={16} />
+                </h3>
+                <p className="text-sm text-default-600">
+                  Standar threshold mortalitas, utilisasi kandang, dan kategori
+                  status berdasarkan best practice industri
+                </p>
+              </div>
+            </div>
+          </Card>
+        </Link>
+      </div>
 
       {/* Workflow / SOP Section */}
       <Card className="p-6 border-l-4 border-l-primary shadow-sm bg-gradient-to-r from-white to-default-50 dark:from-default-50 dark:to-default-100">

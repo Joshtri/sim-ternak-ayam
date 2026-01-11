@@ -41,10 +41,8 @@ export function DetailCard({
     <div className={`space-y-6 ${className || ""}`}>
       {sections.map((section, sectionIndex) => (
         <HeroCard key={sectionIndex} shadow={shadow}>
-          {(sectionIndex === 0 && header) && (
-            <CardHeader className="flex flex-col gap-2">
-              {header}
-            </CardHeader>
+          {sectionIndex === 0 && header && (
+            <CardHeader className="flex flex-col gap-2">{header}</CardHeader>
           )}
 
           <CardBody className="gap-6">
@@ -78,8 +76,8 @@ export function DetailCard({
               }`}
             >
               {section.items
-                .filter((item) => !item.hidden)
-                .map((item) => (
+                .filter(item => !item.hidden)
+                .map(item => (
                   <div
                     key={item.key}
                     className={`flex flex-col gap-1 ${
@@ -105,7 +103,7 @@ export function DetailCard({
             </div>
           </CardBody>
 
-          {(sectionIndex === sections.length - 1 && footer) && (
+          {sectionIndex === sections.length - 1 && footer && (
             <div className="px-6 py-4 border-t border-default-200">
               {footer}
             </div>

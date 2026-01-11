@@ -5,7 +5,7 @@ import { User } from "../services/userService";
 
 // import ListGrid from "@/components/ui/ListGrid";
 import { Badge } from "@/components/ui/Badge";
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { ListGrid } from "@/components/ui/ListGrid";
 
 export default function UserManagementList() {
   const [searchQuery, setSearchQuery] = useState("");

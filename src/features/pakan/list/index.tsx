@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDeletePakan, usePakans } from "../hooks/usePakan";
 import { formatMonthYear } from "../create/helpers";
 
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { ListGrid } from "@/components/ui/ListGrid";
 import { Badge } from "@/components/ui/Badge";
 
 export default function PakanList() {
@@ -26,12 +26,19 @@ export default function PakanList() {
       label: "Sisa Stok",
       value: (item: Pakan) => {
         const sisa = item.stokTersisa ?? item.stokKg;
-        const status = item.statusStok;
+        const status = item.statusStok || "";
 
-        let color: "success" | "warning" | "danger" | "default" = "success";
+        let color: "success" | "warning" | "danger" | "default" = "default";
 
-        if (status === "Menipis") color = "warning";
-        if (status === "Kritis" || status === "Habis") color = "danger";
+        // Logic warna berdasarkan Level
+        if (status.includes("Level 3")) color = "success";
+        else if (status.includes("Level 2")) color = "warning";
+        else if (status.includes("Level 1") || status.includes("Level 0"))
+          color = "danger";
+        // Fallback backward compatibility
+        else if (status === "Aman") color = "success";
+        else if (status === "Menipis") color = "warning";
+        else if (status === "Kritis" || status === "Habis") color = "danger";
 
         return (
           <Badge color={color} variant="flat">
@@ -52,11 +59,18 @@ export default function PakanList() {
       value: (item: Pakan) => {
         if (!item.statusStok) return "-";
 
-        let color: "success" | "warning" | "danger" | "default" = "success";
-        if (item.statusStok === "Aman") color = "success";
-        if (item.statusStok === "Menipis") color = "warning";
-        if (item.statusStok === "Kritis" || item.statusStok === "Habis")
+        const status = item.statusStok;
+        let color: "success" | "warning" | "danger" | "default" = "default";
+
+        // Logic warna berdasarkan Level
+        if (status.includes("Level 3")) color = "success";
+        else if (status.includes("Level 2")) color = "warning";
+        else if (status.includes("Level 1") || status.includes("Level 0"))
           color = "danger";
+        // Fallback backward compatibility
+        else if (status === "Aman") color = "success";
+        else if (status === "Menipis") color = "warning";
+        else if (status === "Kritis" || status === "Habis") color = "danger";
 
         return (
           <Badge color={color} variant="solid">
@@ -78,6 +92,7 @@ export default function PakanList() {
     if (!searchQuery) return true;
 
     const query = searchQuery.toLowerCase();
+
     return item.namaPakan?.toLowerCase().includes(query) ?? false;
   });
 

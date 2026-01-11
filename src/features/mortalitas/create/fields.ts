@@ -1,7 +1,7 @@
 import type { FormSchema } from "@/types/form-fields";
 
 import {
-  validateAyamId,
+  validateKandangId,
   validateTanggalKematian,
   validateJumlahKematian,
   validatePenyebabKematian,
@@ -17,13 +17,13 @@ export const mortalitasSchema: FormSchema = {
       fields: [
         {
           type: "select",
-          name: "ayamId",
-          label: "Data Ayam",
-          placeholder: "Pilih data ayam",
+          name: "kandangId",
+          label: "Kandang",
+          placeholder: "Pilih kandang",
           required: true,
           colSpan: 2,
-          helperText: "Pilih data ayam yang mengalami kematian",
-          validation: validateAyamId,
+          helperText: "Pilih kandang yang mengalami kematian",
+          validation: validateKandangId,
           options: [], // Will be populated dynamically in the component
         },
 

@@ -7,9 +7,12 @@ import type { KandangAsistenResponseDto } from "../types";
 
 import { useState } from "react";
 
-import { useDeleteKandangAsisten, useKandangAsistens } from "../hooks/useKandangAsisten";
+import {
+  useDeleteKandangAsisten,
+  useKandangAsistens,
+} from "../hooks/useKandangAsisten";
 
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { ListGrid } from "@/components/ui/ListGrid";
 import { Badge } from "@/components/ui/Badge";
 
 export default function KandangAsistenList() {
@@ -48,7 +51,7 @@ export default function KandangAsistenList() {
   ];
 
   // Filter data based on search query
-  const filteredData = kandangAsistens?.filter((item) => {
+  const filteredData = kandangAsistens?.filter(item => {
     if (!searchQuery) return true;
 
     const query = searchQuery.toLowerCase();
@@ -89,7 +92,7 @@ export default function KandangAsistenList() {
       searchPlaceholder="Cari berdasarkan kandang, asisten, atau catatan..."
       showPagination={true}
       title="Data Asisten Kandang"
-      onSearch={(value) => setSearchQuery(value)}
+      onSearch={value => setSearchQuery(value)}
     />
   );
 }

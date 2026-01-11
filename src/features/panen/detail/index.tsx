@@ -64,7 +64,7 @@ export default function PanenDetail() {
   return (
     <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
-      <PageHeader
+      {/* <PageHeader
         actions={
           <div className="flex items-center gap-2">
             <LinkButton
@@ -94,7 +94,7 @@ export default function PanenDetail() {
         ]}
         description="Informasi lengkap data pemanenan ayam"
         title={`Detail Panen - ${panen.namaKandang}`}
-      />
+      /> */}
 
       {/* Detail Cards */}
       <DetailCard

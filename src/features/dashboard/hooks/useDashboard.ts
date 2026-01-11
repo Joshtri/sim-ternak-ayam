@@ -53,10 +53,13 @@ export const useOperatorDashboard = () => {
 /**
  * Hook to fetch Pemilik dashboard data
  */
-export const usePemilikDashboard = () => {
+/**
+ * Hook to fetch Pemilik dashboard data
+ */
+export const usePemilikDashboard = (month?: string) => {
   return useQuery<PemilikDashboardData, Error>({
-    queryKey: ["dashboard", "pemilik"],
-    queryFn: () => dashboardService.getPemilikDashboard(),
+    queryKey: ["dashboard", "pemilik", month],
+    queryFn: () => dashboardService.getPemilikDashboard(month),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: true,
   });

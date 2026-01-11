@@ -19,7 +19,7 @@ export interface Vaksin extends BaseEntity {
   jenis?: string;
   satuan?: string;
   hargaPerSatuan?: number;
-  statusStok?: "Aman" | "Menipis" | "Kritis" | "Habis";
+  statusStok?: string;
   isStokCukup?: boolean;
   rekomendasi?: string;
 }

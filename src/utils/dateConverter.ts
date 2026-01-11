@@ -42,7 +42,14 @@ export class DateConverter {
   /**
    * Convert input to Date object
    */
-  private toDate(input: string | Date | number): Date {
+  /**
+   * Convert input to Date object
+   */
+  private toDate(input: string | Date | number | null | undefined): Date {
+    if (input === null || input === undefined) {
+      throw new Error("Invalid date input: null or undefined");
+    }
+
     if (input instanceof Date) {
       return input;
     }
@@ -80,7 +87,7 @@ export class DateConverter {
   /**
    * Convert to ISO string format (for API)
    */
-  toISO(input: string | Date | number): string {
+  toISO(input: string | Date | number | null | undefined): string {
     const date = this.toDate(input);
 
     return date.toISOString();
@@ -89,7 +96,7 @@ export class DateConverter {
   /**
    * Convert to date-only format (YYYY-MM-DD)
    */
-  toDateOnly(input: string | Date | number): string {
+  toDateOnly(input: string | Date | number | null | undefined): string {
     const date = this.toDate(input);
     const isoString = date.toISOString().split("T")[0];
 
@@ -103,7 +110,8 @@ export class DateConverter {
   /**
    * Convert to Indonesian format
    */
-  toIndonesian(input: string | Date | number): string {
+  toIndonesian(input: string | Date | number | null | undefined): string {
+    if (!this.isValid(input)) return "-";
     const date = this.toDate(input);
 
     return date.toLocaleDateString(this.config.locale, {
@@ -117,13 +125,33 @@ export class DateConverter {
   /**
    * Convert to short format (DD/MM/YYYY)
    */
-  toShort(input: string | Date | number): string {
+  toShort(input: string | Date | number | null | undefined): string {
+    if (!this.isValid(input)) return "-";
     const date = this.toDate(input);
 
     return date.toLocaleDateString(this.config.locale, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
+      timeZone: this.config.timezone,
+    });
+  }
+
+  /**
+   * Convert to Indonesian format with Time
+   */
+  toIndonesianDateTime(
+    input: string | Date | number | null | undefined
+  ): string {
+    if (!this.isValid(input)) return "-";
+    const date = this.toDate(input);
+
+    return date.toLocaleString(this.config.locale, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
       timeZone: this.config.timezone,
     });
   }
@@ -150,7 +178,8 @@ export class DateConverter {
   /**
    * Check if a date string is valid
    */
-  isValid(input: string | Date | number): boolean {
+  isValid(input: string | Date | number | null | undefined): boolean {
+    if (input === null || input === undefined) return false;
     try {
       const date = this.toDate(input);
 
@@ -167,3 +196,5 @@ export class DateConverter {
     return this.convert(new Date(), format);
   }
 }
+
+export const dateConverter = new DateConverter();

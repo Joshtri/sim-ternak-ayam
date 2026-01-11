@@ -16,6 +16,18 @@ export interface AyamEditFormData {
 }
 
 /**
+ * Helper to format date to YYYY-MM-DD using local time
+ */
+const formatDateToLocalInput = (dateString?: string): string => {
+  const date = dateString ? new Date(dateString) : new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
+/**
  * Get default form values from existing ayam data
  */
 export const getDefaultAyamEditFormValues = (
@@ -24,16 +36,14 @@ export const getDefaultAyamEditFormValues = (
   if (!ayam) {
     return {
       kandangId: "",
-      tanggalMasuk: new Date().toISOString().split("T")[0],
+      tanggalMasuk: formatDateToLocalInput(),
       jumlahMasuk: 0,
     };
   }
 
   return {
     kandangId: ayam.kandangId || "",
-    tanggalMasuk: ayam.tanggalMasuk
-      ? new Date(ayam.tanggalMasuk).toISOString().split("T")[0]
-      : new Date().toISOString().split("T")[0],
+    tanggalMasuk: formatDateToLocalInput(ayam.tanggalMasuk),
     jumlahMasuk: ayam.jumlahMasuk || 0,
   };
 };

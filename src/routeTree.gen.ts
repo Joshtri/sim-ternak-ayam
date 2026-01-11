@@ -15,6 +15,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAboutThresholdRouteImport } from './routes/_authenticated/about-threshold'
 import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated/about'
 import { Route as AuthenticatedUsersManagementIndexRouteImport } from './routes/_authenticated/users-management/index'
 import { Route as AuthenticatedNotificationsIndexRouteImport } from './routes/_authenticated/notifications/index'
@@ -103,6 +104,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAboutThresholdRoute =
+  AuthenticatedAboutThresholdRouteImport.update({
+    id: '/about-threshold',
+    path: '/about-threshold',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAboutRoute = AuthenticatedAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -456,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/about': typeof AuthenticatedAboutRoute
+  '/about-threshold': typeof AuthenticatedAboutThresholdRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/daftar-ayam/$id': typeof AuthenticatedDaftarAyamIdRoute
@@ -521,6 +529,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/about': typeof AuthenticatedAboutRoute
+  '/about-threshold': typeof AuthenticatedAboutThresholdRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/daftar-ayam/$id': typeof AuthenticatedDaftarAyamIdRoute
@@ -588,6 +597,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/_authenticated/about': typeof AuthenticatedAboutRoute
+  '/_authenticated/about-threshold': typeof AuthenticatedAboutThresholdRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/daftar-ayam/$id': typeof AuthenticatedDaftarAyamIdRoute
@@ -655,6 +665,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/about'
+    | '/about-threshold'
     | '/dashboard'
     | '/profile'
     | '/daftar-ayam/$id'
@@ -720,6 +731,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/about'
+    | '/about-threshold'
     | '/dashboard'
     | '/profile'
     | '/daftar-ayam/$id'
@@ -786,6 +798,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/_authenticated/about'
+    | '/_authenticated/about-threshold'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/_authenticated/daftar-ayam/$id'
@@ -896,6 +909,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/about-threshold': {
+      id: '/_authenticated/about-threshold'
+      path: '/about-threshold'
+      fullPath: '/about-threshold'
+      preLoaderRoute: typeof AuthenticatedAboutThresholdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/about': {
@@ -1309,6 +1329,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
+  AuthenticatedAboutThresholdRoute: typeof AuthenticatedAboutThresholdRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedDaftarAyamIdRoute: typeof AuthenticatedDaftarAyamIdRoute
@@ -1372,6 +1393,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAboutRoute: AuthenticatedAboutRoute,
+  AuthenticatedAboutThresholdRoute: AuthenticatedAboutThresholdRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedDaftarAyamIdRoute: AuthenticatedDaftarAyamIdRoute,

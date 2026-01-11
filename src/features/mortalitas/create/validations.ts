@@ -3,8 +3,16 @@
  * Validation rules for mortalitas create/edit forms
  */
 
+export const validateKandangId = {
+  required: "Kandang harus dipilih",
+  pattern: {
+    value: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    message: "Format ID kandang tidak valid",
+  },
+};
+
 /**
- * Validate ayamId
+ * Validate ayamId (legacy/edit support)
  */
 export const validateAyamId = {
   required: "Ayam harus dipilih",
@@ -80,7 +88,13 @@ export const validateFotoMortalitas = {
       if (!value) return true; // Optional field
 
       // Check if it's a valid image type
-      const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+      const validTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ];
       const fileType = value.split(";")[0]?.split(":")[1];
 
       if (!fileType || !validTypes.includes(fileType)) {

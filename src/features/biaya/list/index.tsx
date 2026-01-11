@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useDeleteBiaya, useBiayas } from "../hooks/useBiaya";
 
-import { ListGrid } from "@/components/ui/ListGrid/ListGridRefactored";
+import { ListGrid } from "@/components/ui/ListGrid";
 import { Badge } from "@/components/ui/Badge";
 
 export default function BiayaList() {

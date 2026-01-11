@@ -11,7 +11,7 @@ import { showToast } from "@/utils/showToast";
 export const panenKeys = {
   all: ["panen"] as const,
   lists: () => [...panenKeys.all, "list"] as const,
-  list: () => [...panenKeys.lists()] as const,
+  list: (filters?: any) => [...panenKeys.lists(), filters] as const,
   details: () => [...panenKeys.all, "detail"] as const,
   detail: (id: string) => [...panenKeys.details(), id] as const,
 };
@@ -19,10 +19,10 @@ export const panenKeys = {
 /**
  * Hook to fetch all panens
  */
-export function usePanens() {
+export function usePanens(filters?: any) {
   return useQuery({
-    queryKey: panenKeys.list(),
-    queryFn: () => panenService.getPanens(),
+    queryKey: panenKeys.list(filters),
+    queryFn: () => panenService.getPanens(filters),
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
   });
 }

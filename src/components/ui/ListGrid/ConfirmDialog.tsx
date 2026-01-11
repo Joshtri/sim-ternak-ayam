@@ -21,6 +21,7 @@ export interface ConfirmDialogProps {
   message?: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  backdrop?: "blur" | "transparent" | "opaque";
   confirmColor?:
     | "default"
     | "primary"
@@ -35,6 +36,7 @@ export function ConfirmDialog({
   isOpen,
   onClose,
   onConfirm,
+  backdrop = "blur",
   title = "Konfirmasi",
   message = "Apakah Anda yakin?",
   confirmLabel = "Hapus",
@@ -48,14 +50,14 @@ export function ConfirmDialog({
 
   return (
     <Modal
-      backdrop="blur"
+      backdrop={backdrop}
       isDismissable={!isLoading}
       isOpen={isOpen}
       placement="center"
       onClose={onClose}
     >
       <ModalContent>
-        {(onCloseModal) => (
+        {onCloseModal => (
           <>
             <ModalHeader className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-warning" />
